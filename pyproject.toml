@@ -13,6 +13,12 @@ numpy = "^2.3.0"
 fastapi = "^0.115.12"
 dvc-s3 = "^3.2.0"
 uvicorn = {extras = ["standard"], version = "^0.34.3"}
+rasterio = "^1.4.3"
+sentinelhub = "^3.11.1"
+earthaccess = "^0.14.0"
+geopandas = "^1.1.0"
+xarray = "^2025.4.0"
+scipy = "^1.15.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.0"

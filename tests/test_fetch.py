@@ -1,10 +1,76 @@
 """Tests for fetch module."""
 import pytest
+import xarray as xr
 
-from kelpie_carbon_v1.fetch import fetch_sentinel_tiles
+from kelpie_carbon_v1.fetch import (
+    configure_sentinelhub,
+    create_evalscript,
+    fetch_sentinel_tiles,
+)
 
 
-def test_fetch_sentinel_tiles_raises_not_implemented():
-    """Test that fetch_sentinel_tiles raises NotImplementedError."""
-    with pytest.raises(NotImplementedError):
-        fetch_sentinel_tiles("test_aoi", "2023-01-01")
+def test_configure_sentinelhub():
+    """Test SentinelHub configuration."""
+    config = configure_sentinelhub()
+    assert config.sh_client_id is not None
+    assert config.sh_client_secret is not None
+
+
+def test_create_evalscript():
+    """Test evalscript creation."""
+    script = create_evalscript()
+    assert "B04" in script  # Red band
+    assert "B05" in script  # Red edge band
+    assert "B08" in script  # NIR band
+    assert "evaluatePixel" in script
+
+
+def test_fetch_sentinel_tiles_with_mock_data():
+    """Test fetch_sentinel_tiles returns mock data when no credentials."""
+    # Use valid coordinates in BC, Canada
+    lat, lng = 49.2827, -123.1207
+    start_date, end_date = "2023-01-01", "2023-01-31"
+
+    result = fetch_sentinel_tiles(lat, lng, start_date, end_date)
+
+    # Check structure
+    assert isinstance(result, dict)
+    assert "data" in result
+    assert "source" in result
+    assert "bands" in result
+
+    # Check data is xarray Dataset
+    assert isinstance(result["data"], xr.Dataset)
+
+    # Check required bands
+    expected_bands = ["red", "red_edge", "nir", "swir1", "cloud_mask"]
+    for band in expected_bands:
+        assert band in result["data"].data_vars
+
+    # Check data shapes are consistent
+    data_vars = list(result["data"].data_vars.values())
+    first_shape = data_vars[0].shape
+    for var in data_vars:
+        assert var.shape == first_shape
+
+    # Check coordinate dimensions
+    assert "x" in result["data"].coords
+    assert "y" in result["data"].coords
+
+
+def test_fetch_sentinel_tiles_invalid_coordinates():
+    """Test fetch_sentinel_tiles with invalid coordinates."""
+    with pytest.raises(ValueError, match="Latitude must be between"):
+        fetch_sentinel_tiles(91.0, 0.0, "2023-01-01", "2023-01-31")
+
+    with pytest.raises(ValueError, match="Longitude must be between"):
+        fetch_sentinel_tiles(0.0, 181.0, "2023-01-01", "2023-01-31")
+
+
+def test_fetch_sentinel_tiles_invalid_dates():
+    """Test fetch_sentinel_tiles with invalid date formats."""
+    with pytest.raises(ValueError, match="Invalid date format"):
+        fetch_sentinel_tiles(49.0, -123.0, "2023/01/01", "2023-01-31")
+
+    with pytest.raises(ValueError, match="Invalid date format"):
+        fetch_sentinel_tiles(49.0, -123.0, "2023-01-01", "invalid-date")

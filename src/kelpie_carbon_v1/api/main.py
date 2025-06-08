@@ -60,17 +60,66 @@ def run_analysis(request: AnalysisRequest):
     # Generate unique analysis ID
     analysis_id = str(uuid.uuid4())[:8]
 
-    # TODO: Integrate with actual pipeline (fetch -> mask -> indices -> model)
-    # For now, return mock results
+    try:
+        # Import pipeline modules
+        from ..fetch import fetch_sentinel_tiles
+        from ..indices import calculate_indices_from_dataset
+        from ..model import predict_biomass
 
-    processing_time = f"{time.time() - start_time:.2f}s"
+        # Step 1: Fetch satellite data
+        satellite_data = fetch_sentinel_tiles(
+            lat=request.aoi["lat"],
+            lng=request.aoi["lng"],
+            start_date=request.start_date,
+            end_date=request.end_date,
+        )
 
-    return AnalysisResponse(
-        analysis_id=analysis_id,
-        status="completed",
-        processing_time=processing_time,
-        aoi=request.aoi,
-        date_range={"start": request.start_date, "end": request.end_date},
-        biomass="Pending implementation",
-        carbon="Pending implementation",
-    )
+        # Step 2: Calculate spectral indices
+        indices = calculate_indices_from_dataset(satellite_data["data"])
+
+        # Step 3: Apply masking (cloud/water mask)
+        # For now, use a simple mask based on cloud_mask
+        cloud_mask = satellite_data["data"]["cloud_mask"]
+        clean_data = indices.where(cloud_mask == 0)  # Keep non-cloudy pixels
+
+        # Step 4: Predict biomass (using mock for now)
+        try:
+            biomass_result = predict_biomass(clean_data)
+            biomass_str = f"{biomass_result:.2f} kg/m²"
+        except NotImplementedError:
+            biomass_str = "Model pending implementation"
+
+        # Calculate carbon sequestration (rough estimate: 1 kg biomass = 0.4 kg carbon)
+        if "pending" not in biomass_str.lower():
+            try:
+                biomass_val = float(biomass_str.split()[0])
+                carbon_val = biomass_val * 0.4  # Carbon content factor
+                carbon_str = f"{carbon_val:.2f} kg C/m²"
+            except ValueError:
+                carbon_str = "Calculation error"
+        else:
+            carbon_str = "Pending biomass calculation"
+
+        processing_time = f"{time.time() - start_time:.2f}s"
+
+        return AnalysisResponse(
+            analysis_id=analysis_id,
+            status="completed",
+            processing_time=processing_time,
+            aoi=request.aoi,
+            date_range={"start": request.start_date, "end": request.end_date},
+            biomass=biomass_str,
+            carbon=carbon_str,
+        )
+
+    except Exception as e:
+        processing_time = f"{time.time() - start_time:.2f}s"
+        return AnalysisResponse(
+            analysis_id=analysis_id,
+            status="error",
+            processing_time=processing_time,
+            aoi=request.aoi,
+            date_range={"start": request.start_date, "end": request.end_date},
+            biomass=f"Error: {str(e)[:100]}",
+            carbon="Error in processing",
+        )
