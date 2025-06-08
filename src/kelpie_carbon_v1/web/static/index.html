@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelpie Carbon v1 - Kelp Forest Carbon Assessment</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🌊 Kelpie Carbon v1</h1>
+            <p>Kelp Forest Carbon Sequestration Assessment</p>
+        </header>
+
+        <main>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date" value="2023-01-01">
+                </div>
+                <div class="control-group">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date" value="2023-12-31">
+                </div>
+                <button id="run-analysis" disabled>Run Analysis</button>
+                <div id="status"></div>
+            </div>
+
+            <div class="map-container">
+                <div id="map"></div>
+                <div class="map-instructions">
+                    Click on the map to select Area of Interest (AOI)
+                </div>
+            </div>
+
+            <div id="results" class="results-container" style="display: none;">
+                <h3>Analysis Results</h3>
+                <div id="results-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
