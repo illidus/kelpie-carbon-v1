@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "kelpie-carbon-v1"
+version = "0.1.0"
+description = ""
+authors = ["Ryan Eyre <ryaneyre1337@gmail.com>"]
+readme = "README.md"
+packages = [{include = "kelpie_carbon_v1", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+typer = "^0.16.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.0"
+pytest-cov = "^6.1.1"
+black = "^25.1.0"
+isort = "^6.0.1"
+flake8 = "^7.2.0"
+mypy = "^1.16.0"
+pre-commit = "^4.2.0"
+dvc = {extras = ["ssh"], version = "^3.60.0"}
+
+[tool.poetry.scripts]
+kelpie-carbon-v1 = "kelpie_carbon_v1.cli:app"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]
