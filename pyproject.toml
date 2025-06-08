@@ -9,6 +9,7 @@ packages = [{include = "kelpie_carbon_v1", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.12"
 typer = "^0.16.0"
+numpy = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.0"
