@@ -131,6 +131,43 @@
 
 ---
 
+### **Task A3: Cloud Mask Implementation** ☁️
+**Status**: ⚪ Not Started  
+**Priority**: HIGH  
+**Estimated Duration**: 1 week  
+**Prerequisite**: Task A1 complete
+
+#### **Objectives**
+- Implement cloud detection and masking functionality
+- Complete the skipped tests in the mask module
+- Improve data quality by filtering cloud-contaminated pixels
+
+#### **Sub-tasks**
+- [ ] **A3.1**: Implement `create_cloud_mask` function
+  - [ ] Research Sentinel-2 cloud detection algorithms
+  - [ ] Implement cloud probability calculation
+  - [ ] Add cloud shadow detection
+  - [ ] Create cloud/shadow mask generation
+
+- [ ] **A3.2**: Implement `remove_small_objects` function
+  - [ ] Add morphological operations for noise removal
+  - [ ] Implement size-based filtering
+  - [ ] Add connected component analysis
+
+- [ ] **A3.3**: Update tests and integration
+  - [ ] Remove pytest.skip from tests in `tests/unit/test_mask.py` (lines 82, 131, 153)
+  - [ ] Add comprehensive test coverage for new functions
+  - [ ] Integrate cloud masking into main processing pipeline
+
+#### **Deliverables**
+- [ ] Cloud detection implementation
+- [ ] Small object removal functionality
+- [ ] Updated test suite (no more skipped tests)
+- [ ] Integration with main imagery processing
+- [ ] Implementation summary: `CLOUD_MASK_IMPLEMENTATION_SUMMARY.md`
+
+---
+
 ## 🎯 **MEDIUM PRIORITY TASKS**
 
 ### **Task B1: Enhanced SKEMA Deep Learning Integration** 🧠
@@ -235,6 +272,47 @@
 - [ ] Depth sensitivity analysis
 - [ ] Integrated detection pipeline
 - [ ] Validation against field measurements
+
+---
+
+### **Task B4: Code Quality & Optimization** 🔧
+**Status**: 🟡 Partially Complete  
+**Priority**: MEDIUM  
+**Estimated Duration**: 1-2 weeks  
+**Prerequisite**: Task A1 complete
+
+#### **Objectives**
+- Complete remaining optimization tasks from `docs/implementation/OPTIMIZATION_TASKS.md`
+- Improve code maintainability and developer experience
+- Enhance system observability
+
+#### **Sub-tasks**
+- [ ] **B4.1**: Standardize Error Messages (🟡 Pending)
+  - [ ] Create consistent error message formats across API endpoints
+  - [ ] Implement standardized error response structure
+  - [ ] Update all error handling to use new standards
+
+- [ ] **B4.2**: Improve Type Hints Coverage (🟡 Pending)
+  - [ ] Add missing type annotations to utility functions
+  - [ ] Achieve 95%+ type hint coverage
+  - [ ] Update mypy configuration for stricter checking
+
+- [ ] **B4.3**: Organize Utility Functions (🟡 Pending)
+  - [ ] Create dedicated utility modules
+  - [ ] Reorganize scattered utility functions
+  - [ ] Improve code organization and discoverability
+
+- [ ] **B4.4**: Add Performance Monitoring (🟡 Pending)
+  - [ ] Implement comprehensive metrics collection
+  - [ ] Add performance dashboard
+  - [ ] Create observability for production monitoring
+
+#### **Deliverables**
+- [ ] Standardized error handling system
+- [ ] Comprehensive type annotation coverage
+- [ ] Organized utility module structure
+- [ ] Performance monitoring dashboard
+- [ ] Implementation summary: `CODE_QUALITY_OPTIMIZATION_SUMMARY.md`
 
 ---
 
