@@ -18,6 +18,8 @@ Welcome to the Kelpie Carbon v1 documentation! This directory contains comprehen
 - **[Testing Guide](TESTING_GUIDE.md)** - Testing strategies, structure, and guidelines
 - **[Agent Guide](agent-guide.md)** - Guide for AI agents working on the codebase
 - **[Standardization Guide](STANDARDIZATION_GUIDE.md)** - **MANDATORY** organizational standards
+- **[New Agent Onboarding](NEW_AGENT_ONBOARDING.md)** - Essential first steps for new AI agents
+- **[Current Task List](CURRENT_TASK_LIST.md)** - Active development priorities
 
 ### 🚀 Deployment & Operations
 - **[Deployment Guide](DEPLOYMENT_GUIDE.md)** - Production deployment instructions
@@ -52,6 +54,8 @@ docs/
 ├── web-interface.md                   # Frontend documentation
 ├── agent-guide.md                     # AI agent guide
 ├── STANDARDIZATION_GUIDE.md           # Mandatory organizational standards
+├── NEW_AGENT_ONBOARDING.md            # Essential first steps for new AI agents
+├── CURRENT_TASK_LIST.md               # Active development priorities
 │
 ├── research/                          # Research and validation docs
 │   ├── VALIDATION_DATA_FRAMEWORK.md
@@ -97,8 +101,10 @@ docs/
 - Review **[Satellite Imagery Features](SATELLITE_IMAGERY_FEATURE.md)** for processing capabilities
 
 ### For AI Agents
+- **START HERE**: **[New Agent Onboarding](NEW_AGENT_ONBOARDING.md)** - Essential first steps
 - Follow **[Agent Guide](agent-guide.md)** for codebase interaction guidelines
 - **MUST READ**: **[Standardization Guide](STANDARDIZATION_GUIDE.md)** - Mandatory structure standards
+- Review **[Current Task List](CURRENT_TASK_LIST.md)** - Your work priorities
 
 ---
 

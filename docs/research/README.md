@@ -2,6 +2,10 @@
 
 This directory contains research documentation, validation frameworks, and scientific specifications for the Kelpie Carbon v1 project.
 
+## 📍 **SKEMA Validation Coordinates**
+
+**⚠️ NEW**: **[SKEMA_VALIDATION_COORDINATES.md](SKEMA_VALIDATION_COORDINATES.md)** - Specific kelp farm coordinates for SKEMA integration validation testing. Use these coordinates in Task A2.4-A2.6 to validate our system against known kelp farm locations.
+
 ## 📚 Research Documents
 
 ### 🌿 SKEMA Integration & Validation
