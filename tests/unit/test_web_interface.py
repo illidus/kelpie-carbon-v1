@@ -70,12 +70,12 @@ def test_layers_js_contains_async_functions():
 
     if response.status_code == 200:
         js_content = response.text
-        
+
         # Check for async method declarations in the class
         assert "async addRGBLayer(" in js_content
         assert "async addMaskOverlay(" in js_content
         assert "async addSpectralLayer(" in js_content
-        
+
         # Check for metadata fetching functionality
         assert "metadata" in js_content
         assert "bounds" in js_content
@@ -88,11 +88,15 @@ def test_layers_js_layer_name_mapping():
 
     if response.status_code == 200:
         js_content = response.text
-        
+
         # Check for layer name mapping logic
         # Should handle kelp_mask -> kelp, water_mask -> water
         assert "kelp_mask" in js_content or "water_mask" in js_content
-        assert ".replace(" in js_content or "split(" in js_content or "substring(" in js_content
+        assert (
+            ".replace(" in js_content
+            or "split(" in js_content
+            or "substring(" in js_content
+        )
 
 
 def test_html_references_correct_static_paths():
@@ -105,7 +109,7 @@ def test_html_references_correct_static_paths():
     # Check that HTML references static files correctly
     assert "/static/style.css" in html_content
     assert "/static/app.js" in html_content
-    
+
     # Check for layers.js reference
     assert "/static/layers.js" in html_content
 
@@ -137,8 +141,14 @@ def test_html_contains_layer_control_elements():
     html_content = response.text
 
     # Check for layer control related elements
-    assert 'id="toggle-controls"' in html_content or 'class="toggle-controls"' in html_content
-    assert 'id="layer-controls"' in html_content or 'class="layer-controls"' in html_content
+    assert (
+        'id="toggle-controls"' in html_content
+        or 'class="toggle-controls"' in html_content
+    )
+    assert (
+        'id="layer-controls"' in html_content
+        or 'class="layer-controls"' in html_content
+    )
 
 
 def test_html_has_proper_structure():
@@ -245,6 +255,6 @@ def test_css_contains_required_styles():
         assert "#run-analysis" in css_content  # Button styling
         assert ".controls" in css_content  # Control panel styling
         assert "height:" in css_content  # Map must have height defined
-        
+
         # Check for layer control styling
         assert "#layer-controls" in css_content or ".layer-controls" in css_content

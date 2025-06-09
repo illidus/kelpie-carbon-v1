@@ -1,7 +1,7 @@
 # 📏 Kelpie Carbon v1 - Standardization Guide
 
-**Date**: January 9, 2025  
-**Purpose**: Ensure consistent project organization and prevent structural drift  
+**Date**: January 9, 2025
+**Purpose**: Ensure consistent project organization and prevent structural drift
 **Audience**: AI Agents, Developers, Contributors
 
 This document establishes **mandatory standards** for maintaining the project's organizational structure. **Deviation from these standards will break the carefully designed architecture.**
@@ -37,7 +37,7 @@ docs/
 │   ├── README.md                 # Research navigation
 │   └── [Research documents]      # Validation, analysis, studies
 │
-└── implementation/               # 📋 HISTORY ONLY  
+└── implementation/               # 📋 HISTORY ONLY
     ├── README.md                 # Implementation navigation
     └── [Implementation summaries] # Task records, status tracking
 ```
@@ -184,7 +184,7 @@ BUGFIX_[ISSUE]_RESOLUTION_SUMMARY.md
 # Unit tests
 test_[module_name].py
 
-# Integration tests  
+# Integration tests
 test_[feature]_integration.py
 
 # End-to-end tests
@@ -224,25 +224,25 @@ test_[aspect]_performance.py
 ## 🚨 **Critical Violations (DO NOT COMMIT)**
 
 ### **Directory Violations**
-❌ Implementation summaries in `docs/` root  
-❌ Research documents in `docs/` root  
-❌ Core documentation in subdirectories  
-❌ Tests in wrong categories  
-❌ Missing `__init__.py` in test directories  
+❌ Implementation summaries in `docs/` root
+❌ Research documents in `docs/` root
+❌ Core documentation in subdirectories
+❌ Tests in wrong categories
+❌ Missing `__init__.py` in test directories
 
 ### **Documentation Violations**
-❌ Broken cross-references  
-❌ Outdated README files  
-❌ Missing entries in directory READMEs  
-❌ Inconsistent naming patterns  
-❌ Duplicate documentation  
+❌ Broken cross-references
+❌ Outdated README files
+❌ Missing entries in directory READMEs
+❌ Inconsistent naming patterns
+❌ Duplicate documentation
 
 ### **Test Violations**
-❌ Unit tests with external dependencies  
-❌ Integration tests in unit directory  
-❌ Performance tests without metrics  
-❌ Missing test categorization  
-❌ Broken test imports  
+❌ Unit tests with external dependencies
+❌ Integration tests in unit directory
+❌ Performance tests without metrics
+❌ Missing test categorization
+❌ Broken test imports
 
 ---
 
@@ -411,4 +411,4 @@ If structural changes become necessary:
 **Verification**: These standards maintain the current success metrics:
 - ✅ 205 tests passing across all categories
 - ✅ Clear documentation navigation
-- ✅ Sustainable organizational patterns 
+- ✅ Sustainable organizational patterns

@@ -26,7 +26,7 @@ This document outlines optimization tasks to improve performance, code quality, 
 #### **2. Eliminate FutureWarnings**
 - **Issue**: Two deprecated method warnings in logs
 - **Impact**: Future compatibility risk
-- **Files**: 
+- **Files**:
   - `pystac_client` usage in `src/kelpie_carbon_v1/core/fetch.py`
   - `xarray` usage in `src/kelpie_carbon_v1/api/main.py`
 - **Solution**: Update to modern API methods
@@ -132,4 +132,4 @@ This document outlines optimization tasks to improve performance, code quality, 
 
 ---
 
-*This document will be updated as tasks are completed.* 
+*This document will be updated as tasks are completed.*

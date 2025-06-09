@@ -32,7 +32,7 @@ Advanced spectral analysis capabilities including:
 ### **Validation Methodology**
 Research-backed validation approaches:
 - Mock BC kelp forest data generation
-- Field campaign management protocols  
+- Field campaign management protocols
 - Performance scoring aligned with SKEMA research standards
 
 ---
@@ -69,4 +69,4 @@ For implementation details, see:
 
 For development context, see:
 - **[Implementation History](../implementation/)** - Development progression
-- **[Project Summary](../PROJECT_SUMMARY.md)** - Overall project scope 
+- **[Project Summary](../PROJECT_SUMMARY.md)** - Overall project scope

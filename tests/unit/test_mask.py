@@ -1,16 +1,17 @@
 """Tests for mask module."""
-import pytest
-import numpy as np
-import xarray as xr
 from unittest.mock import patch
 
+import numpy as np
+import pytest
+import xarray as xr
+
 from kelpie_carbon_v1.core.mask import (
-    create_water_mask,
-    create_kelp_detection_mask,
     apply_mask,
-    get_mask_statistics,
     calculate_fai,
-    calculate_red_edge_ndvi
+    calculate_red_edge_ndvi,
+    create_kelp_detection_mask,
+    create_water_mask,
+    get_mask_statistics,
 )
 
 

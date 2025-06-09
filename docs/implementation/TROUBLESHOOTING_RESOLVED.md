@@ -12,7 +12,7 @@ This guide documents critical issues encountered during optimization and their s
 
 **🔍 Symptoms:**
 ```
-Content-Security-Policy: The page's settings blocked a script (script-src-elem) at 
+Content-Security-Policy: The page's settings blocked a script (script-src-elem) at
 https://unpkg.com/leaflet@1.9.4/dist/leaflet.js from being executed
 ```
 
@@ -153,7 +153,7 @@ Check browser console for CSP violations:
 
 ### ✅ **Post-Fix Validation**
 - [ ] Web interface loads without CSP errors
-- [ ] Leaflet maps render correctly  
+- [ ] Leaflet maps render correctly
 - [ ] All tests pass (`poetry run python -m pytest tests/`)
 - [ ] File watching limited to Python files only
 - [ ] No FutureWarnings in logs
@@ -191,7 +191,7 @@ Check browser console for CSP violations:
 
 **If similar issues occur:**
 1. Check this troubleshooting guide first
-2. Verify import paths match current module structure  
+2. Verify import paths match current module structure
 3. Test CSP policies with external resources
 4. Monitor file watching patterns in logs
 5. Run full test suite to catch regressions
@@ -203,4 +203,4 @@ Check browser console for CSP violations:
 
 ---
 
-*This guide will be updated as new issues are encountered and resolved.* 
+*This guide will be updated as new issues are encountered and resolved.*

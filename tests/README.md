@@ -126,7 +126,7 @@ pytest -m imagery       # Image processing tests
 ### Available Markers
 - `unit` - Fast, isolated unit tests
 - `integration` - Tests with external dependencies
-- `e2e` - End-to-end workflow tests  
+- `e2e` - End-to-end workflow tests
 - `api` - API endpoint tests
 - `core` - Core functionality tests
 - `imagery` - Image processing tests
@@ -268,4 +268,4 @@ pytest --cov=src --cov-report=term-missing
 - **[Testing Guide](../docs/TESTING_GUIDE.md)** - Comprehensive testing documentation
 - **[Development Guide](../docs/DEVELOPMENT_GUIDE.md)** - Development practices
 - **[API Reference](../docs/API_REFERENCE.md)** - API documentation for test development
-- **[Contributing](../CONTRIBUTING.md)** - Contribution guidelines including test requirements 
+- **[Contributing](../CONTRIBUTING.md)** - Contribution guidelines including test requirements

@@ -7,12 +7,12 @@ Based on comprehensive SKEMA framework research, we have identified specific enh
 ## 🎯 **Priority Implementation Items**
 
 ### **1. Enhanced Spectral Processing (IMMEDIATE)**
-**Impact**: Fundamental capability for all advanced features  
-**Effort**: Medium  
+**Impact**: Fundamental capability for all advanced features
+**Effort**: Medium
 **Dependencies**: None
 
 #### **1.1 Add Red-Edge Band Processing**
-**Current Status**: Kelpie v1 uses Bands 2,3,4,8 (Blue,Green,Red,NIR)  
+**Current Status**: Kelpie v1 uses Bands 2,3,4,8 (Blue,Green,Red,NIR)
 **Enhancement**: Add Bands 5,6,7 (Red-Edge) processing
 
 **Files to Modify:**
@@ -24,7 +24,7 @@ Based on comprehensive SKEMA framework research, we have identified specific enh
 # Current bands
 SENTINEL2_BANDS = {
     'B02': 'blue',   # 490nm
-    'B03': 'green',  # 560nm  
+    'B03': 'green',  # 560nm
     'B04': 'red',    # 665nm
     'B08': 'nir'     # 842nm
 }
@@ -42,7 +42,7 @@ SENTINEL2_BANDS_ENHANCED = {
 ```
 
 #### **1.2 Implement NDRE Calculation**
-**Research Basis**: Timmer et al. (2022) - Red-edge outperforms NIR 2:1 for submerged kelp  
+**Research Basis**: Timmer et al. (2022) - Red-edge outperforms NIR 2:1 for submerged kelp
 **Expected Improvement**: 18% more kelp detected
 
 **New Function:**
@@ -54,17 +54,17 @@ def calculate_ndre(image_data):
     """
     red_edge = image_data['B06']  # 740nm
     red = image_data['B04']       # 665nm
-    
+
     # Avoid division by zero
     denominator = red_edge + red
     ndre = np.where(denominator != 0, (red_edge - red) / denominator, 0)
-    
+
     return ndre
 ```
 
 ### **2. NDRE Visualization Layer (HIGH PRIORITY)**
-**Impact**: Immediate user-visible improvement  
-**Effort**: Low  
+**Impact**: Immediate user-visible improvement
+**Effort**: Low
 **Dependencies**: Item 1 complete
 
 Add NDRE as a new layer type alongside existing RGB, NDVI, FAI layers.
@@ -75,8 +75,8 @@ Add NDRE as a new layer type alongside existing RGB, NDVI, FAI layers.
 - `static/js/controls.js` - Update layer management
 
 ### **3. Comparative Analysis Dashboard (MEDIUM PRIORITY)**
-**Impact**: Research validation and system optimization  
-**Effort**: Medium  
+**Impact**: Research validation and system optimization
+**Effort**: Medium
 **Dependencies**: Items 1-2 complete
 
 **Features:**
@@ -122,14 +122,14 @@ Add NDRE as a new layer type alongside existing RGB, NDVI, FAI layers.
 ### **Validation Approach**
 1. **Existing Test Sites**: Use current kelp detection areas in system
 2. **Comparative Analysis**: NDVI vs NDRE on same imagery
-3. **Expected Results**: 
+3. **Expected Results**:
    - NDRE should detect 15-20% more kelp area
    - Better submerged kelp detection in shallow areas
    - Reduced false positives from water surface artifacts
 
 ### **Test Metrics**
 - **Detection Count**: Total kelp pixels detected
-- **Area Coverage**: Square meters of kelp detected  
+- **Area Coverage**: Square meters of kelp detected
 - **Confidence Scores**: Detection certainty levels
 - **Performance**: Processing time comparison
 
@@ -198,6 +198,6 @@ curl http://localhost:8000/health
 
 ---
 
-**Priority**: 🚨 **IMMEDIATE START**  
-**Next Action**: Begin implementing red-edge band processing in `imagery.py`  
-**Timeline**: 2 weeks to functional NDRE layer with comparative analysis 
+**Priority**: 🚨 **IMMEDIATE START**
+**Next Action**: Begin implementing red-edge band processing in `imagery.py`
+**Timeline**: 2 weeks to functional NDRE layer with comparative analysis

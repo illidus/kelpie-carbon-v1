@@ -9,7 +9,7 @@ Welcome to the Kelpie Carbon v1 documentation! This directory contains comprehen
 - **[User Guide](USER_GUIDE.md)** - End-user documentation for using the application
 - **[Developer Onboarding](DEVELOPER_ONBOARDING.md)** - Complete setup guide for new developers
 
-### 🏗️ Architecture & Development  
+### 🏗️ Architecture & Development
 - **[System Architecture](ARCHITECTURE.md)** - Technical architecture and component overview
 - **[Development Guide](DEVELOPMENT_GUIDE.md)** - Development workflows and best practices
 - **[API Reference](API_REFERENCE.md)** - Complete API documentation
@@ -116,6 +116,6 @@ docs/
 
 See **[CONTRIBUTING.md](../CONTRIBUTING.md)** for guidelines on:
 - Documentation standards
-- Writing style guidelines  
+- Writing style guidelines
 - Review process
-- Template usage 
+- Template usage

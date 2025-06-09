@@ -203,17 +203,17 @@ def calculate_kelp_biomass(
     depth_mask: np.ndarray
 ) -> Dict[str, float]:
     """Calculate kelp biomass from spectral data.
-    
+
     Args:
         spectral_data: Multi-band spectral imagery array
         depth_mask: Boolean mask for appropriate depth range
-        
+
     Returns:
         Dictionary containing biomass estimates and confidence metrics
-        
+
     Raises:
         ValueError: If spectral_data dimensions are invalid
-        
+
     Example:
         >>> biomass = calculate_kelp_biomass(data, mask)
         >>> print(biomass['total_biomass'])
@@ -252,7 +252,7 @@ logger = logging.getLogger(__name__)
 def process_satellite_data(scene_id: str) -> None:
     """Process satellite data for given scene."""
     logger.info(f"Processing satellite scene: {scene_id}")
-    
+
     try:
         # Processing logic
         logger.debug("Satellite data processed successfully")
@@ -351,10 +351,10 @@ tests/
     └── test_phase5_performance.py  # System performance metrics
 ```
 
-### **Test Categorization Rules** 
+### **Test Categorization Rules**
 **Unit Tests** (`tests/unit/`):
 - ✅ Fast execution (< 1 second each)
-- ✅ No external dependencies 
+- ✅ No external dependencies
 - ✅ Test single functions/classes
 - ✅ Mockable dependencies
 
@@ -379,7 +379,7 @@ tests/
 # Run by category for focused testing
 pytest tests/unit/ -v          # Fast unit tests
 pytest tests/integration/ -v   # Integration tests
-pytest tests/e2e/ -v          # End-to-end tests  
+pytest tests/e2e/ -v          # End-to-end tests
 pytest tests/performance/ -v   # Performance tests
 
 # Run all tests
@@ -396,7 +396,7 @@ def test_kelp_detection_with_clear_water_conditions():
 def test_biomass_calculation_handles_missing_data():
 def test_api_returns_422_for_invalid_coordinates():
 
-# Bad  
+# Bad
 def test_kelp_function():
 def test_api():
 def test_error():
@@ -409,10 +409,10 @@ def test_spectral_index_calculation():
     # Arrange
     red_band = np.array([[0.1, 0.2], [0.3, 0.4]])
     nir_band = np.array([[0.5, 0.6], [0.7, 0.8]])
-    
+
     # Act
     ndvi = calculate_ndvi(red_band, nir_band)
-    
+
     # Assert
     expected = (nir_band - red_band) / (nir_band + red_band)
     np.testing.assert_array_almost_equal(ndvi, expected)
@@ -426,11 +426,11 @@ class TestSatelliteAPI:
         """Setup fresh state for each test."""
         self.client = TestClient(app)
         self.test_analysis_id = "test-12345"
-    
+
     def test_rgb_endpoint(self):
         # Test doesn't depend on other tests
         pass
-    
+
     def test_metadata_endpoint(self):
         # Independent test
         pass
@@ -481,7 +481,7 @@ docs/
 │   ├── README.md
 │   └── [Scientific research, validation frameworks]
 │
-└── implementation/               # 📋 Implementation summaries only  
+└── implementation/               # 📋 Implementation summaries only
     ├── README.md
     └── [Task summaries, optimization records, status tracking]
 ```
@@ -491,7 +491,7 @@ docs/
 #### **Core Documentation** (`docs/` root)
 **PLACE HERE:**
 - ✅ User guides (`USER_GUIDE.md`)
-- ✅ API documentation (`API_REFERENCE.md`)  
+- ✅ API documentation (`API_REFERENCE.md`)
 - ✅ System architecture (`ARCHITECTURE.md`)
 - ✅ Deployment guides (`DEPLOYMENT_GUIDE.md`)
 - ✅ Developer onboarding (`DEVELOPER_ONBOARDING.md`)
@@ -499,7 +499,7 @@ docs/
 #### **Research Documentation** (`docs/research/`)
 **PLACE HERE:**
 - ✅ Scientific validation frameworks
-- ✅ Algorithm research and analysis  
+- ✅ Algorithm research and analysis
 - ✅ Technical specifications for research
 - ✅ Data validation studies
 
@@ -576,7 +576,7 @@ Always test code examples:
 # ✅ Good: Working example with context
 def analyze_kelp_forest(coordinates: Dict[str, float]) -> Dict[str, Any]:
     """Analyze kelp forest at given coordinates.
-    
+
     Example:
         >>> result = analyze_kelp_forest({"lat": 34.4140, "lng": -119.8489})
         >>> print(result['biomass'])
@@ -825,4 +825,4 @@ If you have questions about contributing, please:
 3. Create a new discussion or issue
 4. Tag maintainers if urgent
 
-Happy coding! 🌊 
+Happy coding! 🌊

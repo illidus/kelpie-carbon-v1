@@ -147,7 +147,7 @@ poetry run pytest --cov=src --cov-report=html
 
 ### **🔒 Security Features**
 - **Input Validation**: Strict Pydantic validation on all inputs
-- **Geographic Bounds**: Coordinate validation prevents invalid requests  
+- **Geographic Bounds**: Coordinate validation prevents invalid requests
 - **Date Validation**: Format and range validation for temporal queries
 - **Error Sanitization**: No sensitive information in error responses
 
@@ -178,6 +178,6 @@ The system successfully processes satellite imagery for kelp forest carbon seque
 
 ---
 
-**Status**: ✅ **PRODUCTION READY**  
-**Last Updated**: $(date)  
-**Next Review**: 30 days 
+**Status**: ✅ **PRODUCTION READY**
+**Last Updated**: $(date)
+**Next Review**: 30 days

@@ -62,45 +62,45 @@ def water_anomaly_filter(image_data, kernel_size=5):
     """
     Water Anomaly Filter based on Uhl et al. (2016)
     Removes sunglint, foam, and anthropogenic objects
-    
+
     Steps:
     1. Moving window analysis (5x5 kernel)
     2. Calculate mean and std dev excluding center pixel
     3. Outlier-corrected mean calculation
     4. Replace anomalies with corrected values
     """
-    
+
     filtered_image = image_data.copy()
     height, width = image_data.shape
-    
+
     # Pad image for border handling
     pad_size = kernel_size // 2
     padded_image = np.pad(image_data, pad_size, mode='reflect')
-    
+
     for i in range(height):
         for j in range(width):
             # Extract 5x5 window
             window = padded_image[i:i+kernel_size, j:j+kernel_size]
             center_val = window[pad_size, pad_size]
-            
+
             # Calculate stats excluding center pixel
             window_flat = window.flatten()
             window_flat = np.delete(window_flat, len(window_flat)//2)
             window_mean = np.mean(window_flat)
             window_std = np.std(window_flat)
-            
+
             # Outlier-corrected mean
             valid_pixels = window_flat[
-                (window_flat >= window_mean - window_std) & 
+                (window_flat >= window_mean - window_std) &
                 (window_flat <= window_mean + window_std)
             ]
             corrected_mean = np.mean(valid_pixels)
-            
+
             # Replace anomalies
-            if (center_val < corrected_mean - window_std or 
+            if (center_val < corrected_mean - window_std or
                 center_val > corrected_mean + window_std):
                 filtered_image[i, j] = corrected_mean
-                
+
     return filtered_image
 ```
 
@@ -108,21 +108,21 @@ def water_anomaly_filter(image_data, kernel_size=5):
 ```python
 def enhanced_image_preprocessing(image_data):
     """Complete preprocessing pipeline with WAF"""
-    
+
     # Step 1: Atmospheric correction (existing)
     corrected_data = apply_atmospheric_correction(image_data)
-    
+
     # Step 2: Water Anomaly Filter (NEW)
     filtered_data = {}
     for band_name, band_data in corrected_data.items():
         filtered_data[band_name] = water_anomaly_filter(band_data)
-    
+
     # Step 3: Geometric correction (existing)
     geometrically_corrected = apply_geometric_correction(filtered_data)
-    
+
     # Step 4: Cloud masking (existing)
     final_data = apply_cloud_masking(geometrically_corrected)
-    
+
     return final_data
 ```
 
@@ -137,12 +137,12 @@ def calculate_spectral_derivatives(spectrum, band_centers):
     Calculate first-order derivatives using Savitzky-Golay filter
     Based on Uhl et al. (2016) methodology
     """
-    
+
     # Savitzky-Golay smoothing and differentiation
     # 7-point window, 2nd degree polynomial
     smoothed_spectrum = scipy.signal.savgol_filter(spectrum, 7, 2)
     first_derivative = scipy.signal.savgol_filter(spectrum, 7, 2, deriv=1)
-    
+
     return smoothed_spectrum, first_derivative
 
 def detect_kelp_features(spectrum, band_centers):
@@ -152,9 +152,9 @@ def detect_kelp_features(spectrum, band_centers):
     - 528nm ± 18nm (fucoxanthin absorption)
     - 570nm ± 10nm (reflectance peak)
     """
-    
+
     smoothed, derivative = calculate_spectral_derivatives(spectrum, band_centers)
-    
+
     # Find zero-crossings in derivative (local maxima/minima)
     zero_crossings = []
     for i in range(len(derivative) - 1):
@@ -165,16 +165,16 @@ def detect_kelp_features(spectrum, band_centers):
                         (band_centers[i+1] - band_centers[i]) * \
                         abs(derivative[i]) / (abs(derivative[i]) + abs(derivative[i+1]))
             zero_crossings.append(zero_point)
-    
+
     # Check for kelp-specific features
     kelp_features = {
         'fucoxanthin_absorption': any(510 <= wl <= 546 for wl in zero_crossings),
         'reflectance_peak': any(560 <= wl <= 580 for wl in zero_crossings)
     }
-    
+
     # Classify as kelp if both features present
     is_kelp = all(kelp_features.values())
-    
+
     return is_kelp, kelp_features, zero_crossings
 ```
 
@@ -184,21 +184,21 @@ def enhanced_kelp_detection(image_data):
     """
     Enhanced kelp detection combining multiple approaches
     """
-    
+
     # Method 1: NDRE-based detection (for submerged kelp)
     ndre_result = create_ndre_layer(image_data)
-    
+
     # Method 2: Feature detection (for depth-invariant detection)
     feature_result = apply_feature_detection(image_data)
-    
+
     # Method 3: Traditional NDVI (for comparison)
     ndvi_result = calculate_ndvi(image_data['B08'], image_data['B04'])
-    
+
     # Combine results with confidence weighting
     combined_detection = combine_detection_methods(
         ndre_result, feature_result, ndvi_result
     )
-    
+
     return {
         'kelp_probability': combined_detection,
         'method_comparison': {
@@ -221,14 +221,14 @@ def apply_tidal_correction(detection_result, tidal_height):
     - Low current (<10 cm/s): 22.5% extent decrease per meter
     - High current (>10 cm/s): 35.5% extent decrease per meter
     """
-    
+
     # Correction factors from research
     low_current_factor = -0.225  # -22.5% per meter
     high_current_factor = -0.355  # -35.5% per meter
-    
+
     # Apply correction (simplified - would need current speed data)
     corrected_extent = detection_result * (1 + low_current_factor * tidal_height)
-    
+
     return np.clip(corrected_extent, 0, 1)  # Keep within valid range
 ```
 
@@ -238,7 +238,7 @@ def apply_tidal_correction(detection_result, tidal_height):
 ```python
 def calculate_enhanced_metrics(predicted, ground_truth):
     """Calculate performance metrics for enhanced detection"""
-    
+
     return {
         'detection_improvement': {
             'ndre_vs_ndvi_gain': calculate_detection_gain(),
@@ -325,4 +325,4 @@ RED_EDGE_CONFIG = {
 
 **Status**: 📋 **Specification Complete**
 **Next**: Implementation Phase 1 - Core Red-Edge Processing
-**Timeline**: 4 weeks for full implementation and testing 
+**Timeline**: 4 weeks for full implementation and testing

@@ -46,11 +46,11 @@ class SimpleConfig:
     app_name: str = "Kelpie Carbon v1"
     app_version: str = "0.1.0"
     description: str = "Kelp Forest Carbon Sequestration Assessment..."
-    
+
     # Server settings with environment variable support
     host: str = field(default_factory=lambda: os.getenv("KELPIE_HOST", "0.0.0.0"))
     port: int = field(default_factory=lambda: int(os.getenv("KELPIE_PORT", "8000")))
-    
+
     # Built-in validation
     def __post_init__(self):
         if not 1 <= self.port <= 65535:
@@ -108,7 +108,7 @@ return HealthResponse(
 **Created `tests/test_simple_config.py`** with 9 test methods:
 
 #### Configuration Tests
-- **Default value tests** 
+- **Default value tests**
 - **Environment variable tests**
 - **Validation tests** (port ranges, cloud cover, timeouts)
 - **Caching tests**
@@ -164,7 +164,7 @@ def setup_logging() -> None:
 poetry run pytest tests/test_models.py -v
 # ========== 16 passed, 5 warnings ==========
 # ✅ All coordinate validation tests pass
-# ✅ All date validation tests pass  
+# ✅ All date validation tests pass
 # ✅ All model serialization tests pass
 ```
 
@@ -232,4 +232,4 @@ Phase 2 successfully delivered **Structure Improvements** that significantly enh
 - ✅ **Zero breaking changes** through backward compatibility
 - ✅ **Auto-generated documentation** via OpenAPI integration
 
-The codebase is now ready for Phase 3 improvements with a solid foundation of validated APIs and simplified configuration management. 
+The codebase is now ready for Phase 3 improvements with a solid foundation of validated APIs and simplified configuration management.

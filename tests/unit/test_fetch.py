@@ -1,12 +1,11 @@
 """Tests for fetch module."""
-import pytest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
+import pytest
 import xarray as xr
-from unittest.mock import patch, MagicMock
-from kelpie_carbon_v1.core.fetch import (
-    fetch_sentinel_tiles,
-    _create_mock_sentinel_data
-)
+
+from kelpie_carbon_v1.core.fetch import _create_mock_sentinel_data, fetch_sentinel_tiles
 
 
 def test_fetch_sentinel_tiles_with_mock_data():

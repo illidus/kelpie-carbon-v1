@@ -1,6 +1,6 @@
 # 🤖 AI Agent Guide - Kelpie Carbon v1
 
-**Last Updated**: January 9, 2025  
+**Last Updated**: January 9, 2025
 **Structure Version**: 2.0 (Post-Reorganization)
 
 This guide provides comprehensive instructions for AI agents working on the Kelpie Carbon v1 project. **Follow this guide carefully to maintain the established organizational structure.**
@@ -35,7 +35,7 @@ This guide provides comprehensive instructions for AI agents working on the Kelp
 docs/
 ├── README.md                          # 📚 NAVIGATION HUB - Start here
 ├── PROJECT_SUMMARY.md                 # Project overview
-├── USER_GUIDE.md                      # End-user documentation  
+├── USER_GUIDE.md                      # End-user documentation
 ├── DEVELOPER_ONBOARDING.md            # Developer setup
 ├── DEVELOPMENT_GUIDE.md               # Development workflows
 ├── ARCHITECTURE.md                    # System architecture
@@ -164,7 +164,7 @@ Before creating ANY new documentation file:
 ## 🧪 **Testing Standards (CRITICAL)**
 
 ### **Test Categorization Rules**
-1. **Unit Tests** (`tests/unit/`): 
+1. **Unit Tests** (`tests/unit/`):
    - Fast, isolated, no external dependencies
    - Test individual functions/classes
    - **Example**: API endpoint logic, data models
@@ -267,7 +267,7 @@ poetry run flake8 src/ tests/
 
 ### **Structure Preservation**
 1. ❌ **NEVER** put implementation summaries in `docs/` root
-2. ❌ **NEVER** put research docs in `docs/` root  
+2. ❌ **NEVER** put research docs in `docs/` root
 3. ❌ **NEVER** mix test types in wrong directories
 4. ❌ **NEVER** skip updating READMEs when adding files
 5. ❌ **NEVER** break cross-references without fixing them
@@ -368,5 +368,5 @@ refactor(core): improve satellite data processing efficiency
 
 **Remember**: This organizational structure was carefully designed for maintainability. Following these guidelines ensures the codebase remains clean, navigable, and sustainable for future development.
 
-**Last Verification**: All 205 tests passing ✅  
+**Last Verification**: All 205 tests passing ✅
 **Structure Status**: Fully implemented and documented ✅

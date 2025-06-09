@@ -16,7 +16,7 @@ Comprehensive framework for collecting and managing local validation data to val
    - **Advantages**: Sheltered waters, easy access, diverse depth zones
 
 2. **Haro Strait (Gulf Islands)**
-   - **Coordinates**: 48°30'N, 123°10'W  
+   - **Coordinates**: 48°30'N, 123°10'W
    - **Distance**: 1.5 hours (Sidney ferry + boat)
    - **Kelp Species**: Dense *Nereocystis* beds, some *Macrocystis*
    - **Advantages**: Clear water, minimal human impact
@@ -77,5 +77,5 @@ Ready to implement comprehensive validation framework with database schema, file
 
 ---
 
-**Status**: 🟡 **In Progress**  
-**Next**: Implement validation infrastructure 
+**Status**: 🟡 **In Progress**
+**Next**: Implement validation infrastructure

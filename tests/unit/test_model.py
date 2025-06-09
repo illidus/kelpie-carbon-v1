@@ -407,71 +407,75 @@ def test_model_robustness():
 def test_empty_array_handling():
     """Test that empty arrays are handled without RuntimeWarnings."""
     import warnings
-    
+
     model = KelpBiomassModel()
-    
+
     # Test with empty arrays that used to cause RuntimeWarnings
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter("always")
-        
+
         # Test empty slice mean calculation
         empty_array = np.array([])
         if len(empty_array) > 0:
             result = np.mean(empty_array)
         else:
             result = 0.0  # Default value for empty arrays
-        
+
         assert result == 0.0
-        
-        # Test empty slice percentile calculation  
+
+        # Test empty slice percentile calculation
         if len(empty_array) > 0:
             result = np.percentile(empty_array, 95)
         else:
             result = 0.0  # Default value for empty arrays
-            
+
         assert result == 0.0
-        
+
         # Check that no RuntimeWarnings were generated
-        runtime_warnings = [warning for warning in w if warning.category == RuntimeWarning]
+        runtime_warnings = [
+            warning for warning in w if warning.category == RuntimeWarning
+        ]
         assert len(runtime_warnings) == 0
 
 
 def test_all_nan_array_handling():
     """Test handling of arrays with all NaN values."""
     import warnings
-    
+
     model = KelpBiomassModel()
-    
+
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter("always")
-        
+
         # Test all-NaN arrays
         nan_array = np.full(10, np.nan)
         valid_mask = ~np.isnan(nan_array)
-        
+
         if np.any(valid_mask):
             result = np.mean(nan_array[valid_mask])
         else:
             result = 0.0  # Default for all-NaN arrays
-            
+
         assert result == 0.0
-        
+
         # Check that no RuntimeWarnings were generated
-        runtime_warnings = [warning for warning in w if warning.category == RuntimeWarning]
+        runtime_warnings = [
+            warning for warning in w if warning.category == RuntimeWarning
+        ]
         assert len(runtime_warnings) == 0
 
 
 def test_model_statistical_operations_safe():
     """Test that model statistical operations don't generate RuntimeWarnings."""
     import warnings
-    
+
     # Create a dataset with some empty/NaN regions
     height, width = 10, 10
-    
+
     # Create mostly NaN data to test edge cases
     red = np.full((height, width), np.nan)
     red[0:2, 0:2] = 0.1  # Only a small valid region
-    
+
     dataset = xr.Dataset(
         {
             "red": (["y", "x"], red),
@@ -482,21 +486,28 @@ def test_model_statistical_operations_safe():
             "water_mask": (["y", "x"], np.ones((height, width))),
             "valid_mask": (["y", "x"], np.ones((height, width))),
         },
-        coords={"x": np.linspace(-123.5, -123.0, width), "y": np.linspace(49.5, 49.0, height)},
+        coords={
+            "x": np.linspace(-123.5, -123.0, width),
+            "y": np.linspace(49.5, 49.0, height),
+        },
     )
-    
+
     model = KelpBiomassModel()
-    
+
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter("always")
-        
+
         # This should not generate RuntimeWarnings
         features = model.extract_features(dataset)
-        
+
         # Check that features were extracted successfully
         assert isinstance(features, pd.DataFrame)
         assert len(features) == 1
-        
+
         # Check that no RuntimeWarnings were generated
-        runtime_warnings = [warning for warning in w if warning.category == RuntimeWarning]
-        assert len(runtime_warnings) == 0, f"Generated RuntimeWarnings: {[str(w.message) for w in runtime_warnings]}"
+        runtime_warnings = [
+            warning for warning in w if warning.category == RuntimeWarning
+        ]
+        assert (
+            len(runtime_warnings) == 0
+        ), f"Generated RuntimeWarnings: {[str(w.message) for w in runtime_warnings]}"

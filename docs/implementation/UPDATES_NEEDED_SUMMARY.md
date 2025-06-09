@@ -18,7 +18,7 @@ This document outlines all documentation, tests, and other materials that need t
 
 ### **3. Layer Control Fixes**
 - **File**: `src/kelpie_carbon_v1/web/static/layers.js`
-- **Changes**: 
+- **Changes**:
   - Made layer creation methods async
   - Added proper bounds fetching before layer creation
   - Fixed layer name mapping (`kelp_mask` → `kelp`, `water_mask` → `water`)
@@ -44,7 +44,7 @@ This document outlines all documentation, tests, and other materials that need t
 #### **2. Web Interface Documentation (`docs/web-interface.md`)**
 - **Current Status**: Outdated (mentions "Future Enhancements")
 - **Updates Needed**:
-  - Remove "Future Enhancements" section 
+  - Remove "Future Enhancements" section
   - Update to reflect current layer control capabilities
   - Add section on layer management features
   - Update API integration examples
@@ -211,4 +211,4 @@ This document outlines all documentation, tests, and other materials that need t
 - **System-Facing**: No more RuntimeWarnings, cleaner logs
 - **Testing**: More robust test cleanup on Windows
 
-**Estimated Total Update Effort**: 4-6 hours for complete implementation 
+**Estimated Total Update Effort**: 4-6 hours for complete implementation

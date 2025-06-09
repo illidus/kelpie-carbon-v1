@@ -199,7 +199,7 @@ poetry run pytest
 # Run by category
 poetry run pytest tests/unit/              # Unit tests (fast)
 poetry run pytest tests/integration/       # Integration tests
-poetry run pytest tests/e2e/              # End-to-end tests  
+poetry run pytest tests/e2e/              # End-to-end tests
 poetry run pytest tests/performance/       # Performance tests
 
 # Run with coverage
