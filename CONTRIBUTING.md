@@ -324,21 +324,66 @@ try {
 ## **Testing Guidelines**
 
 ### **Test Structure**
-Organize tests by component and type:
+**⚠️ IMPORTANT**: Follow the established test categorization structure:
 ```
 tests/
-├── unit/                    # Fast, isolated tests
-│   ├── test_api.py
-│   ├── test_imagery.py
-│   └── test_models.py
-├── integration/             # Component interaction tests
-│   ├── test_workflow.py
-│   └── test_api_integration.py
-├── performance/             # Performance and load tests
-│   └── test_performance.py
-└── fixtures/               # Test data and utilities
-    ├── sample_data.py
-    └── mock_responses.py
+├── README.md                # Test guide and documentation
+├── conftest.py              # Shared test configuration
+│
+├── unit/                    # ⚡ Fast, isolated tests (< 1 second)
+│   ├── __init__.py
+│   ├── test_api.py          # API endpoint logic
+│   ├── test_imagery.py      # Image processing functions
+│   └── test_models.py       # Data models and utilities
+│
+├── integration/             # 🔗 Component interaction tests
+│   ├── __init__.py
+│   ├── test_workflow.py     # Multi-component workflows
+│   └── test_real_satellite_data.py  # External API integration
+│
+├── e2e/                     # 🌐 End-to-end workflow tests
+│   ├── __init__.py
+│   └── test_integration_comprehensive.py  # Complete user workflows
+│
+└── performance/             # ⚡ Performance and optimization tests
+    ├── __init__.py
+    ├── test_optimization.py # Caching and performance
+    └── test_phase5_performance.py  # System performance metrics
+```
+
+### **Test Categorization Rules** 
+**Unit Tests** (`tests/unit/`):
+- ✅ Fast execution (< 1 second each)
+- ✅ No external dependencies 
+- ✅ Test single functions/classes
+- ✅ Mockable dependencies
+
+**Integration Tests** (`tests/integration/`):
+- ✅ Test component interactions
+- ✅ May use external APIs (satellite data)
+- ✅ Test real data flows
+- ✅ Verify service integrations
+
+**End-to-End Tests** (`tests/e2e/`):
+- ✅ Test complete user workflows
+- ✅ Full system integration
+- ✅ Simulate real user scenarios
+
+**Performance Tests** (`tests/performance/`):
+- ✅ Measure performance metrics
+- ✅ Test optimization effectiveness
+- ✅ Benchmark improvements
+
+### **Test Execution Commands**
+```bash
+# Run by category for focused testing
+pytest tests/unit/ -v          # Fast unit tests
+pytest tests/integration/ -v   # Integration tests
+pytest tests/e2e/ -v          # End-to-end tests  
+pytest tests/performance/ -v   # Performance tests
+
+# Run all tests
+pytest -v
 ```
 
 ### **Testing Principles**
@@ -423,22 +468,93 @@ def test_api_response_time():
 
 ## **Documentation**
 
-### **Documentation Types**
+### **Documentation Structure & Organization**
+
+**⚠️ CRITICAL**: Follow the established documentation structure exactly:
+
+```
+docs/
+├── README.md                     # 🚪 Navigation hub - ENTRY POINT
+├── [Core Documentation]          # User guides, API docs, architecture
+│
+├── research/                     # 🔬 Research & validation docs only
+│   ├── README.md
+│   └── [Scientific research, validation frameworks]
+│
+└── implementation/               # 📋 Implementation summaries only  
+    ├── README.md
+    └── [Task summaries, optimization records, status tracking]
+```
+
+### **File Placement Rules (MANDATORY)**
+
+#### **Core Documentation** (`docs/` root)
+**PLACE HERE:**
+- ✅ User guides (`USER_GUIDE.md`)
+- ✅ API documentation (`API_REFERENCE.md`)  
+- ✅ System architecture (`ARCHITECTURE.md`)
+- ✅ Deployment guides (`DEPLOYMENT_GUIDE.md`)
+- ✅ Developer onboarding (`DEVELOPER_ONBOARDING.md`)
+
+#### **Research Documentation** (`docs/research/`)
+**PLACE HERE:**
+- ✅ Scientific validation frameworks
+- ✅ Algorithm research and analysis  
+- ✅ Technical specifications for research
+- ✅ Data validation studies
+
+#### **Implementation History** (`docs/implementation/`)
+**PLACE HERE:**
+- ✅ Task completion summaries
+- ✅ Phase implementation records
+- ✅ Optimization and performance tracking
+- ✅ Bug fix documentation
+
+### **Documentation Standards**
+
+#### **Implementation Summary Template** (REQUIRED)
+All implementation summaries must use this template:
+
+```markdown
+# [Feature/Task] Implementation Summary
+
+**Date**: [YYYY-MM-DD]
+**Status**: [COMPLETED/IN_PROGRESS/BLOCKED]
+**Type**: [Feature/Bug Fix/Optimization/Research]
+
+## 🎯 Objective
+[Clear description of what was implemented/changed]
+
+## ✅ Completed Tasks
+- [ ] Task 1: [Description]
+- [ ] Task 2: [Description]
+
+## 📊 Results
+[Quantitative results, performance improvements, metrics]
+
+## 🧪 Testing
+**Test Results**: [Pass/Fail counts, coverage info]
+**Test Categories**: [Which test categories were affected]
+
+## 🔗 Related Documentation
+- [Link to User Guide updates]
+- [Link to API Reference changes]
+
+## 📝 Notes
+[Additional context, challenges, lessons learned]
+```
+
+#### **Required Actions When Adding Documentation**
+1. ✅ **Determine Category**: Core, Research, or Implementation?
+2. ✅ **Update README**: Add entry to appropriate directory README
+3. ✅ **Add Cross-References**: Link from related documents
+4. ✅ **Follow Naming**: Use clear, descriptive filenames
+5. ✅ **Use Templates**: Follow established document templates
 
 #### **Code Documentation**
 - **Docstrings**: For all public functions and classes
 - **Inline Comments**: For complex logic
 - **Type Hints**: For all function parameters and returns
-
-#### **User Documentation**
-- **README.md**: Project overview and quick start
-- **USER_GUIDE.md**: Comprehensive user instructions
-- **API_REFERENCE.md**: Complete API documentation
-
-#### **Developer Documentation**
-- **ARCHITECTURE.md**: System design and components
-- **TESTING_GUIDE.md**: Testing strategies and guidelines
-- **DEPLOYMENT_GUIDE.md**: Deployment instructions
 
 ### **Writing Guidelines**
 

@@ -172,41 +172,50 @@ kelpie-carbon-v1/
 └── pyproject.toml                # Project configuration
 ```
 
+### **📚 Documentation**
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[📚 Documentation Index](docs/README.md)** - Complete documentation navigation
+- **[🎯 Project Summary](docs/PROJECT_SUMMARY.md)** - Overview and features
+- **[👨‍💻 Developer Guide](docs/DEVELOPER_ONBOARDING.md)** - Setup and development
+- **[🏗️ Architecture](docs/ARCHITECTURE.md)** - System design and components
+- **[📡 API Reference](docs/API_REFERENCE.md)** - Complete API documentation
+- **[🧪 Testing Guide](docs/TESTING_GUIDE.md)** - Testing strategies and structure
+
 ### **API Documentation**
 When the server is running, visit:
 - **Interactive API Docs**: http://localhost:8000/docs
 - **OpenAPI Schema**: http://localhost:8000/openapi.json
 
-### **Phase Implementation Guide**
-The project was developed in 5 phases:
-
-1. **[Phase 1: Core Image Generation](docs/PHASE1_CORE_IMAGE_GENERATION.md)**
-2. **[Phase 2: Spectral Visualizations](docs/PHASE2_SPECTRAL_VISUALIZATIONS.md)**
-3. **[Phase 3: Analysis Overlays](docs/PHASE3_ANALYSIS_OVERLAYS.md)**
-4. **[Phase 4: Interactive Controls](docs/PHASE4_INTERACTIVE_CONTROLS.md)**
-5. **[Phase 5: Performance & Polish](docs/PHASE5_PERFORMANCE_POLISH.md)**
-
 ## 🧪 **Testing**
 
-### **Running Tests**
+The test suite is organized into categories for better maintainability:
+
+### **Quick Test Commands**
 ```bash
 # Run all tests
 poetry run pytest
 
+# Run by category
+poetry run pytest tests/unit/              # Unit tests (fast)
+poetry run pytest tests/integration/       # Integration tests
+poetry run pytest tests/e2e/              # End-to-end tests  
+poetry run pytest tests/performance/       # Performance tests
+
 # Run with coverage
 poetry run pytest --cov=src --cov-report=html
-
-# Run specific test categories
-poetry run pytest tests/test_api.py          # API tests
-poetry run pytest tests/test_imagery.py     # Imagery processing tests
-poetry run pytest tests/test_integration.py # Integration tests
 ```
 
-### **Test Categories**
-- **Unit Tests**: Individual component testing
-- **Integration Tests**: End-to-end workflow testing
-- **Performance Tests**: Load and performance validation
-- **API Tests**: REST endpoint validation
+For detailed testing information, see **[🧪 Tests README](tests/README.md)**
+
+### **Test Structure**
+```
+tests/
+├── unit/           # Unit tests (fast, isolated)
+├── integration/    # Integration tests (external APIs)
+├── e2e/           # End-to-end tests (complete workflows)
+└── performance/   # Performance tests (optimization)
+```
 
 ## 🏗️ **Architecture**
 
