@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Imagery API</title>
+</head>
+<body>
+    <h1>Test Imagery API</h1>
+    <button id="test-btn">Test Imagery API</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('test-btn').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                console.log('🚀 Testing imagery API...');
+                
+                const response = await fetch('/api/imagery/analyze-and-cache', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        aoi: {
+                            lat: 36.8,
+                            lng: -121.9
+                        },
+                        start_date: "2023-01-01",
+                        end_date: "2023-12-31",
+                        buffer_km: 1.0,
+                        max_cloud_cover: 0.3
+                    })
+                });
+                
+                console.log('📡 Response status:', response.status);
+                console.log('📡 Response ok:', response.ok);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Error response:', errorText);
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${response.status} - ${errorText}</p>`;
+                    return;
+                }
+                
+                const result = await response.json();
+                console.log('✅ Success result:', result);
+                resultDiv.innerHTML = `
+                    <p style="color: green;">Success!</p>
+                    <p>Analysis ID: ${result.analysis_id}</p>
+                    <p>Status: ${result.status}</p>
+                    <p>Bounds: ${JSON.stringify(result.bounds)}</p>
+                `;
+                
+            } catch (error) {
+                console.error('❌ Fetch error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">Fetch Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,152 @@
+# Kelpie Carbon v1 - Development Configuration
+# Configuration file for local development environment
+
+app:
+  name: "Kelpie Carbon v1"
+  version: "1.0.0"
+  environment: "development"
+  debug: true
+  description: "Kelp Forest Carbon Sequestration Assessment"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  reload: true
+  workers: 1
+  access_log: true
+  log_level: "debug"
+
+# Data processing configuration
+processing:
+  max_concurrent_analyses: 5
+  analysis_timeout: 300  # seconds
+  image_cache_size: 100
+  image_cache_ttl: 3600  # seconds
+
+# Satellite data configuration
+satellite:
+  data_source: "microsoft_planetary_computer"
+  max_cloud_cover: 0.3  # 30%
+  preferred_resolution: 10  # meters
+  max_scenes_per_request: 5
+  timeout: 30  # seconds
+
+# Machine learning configuration
+ml_models:
+  kelp_detection:
+    model_type: "random_forest"
+    confidence_threshold: 0.7
+    min_area_threshold: 100  # square meters
+  
+  biomass_estimation:
+    model_type: "regression"
+    units: "tons_per_hectare"
+    carbon_conversion_factor: 0.45
+
+# Image generation settings
+image_generation:
+  rgb_composite:
+    format: "JPEG"
+    quality: 85
+    enhancement: true
+    
+  spectral_indices:
+    format: "PNG"
+    colormap: "viridis"
+    transparency: true
+    
+  overlays:
+    format: "PNG"
+    default_alpha: 0.6
+    line_width: 2
+
+# Performance and caching
+cache:
+  type: "memory"
+  max_size: "1GB"
+  cleanup_interval: 3600  # seconds
+  compression: true
+
+# Logging configuration
+logging:
+  level: "DEBUG"
+  format: "detailed"
+  include_timestamp: true
+  include_module: true
+  console_output: true
+  file_output: false
+  log_file: "logs/kelpie-dev.log"
+
+# CORS configuration for development
+cors:
+  allow_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8000"
+    - "http://127.0.0.1:8000"
+  allow_credentials: true
+  allow_methods:
+    - "GET"
+    - "POST"
+    - "OPTIONS"
+  allow_headers:
+    - "*"
+
+# Security settings (relaxed for development)
+security:
+  trusted_hosts:
+    - "localhost"
+    - "127.0.0.1"
+  rate_limiting:
+    enabled: false
+    requests_per_minute: 100
+  
+# Database configuration (future enhancement)
+database:
+  enabled: false
+  url: "sqlite:///dev_kelpie.db"
+  echo: true  # SQL logging
+  pool_size: 5
+  max_overflow: 10
+
+# External services
+external_services:
+  planetary_computer:
+    base_url: "https://planetarycomputer.microsoft.com"
+    timeout: 30
+    retry_attempts: 3
+    
+  sentry:
+    enabled: false
+    dsn: ""
+    environment: "development"
+
+# Feature flags
+features:
+  enable_performance_monitoring: true
+  enable_progressive_loading: true
+  enable_error_recovery: true
+  enable_cache_optimization: true
+  enable_real_time_updates: false
+
+# Development tools
+development:
+  hot_reload: true
+  debug_toolbar: true
+  profiling: false
+  mock_satellite_data: false
+  test_mode: false
+
+# Monitoring and metrics
+monitoring:
+  enabled: true
+  metrics_endpoint: "/metrics"
+  health_check_endpoint: "/health"
+  readiness_check_endpoint: "/ready"
+  
+# File paths
+paths:
+  static_files: "src/kelpie_carbon_v1/web/static"
+  templates: "src/kelpie_carbon_v1/web/templates"
+  logs: "logs"
+  cache: "cache"
+  temp: "tmp" 

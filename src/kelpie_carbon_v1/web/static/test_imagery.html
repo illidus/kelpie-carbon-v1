@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Imagery API</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; width: 100%; margin-top: 20px; }
+        button { margin: 10px; padding: 10px; }
+        #result { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Test Imagery API</h1>
+    <button id="test-btn">Test Imagery API</button>
+    <button id="test-image-btn" disabled>Test Image Loading</button>
+    <div id="result"></div>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let currentAnalysisId = null;
+        let map = null;
+
+        // Initialize map
+        document.addEventListener('DOMContentLoaded', function() {
+            map = L.map('map').setView([49.244142, -123.821411], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        });
+
+        document.getElementById('test-btn').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('result');
+            const testImageBtn = document.getElementById('test-image-btn');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                console.log('🚀 Testing imagery API...');
+                
+                const response = await fetch('/api/imagery/analyze-and-cache', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        aoi: {
+                            lat: 49.244142,
+                            lng: -123.821411
+                        },
+                        start_date: "2023-01-01",
+                        end_date: "2023-12-31",
+                        buffer_km: 1.0,
+                        max_cloud_cover: 0.3
+                    })
+                });
+                
+                console.log('📡 Response status:', response.status);
+                console.log('📡 Response ok:', response.ok);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Error response:', errorText);
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${response.status} - ${errorText}</p>`;
+                    return;
+                }
+                
+                const result = await response.json();
+                console.log('✅ Success result:', result);
+                currentAnalysisId = result.analysis_id;
+                
+                resultDiv.innerHTML = `
+                    <p style="color: green;">Success!</p>
+                    <p>Analysis ID: ${result.analysis_id}</p>
+                    <p>Status: ${result.status}</p>
+                    <p>Bounds: ${JSON.stringify(result.bounds)}</p>
+                    <p>Available Layers: ${JSON.stringify(result.available_layers)}</p>
+                `;
+                
+                testImageBtn.disabled = false;
+                
+            } catch (error) {
+                console.error('❌ Fetch error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">Fetch Error: ${error.message}</p>`;
+            }
+        });
+
+        document.getElementById('test-image-btn').addEventListener('click', async function() {
+            if (!currentAnalysisId) {
+                alert('No analysis ID available. Run the API test first.');
+                return;
+            }
+
+            console.log('🖼️ Testing image loading with ID:', currentAnalysisId);
+            
+            try {
+                // Test RGB image endpoint
+                const rgbUrl = `/api/imagery/${currentAnalysisId}/rgb`;
+                console.log('🔍 Testing RGB URL:', rgbUrl);
+                
+                const imgResponse = await fetch(rgbUrl);
+                console.log('📸 Image response status:', imgResponse.status);
+                
+                if (!imgResponse.ok) {
+                    throw new Error(`Image failed to load: ${imgResponse.status}`);
+                }
+                
+                // Create simple image overlay
+                const bounds = [
+                    [49.235, -123.830], // Southwest
+                    [49.253, -123.812]  // Northeast
+                ];
+                
+                const imageOverlay = L.imageOverlay(rgbUrl, bounds, {
+                    opacity: 0.8,
+                    alt: 'Satellite RGB Image'
+                }).addTo(map);
+                
+                // Fit map to bounds
+                map.fitBounds(bounds);
+                
+                console.log('✅ Image overlay added successfully');
+                document.getElementById('result').innerHTML += '<p style="color: blue;">Image loaded on map!</p>';
+                
+            } catch (error) {
+                console.error('❌ Image loading failed:', error);
+                document.getElementById('result').innerHTML += `<p style="color: red;">Image Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,24 @@
+{
+  "campaign_id": "bc_saanich_inlet_20230815",
+  "site_name": "Saanich Inlet Kelp Forest",
+  "date_start": "2023-08-15 00:00:00",
+  "date_end": "2023-08-16 00:00:00",
+  "satellite_overpass_time": "2023-08-15 19:20:00",
+  "weather_conditions": {
+    "wind_ms": 3.5,
+    "clouds": 15,
+    "temp_c": 16
+  },
+  "personnel": [
+    "Marine biologist",
+    "Remote sensing tech"
+  ],
+  "equipment_used": [
+    "GPS",
+    "Hyperspectral radiometer"
+  ],
+  "coordinates": [
+    48.583,
+    -123.5
+  ]
+}

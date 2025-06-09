@@ -1,28 +1,12 @@
 """Tests for fetch module."""
 import pytest
+import numpy as np
 import xarray as xr
-
-from kelpie_carbon_v1.fetch import (
-    configure_sentinelhub,
-    create_evalscript,
+from unittest.mock import patch, MagicMock
+from kelpie_carbon_v1.core.fetch import (
     fetch_sentinel_tiles,
+    _create_mock_sentinel_data
 )
-
-
-def test_configure_sentinelhub():
-    """Test SentinelHub configuration."""
-    config = configure_sentinelhub()
-    assert config.sh_client_id is not None
-    assert config.sh_client_secret is not None
-
-
-def test_create_evalscript():
-    """Test evalscript creation."""
-    script = create_evalscript()
-    assert "B04" in script  # Red band
-    assert "B05" in script  # Red edge band
-    assert "B08" in script  # NIR band
-    assert "evaluatePixel" in script
 
 
 def test_fetch_sentinel_tiles_with_mock_data():

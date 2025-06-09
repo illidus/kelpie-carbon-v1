@@ -1,0 +1,77 @@
+# Kelpie Carbon v1 - Base Configuration
+# Common configuration shared across all environments
+
+app:
+  name: "Kelpie Carbon v1"
+  version: "0.1.0"
+  description: "Kelp Forest Carbon Sequestration Assessment"
+
+# Data processing configuration
+processing:
+  analysis_timeout: 300  # seconds
+  image_cache_size: 100
+  image_cache_ttl: 3600  # seconds
+
+# Satellite data configuration
+satellite:
+  data_source: "microsoft_planetary_computer"
+  preferred_resolution: 10  # meters
+  timeout: 30  # seconds
+
+# Machine learning configuration
+ml_models:
+  kelp_detection:
+    model_type: "random_forest"
+    min_area_threshold: 100  # square meters
+  
+  biomass_estimation:
+    model_type: "regression"
+    units: "tons_per_hectare"
+    carbon_conversion_factor: 0.45
+
+# Image generation settings
+image_generation:
+  rgb_composite:
+    enhancement: true
+    
+  spectral_indices:
+    colormap: "viridis"
+    transparency: true
+    
+  overlays:
+    default_alpha: 0.6
+
+# Performance and caching
+cache:
+  compression: true
+
+# Logging configuration
+logging:
+  include_timestamp: true
+  console_output: true
+
+# Security settings
+security:
+  trusted_hosts:
+    - "localhost"
+    - "127.0.0.1"
+
+# External services
+external_services:
+  planetary_computer:
+    base_url: "https://planetarycomputer.microsoft.com"
+    retry_attempts: 3
+
+# Feature flags
+features:
+  enable_performance_monitoring: true
+  enable_progressive_loading: true
+  enable_error_recovery: true
+  enable_cache_optimization: true
+
+# Monitoring and metrics
+monitoring:
+  enabled: true
+  metrics_endpoint: "/metrics"
+  health_check_endpoint: "/health"
+  readiness_check_endpoint: "/ready" 

@@ -33,6 +33,69 @@
                 <div class="map-instructions">
                     Click on the map to select Area of Interest (AOI)
                 </div>
+                
+                <!-- Layer Control Panel -->
+                <div id="layer-control-panel" class="layer-control-panel layer-controls" style="display: none;">
+                    <div class="panel-header">
+                        <h3>🛰️ Imagery Controls</h3>
+                        <button id="close-panel" class="close-btn">&times;</button>
+                    </div>
+                    
+                    <div class="panel-content" id="layer-controls">
+                        <!-- Opacity Controls -->
+                        <div class="control-section">
+                            <h4>Layer Opacity</h4>
+                            <div id="opacity-controls"></div>
+                        </div>
+                        
+                        <!-- Legend Section -->
+                        <div class="control-section">
+                            <h4>Legend</h4>
+                            <div id="legend-container">
+                                <div class="legend-item">
+                                    <span class="legend-color kelp-color"></span>
+                                    <span>Kelp Forest</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color water-color"></span>
+                                    <span>Water Areas</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color cloud-color"></span>
+                                    <span>Cloud Coverage</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Metadata Section -->
+                        <div class="control-section">
+                            <h4>Imagery Metadata</h4>
+                            <div id="metadata-container">
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Acquisition Date:</span>
+                                    <span id="metadata-date">-</span>
+                                </div>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Resolution:</span>
+                                    <span id="metadata-resolution">-</span>
+                                </div>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Cloud Coverage:</span>
+                                    <span id="metadata-clouds">-</span>
+                                </div>
+                                <div class="metadata-item">
+                                    <span class="metadata-label">Bounds:</span>
+                                    <span id="metadata-bounds">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Toggle button for panel -->
+                <button id="toggle-controls" class="control-toggle-btn" style="display: none;">
+                    🎛️ Controls
+                </button>
             </div>
 
             <div id="results" class="results-container" style="display: none;">
@@ -43,6 +106,10 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/layers.js"></script>
+    <script src="/static/controls.js"></script>
+    <script src="/static/loading.js"></script>
+    <script src="/static/performance.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>

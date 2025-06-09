@@ -37,9 +37,30 @@ def calculate_indices_from_dataset(dataset: xr.Dataset) -> xr.Dataset:
     if "red_edge" in dataset and "nir" in dataset:
         indices["fai"] = floating_algae_index(dataset["red_edge"], dataset["nir"])
 
-    # Normalized Difference Red-Edge (NDRE)
+    # Normalized Difference Red-Edge (NDRE) - SKEMA Enhanced Formula
+    # Uses proper NDRE formula: (Red_Edge - Red) / (Red_Edge + Red)
+    # Prioritizes 740nm band (red_edge_2) for optimal submerged kelp detection
+    if "red" in dataset:
+        if "red_edge_2" in dataset:
+            # Use optimal 740nm red-edge band
+            indices["ndre"] = (dataset["red_edge_2"] - dataset["red"]) / (
+                dataset["red_edge_2"] + dataset["red"]
+            )
+        elif "red_edge" in dataset:
+            # Fallback to 705nm red-edge band
+            indices["ndre"] = (dataset["red_edge"] - dataset["red"]) / (
+                dataset["red_edge"] + dataset["red"]
+            )
+
+    # Traditional NDVI for comparison with NDRE
+    if "red" in dataset and "nir" in dataset:
+        indices["ndvi"] = (dataset["nir"] - dataset["red"]) / (
+            dataset["nir"] + dataset["red"]
+        )
+
+    # Red Edge NDVI (traditional formula)
     if "red_edge" in dataset and "nir" in dataset:
-        indices["ndre"] = (dataset["nir"] - dataset["red_edge"]) / (
+        indices["red_edge_ndvi"] = (dataset["nir"] - dataset["red_edge"]) / (
             dataset["nir"] + dataset["red_edge"]
         )
 
