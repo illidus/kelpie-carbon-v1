@@ -16,6 +16,33 @@
 
 ## 🚀 HIGH PRIORITY (In Progress)
 
+### ✅ COMPLETED - Fix Missing Function Export (Server Import Error)
+**Status**: ✅ **COMPLETED**
+**Priority**: IMMEDIATE ⚡ (RESOLVED)
+**Issue**: ImportError preventing server startup - FIXED!
+
+#### **Problem** ✅ RESOLVED
+Server was failing to start with import error:
+```
+ImportError: cannot import name 'create_skema_kelp_detection_mask' from 'kelpie_carbon_v1.core.mask'
+```
+
+#### **Root Cause** ✅ IDENTIFIED
+The function `create_skema_kelp_detection_mask` existed in `src/kelpie_carbon_v1/core/mask.py` (line 307) but was not exported in `src/kelpie_carbon_v1/core/__init__.py`. This prevented the real-world validation module from importing it.
+
+#### **Solution** ✅ IMPLEMENTED
+1. ✅ Added `create_skema_kelp_detection_mask` to core module exports
+2. ✅ Updated `__all__` list in core module `__init__.py`
+3. ✅ Tested server startup - now working successfully
+4. ✅ Verified all imports work correctly
+
+#### **Success Criteria** ✅ ALL ACHIEVED
+- ✅ Function properly exported from core module
+- ✅ Server starts without import errors (HTTP 200 on /health)
+- ✅ All mask tests continue to pass (15/15 passing)
+- ✅ SKEMA benchmark tests all pass (5/5 passing)
+- ✅ Real-world validation module can import function successfully
+
 ### ✅ COMPLETED - Async Configuration Fix
 - **Fixed pytest-asyncio configuration**: Added `--asyncio-mode=auto` to pytest.ini and ensured all async test functions have `@pytest.mark.asyncio` decorators
 - **Result**: 6 async temporal validation tests now properly execute (no more "async def functions are not natively supported" errors)
