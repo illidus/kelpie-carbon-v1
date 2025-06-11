@@ -123,6 +123,10 @@ class SpeciesClassifier:
             # Determine primary species and confidence
             primary_species = max(species_probabilities, key=species_probabilities.get)
             confidence = species_probabilities[primary_species]
+            
+            # Special case: empty mask should have 0 confidence even if classified as UNKNOWN
+            if kelp_mask.sum() == 0:
+                confidence = 0.0
 
             # Estimate biomass if possible
             biomass_estimate = self._estimate_biomass(
@@ -282,18 +286,23 @@ class SpeciesClassifier:
             features["compactness"] = 0.0
             features["blob_count"] = 0.0
 
-        # Legacy morphological indicators (if advanced analysis not available)
-        if not self.enable_morphology:
+        # Legacy morphological indicators (always computed for compatibility)
+        if not self.enable_morphology or "pneumatocyst_score" not in features:
             features["pneumatocyst_score"] = self._detect_pneumatocysts(
                 rgb_image, kelp_mask
             )
             features["frond_pattern_score"] = self._detect_frond_patterns(
                 rgb_image, kelp_mask
             )
-            features["pneumatocyst_count"] = 0.0
-            features["blade_count"] = 0.0
-            features["frond_count"] = 0.0
-            features["morphology_confidence"] = 0.0
+            # Only set these if not already set by advanced analysis
+            if "pneumatocyst_count" not in features:
+                features["pneumatocyst_count"] = 0.0
+            if "blade_count" not in features:
+                features["blade_count"] = 0.0
+            if "frond_count" not in features:
+                features["frond_count"] = 0.0
+            if "morphology_confidence" not in features:
+                features["morphology_confidence"] = 0.0
 
         return features
 
@@ -373,6 +382,11 @@ class SpeciesClassifier:
         """Classify species based on extracted features."""
         # Initialize probabilities
         probabilities = {species: 0.0 for species in KelpSpecies}
+        
+        # Handle empty mask case - no kelp area to classify
+        if morphological_features.get("total_area", 0) == 0:
+            probabilities[KelpSpecies.UNKNOWN] = 1.0
+            return probabilities
 
         # Nereocystis luetkeana indicators:
         nereocystis_score = 0.0
@@ -495,7 +509,7 @@ class SpeciesClassifier:
             probabilities[KelpSpecies.MIXED_SPECIES] = mixed_score / total_score
             probabilities[KelpSpecies.UNKNOWN] = 0.0
         else:
-            # No indicators found, classify as unknown
+            # No indicators found, classify as unknown with low confidence
             probabilities[KelpSpecies.UNKNOWN] = 1.0
 
         return probabilities
@@ -862,3 +876,26 @@ class SpeciesClassifier:
 def create_species_classifier() -> SpeciesClassifier:
     """Create and return a configured species classifier instance."""
     return SpeciesClassifier()
+
+
+def run_species_classification(
+    rgb_image: np.ndarray,
+    spectral_indices: Dict[str, np.ndarray],
+    kelp_mask: np.ndarray,
+    metadata: Optional[Dict[str, Any]] = None,
+    enable_morphology: bool = True
+) -> SpeciesClassificationResult:
+    """Run species classification on kelp areas.
+    
+    Args:
+        rgb_image: RGB satellite image array
+        spectral_indices: Dictionary of spectral indices
+        kelp_mask: Binary mask of kelp areas
+        metadata: Optional metadata dictionary
+        enable_morphology: Whether to enable morphological analysis
+        
+    Returns:
+        SpeciesClassificationResult with species identification and biomass estimates
+    """
+    classifier = SpeciesClassifier(enable_morphology=enable_morphology)
+    return classifier.classify_species(rgb_image, spectral_indices, kelp_mask, metadata)
