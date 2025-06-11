@@ -35,6 +35,17 @@ segment-anything = "^1.0"
 opencv-python = "^4.8.0"
 # segmentation-models-pytorch = "^0.3.4"  # Optional: U-Net transfer learning
 scikit-image = "^0.25.2"
+# Professional Reporting Dependencies
+folium = "^0.18.0"
+plotly = "^5.15.0"
+contextily = "^1.6.0"
+earthpy = "^0.9.4"
+streamlit = "^1.32.0"
+jupyter = "^1.1.1"
+nbformat = "^5.10.4"
+jinja2 = "^3.1.4"
+weasyprint = "^62.3"
+sympy = "^1.12"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.0"

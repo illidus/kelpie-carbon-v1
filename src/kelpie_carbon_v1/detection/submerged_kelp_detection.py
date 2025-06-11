@@ -183,7 +183,7 @@ class SubmergedKelpDetector:
         except Exception as e:
             logger.error(f"Error in submerged kelp detection: {e}")
             # Return empty result on error
-            shape = dataset.dims.get('y', 100), dataset.dims.get('x', 100)
+            shape = dataset.sizes.get('y', 100), dataset.sizes.get('x', 100)
             return DepthDetectionResult(
                 depth_estimate=np.zeros(shape, dtype=np.float32),
                 depth_confidence=np.zeros(shape, dtype=np.float32),

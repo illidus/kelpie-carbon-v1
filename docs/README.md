@@ -26,10 +26,13 @@ Welcome to the Kelpie Carbon v1 documentation! This directory contains comprehen
 - **[Deployment Guide](DEPLOYMENT_GUIDE.md)** - Production deployment instructions
 - **[Web Interface](web-interface.md)** - Frontend interface documentation
 
-### 🔬 Research & Features
+### 🔬 Research & Analysis
 - **[Satellite Imagery Features](SATELLITE_IMAGERY_FEATURE.md)** - Satellite data processing capabilities
 - **[Validation Framework](research/VALIDATION_DATA_FRAMEWORK.md)** - SKEMA validation integration
 - **[Red Edge Enhancement](research/RED_EDGE_ENHANCEMENT_SPEC.md)** - NDRE implementation details
+- **[Kelp Carbon Benchmarking Analysis](KELP_CARBON_BENCHMARKING_ANALYSIS.md)** - Peer-reviewed project comparison & satellite optimization
+- **[Benchmarking Task Completion Summary](BENCHMARKING_TASK_COMPLETION_SUMMARY.md)** - Complete benchmarking analysis results & implementation guidance
+- **[Actionable Implementation Task List](ACTIONABLE_IMPLEMENTATION_TASK_LIST.md)** - 🚀 **Ready-to-implement task roadmap with 30+ modular tasks organized by category**
 
 ### 📋 Implementation History
 - **[Implementation Summaries](implementation/)** - Historical implementation progress
@@ -58,6 +61,9 @@ docs/
 ├── NEW_AGENT_QUICK_START.md           # 5-minute rapid onboarding for AI agents
 ├── NEW_AGENT_ONBOARDING.md            # Essential first steps for new AI agents
 ├── CURRENT_TASK_LIST.md               # Active development priorities
+├── KELP_CARBON_BENCHMARKING_ANALYSIS.md # Peer-reviewed project benchmarking analysis
+├── BENCHMARKING_TASK_COMPLETION_SUMMARY.md # Benchmarking task completion guide
+├── ACTIONABLE_IMPLEMENTATION_TASK_LIST.md # 🚀 Ready-to-implement task roadmap (30+ tasks)
 │
 ├── research/                          # Research and validation docs
 │   ├── VALIDATION_DATA_FRAMEWORK.md

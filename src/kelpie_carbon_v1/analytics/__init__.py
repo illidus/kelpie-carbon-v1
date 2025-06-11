@@ -31,6 +31,36 @@ from .stakeholder_reports import (
     create_stakeholder_report,
 )
 
+# Professional Reporting System Components
+from .enhanced_satellite_integration import (
+    EnhancedSatelliteAnalyzer,
+    SatelliteAnalysisResult,
+    create_enhanced_satellite_analyzer
+)
+
+from .mathematical_transparency import (
+    MathematicalTransparencyEngine,
+    FormulaDocumentation,
+    CalculationStep,
+    CarbonCalculationBreakdown,
+    create_mathematical_transparency_engine
+)
+
+from .jupyter_templates import (
+    JupyterTemplateManager,
+    ScientificAnalysisTemplate,
+    TemporalAnalysisTemplate,
+    create_jupyter_template_manager
+)
+
+from .professional_report_templates import (
+    ProfessionalReportGenerator,
+    ReportConfiguration,
+    ProfessionalReportTemplate,
+    RegulatoryComplianceReport,
+    create_professional_report_generator
+)
+
 __all__ = [
     # Core Framework
     "AnalyticsFramework",
@@ -50,6 +80,25 @@ __all__ = [
     "ReportSection",
     "create_stakeholder_reporter",
     "create_stakeholder_report",
+
+    # Professional Reporting System
+    "EnhancedSatelliteAnalyzer",
+    "SatelliteAnalysisResult", 
+    "create_enhanced_satellite_analyzer",
+    "MathematicalTransparencyEngine",
+    "FormulaDocumentation",
+    "CalculationStep",
+    "CarbonCalculationBreakdown",
+    "create_mathematical_transparency_engine",
+    "JupyterTemplateManager",
+    "ScientificAnalysisTemplate",
+    "TemporalAnalysisTemplate", 
+    "create_jupyter_template_manager",
+    "ProfessionalReportGenerator",
+    "ReportConfiguration",
+    "ProfessionalReportTemplate",
+    "RegulatoryComplianceReport",
+    "create_professional_report_generator"
 ]
 
 # Version and metadata
