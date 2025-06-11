@@ -1,0 +1,113 @@
+{
+  "validation_timestamp": "2025-06-10T09:24:34.523091",
+  "total_sites": 3,
+  "successful_validations": 3,
+  "configuration": {
+    "max_cloud_cover": 30.0,
+    "buffer_km": 2.0,
+    "date_range_days": 30,
+    "min_detection_threshold": 0.01,
+    "max_processing_time": 120
+  },
+  "skema_configuration": {
+    "apply_waf": true,
+    "combine_with_ndre": true,
+    "detection_combination": "union",
+    "apply_morphology": true,
+    "min_kelp_cluster_size": 5,
+    "ndre_threshold": 0.0,
+    "require_water_context": false
+  },
+  "results": [
+    {
+      "site_name": "Broughton Archipelago",
+      "coordinates": {
+        "lat": 50.0833,
+        "lng": -126.1667
+      },
+      "species": "Nereocystis luetkeana",
+      "expected_detection_rate": 0.15,
+      "actual_detection_rate": 0.97745,
+      "cloud_cover": 0.0,
+      "acquisition_date": "2025-06-10",
+      "processing_time": 1.278597,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "satellite_source": "Mock Sentinel-2 L2A (Realistic Coastal Simulation)",
+        "scene_id": "",
+        "resolution": 10,
+        "bands": [
+          "red",
+          "red_edge",
+          "red_edge_2",
+          "red_edge_3",
+          "nir",
+          "swir1",
+          "cloud_mask"
+        ],
+        "bbox": "POINT(-126.1667 50.0833) +/- 1km"
+      }
+    },
+    {
+      "site_name": "Saanich Inlet",
+      "coordinates": {
+        "lat": 48.583,
+        "lng": -123.5
+      },
+      "species": "Mixed Nereocystis + Macrocystis",
+      "expected_detection_rate": 0.12,
+      "actual_detection_rate": 0.97785,
+      "cloud_cover": 0.0,
+      "acquisition_date": "2025-06-10",
+      "processing_time": 1.186234,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "satellite_source": "Mock Sentinel-2 L2A (Realistic Coastal Simulation)",
+        "scene_id": "",
+        "resolution": 10,
+        "bands": [
+          "red",
+          "red_edge",
+          "red_edge_2",
+          "red_edge_3",
+          "nir",
+          "swir1",
+          "cloud_mask"
+        ],
+        "bbox": "POINT(-123.5 48.583) +/- 1km"
+      }
+    },
+    {
+      "site_name": "Monterey Bay",
+      "coordinates": {
+        "lat": 36.8,
+        "lng": -121.9
+      },
+      "species": "Macrocystis pyrifera",
+      "expected_detection_rate": 0.1,
+      "actual_detection_rate": 0.9764,
+      "cloud_cover": 0.0,
+      "acquisition_date": "2025-06-10",
+      "processing_time": 0.940151,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "satellite_source": "Mock Sentinel-2 L2A (Realistic Coastal Simulation)",
+        "scene_id": "",
+        "resolution": 10,
+        "bands": [
+          "red",
+          "red_edge",
+          "red_edge_2",
+          "red_edge_3",
+          "nir",
+          "swir1",
+          "cloud_mask"
+        ],
+        "bbox": "POINT(-121.9 36.8) +/- 1km"
+      }
+    }
+  ]
+}

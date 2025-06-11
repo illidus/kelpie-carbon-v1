@@ -1,4 +1,5 @@
 """Integration test for the complete satellite imagery visualization pipeline."""
+
 import io
 from unittest.mock import Mock, patch
 

@@ -1,0 +1,94 @@
+2025-06-10 09:28:48,584 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Starting comprehensive threshold optimization...
+2025-06-10 09:28:48,585 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Loaded validation results from results/primary_validation_20250610_092434.json
+2025-06-10 09:28:48,585 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Results contain 3 sites with 3 successful validations
+2025-06-10 09:28:48,585 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Detection Analysis:
+2025-06-10 09:28:48,585 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Mean detection rate: 97.7%
+2025-06-10 09:28:48,597 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Mean expected rate: 12.3%
+2025-06-10 09:28:48,597 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Over-detection ratio: 7.9x
+2025-06-10 09:28:48,597 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Accuracy score: 0.146
+2025-06-10 09:28:48,598 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Detection Analysis:
+2025-06-10 09:28:48,598 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Mean detection rate: 97.7%
+2025-06-10 09:28:48,598 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Mean expected rate: 12.3%
+2025-06-10 09:28:48,598 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Over-detection ratio: 7.9x
+2025-06-10 09:28:48,599 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Accuracy score: 0.146
+2025-06-10 09:28:48,599 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Calculated optimal thresholds:
+2025-06-10 09:28:48,599 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   ndre_threshold: 0.100
+2025-06-10 09:28:48,599 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   min_detection_threshold: 0.040
+2025-06-10 09:28:48,599 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   kelp_fai_threshold: 0.040
+2025-06-10 09:28:48,599 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for kelp_farm site:
+2025-06-10 09:28:48,600 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=15.0%, turbidity=medium
+2025-06-10 09:28:48,600 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for open_ocean site:
+2025-06-10 09:28:48,600 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=20.0%, turbidity=low
+2025-06-10 09:28:48,600 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for coastal site:
+2025-06-10 09:28:48,600 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=25.0%, turbidity=high
+2025-06-10 09:28:48,600 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created real-time optimized config (target: 15.0s)
+2025-06-10 09:28:48,602 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Optimization results saved to results\optimization\optimization_results_20250610_092848.json
+2025-06-10 09:28:48,602 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Comprehensive optimization completed successfully!
+2025-06-10 09:28:48,602 | INFO | __main__ | ============================================================
+2025-06-10 09:28:48,602 | INFO | __main__ | OPTIMIZATION ANALYSIS COMPLETE
+2025-06-10 09:28:48,603 | INFO | __main__ | ============================================================
+2025-06-10 09:28:48,604 | INFO | __main__ |    Mean detection rate: 97.7%
+2025-06-10 09:28:48,605 | INFO | __main__ |    Expected detection rate: 12.3%
+2025-06-10 09:28:48,605 | INFO | __main__ |    Over-detection ratio: 7.9x
+2025-06-10 09:28:48,605 | INFO | __main__ |    Accuracy score: 0.146
+2025-06-10 09:28:48,606 | INFO | __main__ |    1. CRITICAL: Detection thresholds are too low, causing severe over-detection
+2025-06-10 09:28:48,607 | INFO | __main__ |    2. Increase NDRE threshold to at least 0.1 and FAI threshold to 0.05
+2025-06-10 09:28:48,607 | INFO | __main__ |    3. Poor accuracy score - comprehensive threshold review needed
+2025-06-10 09:28:48,607 | INFO | __main__ |    4. Consider adaptive thresholding based on environmental conditions
+2025-06-10 09:28:48,607 | INFO | __main__ |    5. Implement real-time optimization for production deployments
+2025-06-10 09:28:48,613 | INFO | __main__ |       NDRE threshold: 0.100
+2025-06-10 09:28:48,613 | INFO | __main__ |       FAI threshold: 0.040
+2025-06-10 09:28:48,613 | INFO | __main__ |       Min detection: 0.040
+2025-06-10 09:28:48,615 | INFO | __main__ |       NDRE threshold: 0.080
+2025-06-10 09:28:48,615 | INFO | __main__ |       FAI threshold: 0.030
+2025-06-10 09:28:48,616 | INFO | __main__ |       Min detection: 0.050
+2025-06-10 09:28:48,618 | INFO | __main__ |       NDRE threshold: 0.132
+2025-06-10 09:28:48,618 | INFO | __main__ |       FAI threshold: 0.040
+2025-06-10 09:28:48,618 | INFO | __main__ |       Min detection: 0.080
+2025-06-10 09:28:48,620 | INFO | __main__ |       NDRE threshold: 0.054
+2025-06-10 09:28:48,620 | INFO | __main__ |       FAI threshold: 0.028
+2025-06-10 09:28:48,620 | INFO | __main__ |       Min detection: 0.040
+2025-06-10 09:28:48,623 | INFO | __main__ |       NDRE threshold: 0.100
+2025-06-10 09:28:48,623 | INFO | __main__ |       FAI threshold: 0.040
+2025-06-10 09:28:48,623 | INFO | __main__ |       Min detection: 0.060
+2025-06-10 09:28:48,625 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for kelp_farm site:
+2025-06-10 09:28:48,625 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=15.0%, turbidity=medium
+2025-06-10 09:28:48,628 | INFO | __main__ |       NDRE: 0.080, FAI: 0.030
+2025-06-10 09:28:48,628 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for open_ocean site:
+2025-06-10 09:28:48,629 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=10.0%, turbidity=low
+2025-06-10 09:28:48,631 | INFO | __main__ |       NDRE: 0.132, FAI: 0.040
+2025-06-10 09:28:48,631 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created real-time optimized config (target: 15.0s)
+2025-06-10 09:28:48,633 | INFO | __main__ |       NDRE: 0.100, FAI: 0.040
+2025-06-10 09:28:48,633 | INFO | __main__ | ============================================================
+2025-06-10 09:28:48,634 | INFO | __main__ | ============================================================
+2025-06-10 09:28:48,636 | INFO | __main__ | ==================================================
+2025-06-10 09:28:48,636 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for kelp_farm site:
+2025-06-10 09:28:48,637 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=5.0%, turbidity=low
+2025-06-10 09:28:48,639 | INFO | __main__ |    NDRE threshold: 0.088
+2025-06-10 09:28:48,639 | INFO | __main__ |    FAI threshold: 0.024
+2025-06-10 09:28:48,639 | INFO | __main__ |    Min cluster size: 8
+2025-06-10 09:28:48,639 | INFO | __main__ |    Morphology: Yes
+2025-06-10 09:28:48,640 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for kelp_farm site:
+2025-06-10 09:28:48,640 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=35.0%, turbidity=medium
+2025-06-10 09:28:48,642 | INFO | __main__ |    NDRE threshold: 0.096
+2025-06-10 09:28:48,642 | INFO | __main__ |    FAI threshold: 0.039
+2025-06-10 09:28:48,643 | INFO | __main__ |    Min cluster size: 8
+2025-06-10 09:28:48,643 | INFO | __main__ |    Morphology: Yes
+2025-06-10 09:28:48,643 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for kelp_farm site:
+2025-06-10 09:28:48,644 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=15.0%, turbidity=high
+2025-06-10 09:28:48,646 | INFO | __main__ |    NDRE threshold: 0.072
+2025-06-10 09:28:48,646 | INFO | __main__ |    FAI threshold: 0.042
+2025-06-10 09:28:48,647 | INFO | __main__ |    Min cluster size: 11
+2025-06-10 09:28:48,647 | INFO | __main__ |    Morphology: Yes
+2025-06-10 09:28:48,647 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for open_ocean site:
+2025-06-10 09:28:48,647 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=20.0%, turbidity=low
+2025-06-10 09:28:48,649 | INFO | __main__ |    NDRE threshold: 0.132
+2025-06-10 09:28:48,649 | INFO | __main__ |    FAI threshold: 0.040
+2025-06-10 09:28:48,649 | INFO | __main__ |    Min cluster size: 12
+2025-06-10 09:28:48,649 | INFO | __main__ |    Morphology: Yes
+2025-06-10 09:28:48,649 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer | Created adaptive config for coastal site:
+2025-06-10 09:28:48,650 | INFO | kelpie_carbon_v1.optimization.threshold_optimizer |   Environmental conditions: cloud_cover=25.0%, turbidity=high
+2025-06-10 09:28:48,652 | INFO | __main__ |    NDRE threshold: 0.054
+2025-06-10 09:28:48,652 | INFO | __main__ |    FAI threshold: 0.028
+2025-06-10 09:28:48,652 | INFO | __main__ |    Min cluster size: 9
+2025-06-10 09:28:48,652 | INFO | __main__ |    Morphology: Yes

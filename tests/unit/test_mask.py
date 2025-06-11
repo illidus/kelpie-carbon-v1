@@ -1,4 +1,5 @@
 """Tests for mask module."""
+
 from unittest.mock import patch
 
 import numpy as np
@@ -9,9 +10,11 @@ from kelpie_carbon_v1.core.mask import (
     apply_mask,
     calculate_fai,
     calculate_red_edge_ndvi,
+    create_cloud_mask,
     create_kelp_detection_mask,
     create_water_mask,
     get_mask_statistics,
+    remove_small_objects,
 )
 
 
@@ -79,8 +82,19 @@ def test_apply_mask_with_custom_config(sample_dataset):
 
 def test_create_cloud_mask(sample_dataset):
     """Test cloud mask creation."""
-    # Skip this test as create_cloud_mask function doesn't exist in current implementation
-    pytest.skip("create_cloud_mask function not implemented in current version")
+    cloud_mask = create_cloud_mask(sample_dataset)
+
+    assert isinstance(cloud_mask, np.ndarray)
+    assert cloud_mask.dtype == bool
+    assert cloud_mask.shape == sample_dataset["red"].shape
+    
+    # Test with custom threshold
+    cloud_mask_conservative = create_cloud_mask(sample_dataset, threshold=0.8)
+    assert isinstance(cloud_mask_conservative, np.ndarray)
+    assert cloud_mask_conservative.dtype == bool
+    
+    # Conservative threshold should detect fewer clouds
+    assert np.sum(cloud_mask_conservative) <= np.sum(cloud_mask)
 
 
 def test_create_water_mask(sample_dataset):
@@ -128,8 +142,29 @@ def test_calculate_red_edge_ndvi(sample_dataset):
 
 def test_remove_small_objects():
     """Test small object removal from binary mask."""
-    # Skip this test as remove_small_objects function doesn't exist in current implementation
-    pytest.skip("remove_small_objects function not implemented in current version")
+    # Create a test binary mask with small and large objects
+    test_mask = np.zeros((20, 20), dtype=bool)
+    
+    # Add a large object (16 pixels)
+    test_mask[5:9, 5:9] = True
+    
+    # Add small objects (1-4 pixels each)
+    test_mask[1, 1] = True  # 1 pixel
+    test_mask[10:12, 10:12] = True  # 4 pixels
+    test_mask[15, 15:17] = True  # 2 pixels
+    
+    # Remove objects smaller than 5 pixels
+    cleaned_mask = remove_small_objects(test_mask, min_size=5)
+    
+    assert isinstance(cleaned_mask, np.ndarray)
+    assert cleaned_mask.dtype == bool
+    assert cleaned_mask.shape == test_mask.shape
+    
+    # Should only keep the large object (16 pixels >= 5)
+    assert np.sum(cleaned_mask) == 16
+    assert np.all(cleaned_mask[5:9, 5:9] == True)
+    assert cleaned_mask[1, 1] == False  # Small object removed
+    assert np.all(cleaned_mask[15, 15:17] == False)  # Small object removed
 
 
 def test_get_mask_statistics(sample_dataset):
@@ -150,8 +185,79 @@ def test_get_mask_statistics(sample_dataset):
 
 def test_cloud_mask_without_cloud_data():
     """Test cloud mask creation when no cloud data is available."""
-    # Skip this test as create_cloud_mask function doesn't exist in current implementation
-    pytest.skip("create_cloud_mask function not implemented in current version")
+    # Create dataset without cloud_mask band
+    dataset_no_clouds = xr.Dataset(
+        {
+            "red": (["y", "x"], np.random.normal(0.1, 0.03, (10, 10)).clip(0, 1)),
+            "red_edge": (["y", "x"], np.random.normal(0.15, 0.04, (10, 10)).clip(0, 1)),
+            "nir": (["y", "x"], np.random.normal(0.3, 0.1, (10, 10)).clip(0, 1)),
+            "swir1": (["y", "x"], np.random.normal(0.2, 0.05, (10, 10)).clip(0, 1)),
+            # No cloud_mask band
+        }
+    )
+    
+    # Should fall back to basic cloud detection
+    cloud_mask = create_cloud_mask(dataset_no_clouds)
+    
+    assert isinstance(cloud_mask, np.ndarray)
+    assert cloud_mask.dtype == bool
+    assert cloud_mask.shape == (10, 10)
+    
+    # Test that it doesn't crash and produces reasonable results
+    cloud_percentage = np.sum(cloud_mask) / cloud_mask.size
+    assert 0 <= cloud_percentage <= 1  # Should be between 0 and 100%
+
+
+def test_cloud_shadow_detection():
+    """Test cloud shadow detection functionality."""
+    # Create dataset with known cloud and shadow patterns
+    height, width = 20, 20
+    
+    # Create base reflectance values
+    red = np.full((height, width), 0.1)
+    red_edge = np.full((height, width), 0.15)
+    nir = np.full((height, width), 0.2)
+    swir1 = np.full((height, width), 0.15)
+    
+    # Add cloud area (high reflectance)
+    red[5:8, 5:8] = 0.4
+    nir[5:8, 5:8] = 0.4
+    swir1[5:8, 5:8] = 0.3
+    
+    # Add shadow area (low reflectance)
+    red[12:15, 12:15] = 0.08  # Very low reflectance
+    red_edge[12:15, 12:15] = 0.10
+    nir[12:15, 12:15] = 0.09
+    swir1[12:15, 12:15] = 0.08
+    
+    # Create cloud mask for the cloud area
+    cloud_prob = np.zeros((height, width))
+    cloud_prob[5:8, 5:8] = 0.8  # High cloud probability
+    
+    dataset = xr.Dataset(
+        {
+            "red": (["y", "x"], red),
+            "red_edge": (["y", "x"], red_edge),
+            "nir": (["y", "x"], nir),
+            "swir1": (["y", "x"], swir1),
+            "cloud_mask": (["y", "x"], cloud_prob),
+        }
+    )
+    
+    # Test cloud mask creation (should detect both clouds and shadows)
+    combined_mask = create_cloud_mask(dataset)
+    
+    assert isinstance(combined_mask, np.ndarray)
+    assert combined_mask.dtype == bool
+    assert combined_mask.shape == (height, width)
+    
+    # Should detect the cloud area
+    assert np.any(combined_mask[5:8, 5:8])
+    
+    # May detect shadow area (depends on thresholds, but should not crash)
+    shadow_detected = np.any(combined_mask[12:15, 12:15])
+    # We don't assert True for shadow detection as it depends on specific thresholds
+    # The main test is that the function works without errors
 
 
 def test_mask_integration():

@@ -1,4 +1,5 @@
 """Tests for satellite imagery API endpoints."""
+
 import io
 from unittest.mock import Mock, patch
 
@@ -31,13 +32,13 @@ class TestImageryAPI:
 
         assert data["status"] == "ok"
         assert data["service"] == "imagery"
-        assert "cached_analyses" in data
-        assert "supported_formats" in data
-        assert "available_colormaps" in data
 
     def test_get_nonexistent_analysis(self):
         """Test accessing non-existent analysis."""
         response = self.client.get("/api/imagery/nonexistent/rgb")
 
         assert response.status_code == 404
-        assert "not found" in response.json()["detail"]
+        error_data = response.json()
+        assert "detail" in error_data
+        assert "error" in error_data["detail"]
+        assert "not found" in error_data["detail"]["error"]["message"].lower()

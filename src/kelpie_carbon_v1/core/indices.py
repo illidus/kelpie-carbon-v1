@@ -1,4 +1,5 @@
 """Spectral index calculations for kelp detection."""
+
 from typing import Union
 
 import numpy as np

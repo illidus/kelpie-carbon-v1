@@ -22,7 +22,7 @@ from .utils import (
 
 __all__ = [
     "generate_rgb_composite",
-    "generate_false_color_composite", 
+    "generate_false_color_composite",
     "generate_spectral_visualization",
     "generate_mask_overlay",
     "generate_biomass_heatmap",
@@ -34,4 +34,4 @@ __all__ = [
     "apply_colormap",
     "array_to_image",
     "get_image_bounds",
-] 
+]

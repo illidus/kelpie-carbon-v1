@@ -1,4 +1,5 @@
 """Tests for API models and validation."""
+
 import pytest
 from pydantic import ValidationError
 

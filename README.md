@@ -1,52 +1,81 @@
-# 🌊 Kelpie Carbon v1: Kelp Forest Carbon Sequestration Assessment
+# Kelpie Carbon v1 - Kelp Detection & Carbon Monitoring System
+
+**Status**: 🚧 **IN ACTIVE DEVELOPMENT** (97% functional, 16 failing tests)  
+**Version**: 0.1.0  
+**Last Updated**: January 10, 2025  
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
-[![Leaflet](https://img.shields.io/badge/Leaflet-1.9+-brightgreen.svg)](https://leafletjs.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://img.shields.io/badge/tests-598_passing_16_failing-yellow.svg)](#testing-status)
+[![Development](https://img.shields.io/badge/status-active_development-orange.svg)](#current-status)
 
-A sophisticated satellite imagery analysis application for assessing kelp forest carbon sequestration using Sentinel-2 data. Built with FastAPI, Leaflet, and advanced computer vision techniques.
+## 🌊 Overview
 
-## 🌟 **Features**
+The **Kelpie Carbon v1** system is a comprehensive platform for kelp detection and carbon monitoring in coastal waters, with a focus on British Columbia. The system integrates satellite imagery analysis, machine learning models, and multi-stakeholder reporting capabilities.
 
-### **🛰️ Satellite Imagery Analysis**
-- **Real-time Sentinel-2 Data**: Automatic fetching from Microsoft Planetary Computer
-- **Spectral Index Calculation**: NDVI, FAI, NDRE for vegetation analysis
-- **Kelp Detection**: Advanced machine learning-based kelp forest identification
-- **Cloud/Water Masking**: Automated quality filtering and water body detection
+### 🎯 Current Capabilities
 
-### **🗺️ Interactive Visualization**
-- **Dynamic Layer Management**: Toggle RGB, spectral indices, and analysis overlays
-- **Fixed Layer Switching**: All layers now display correctly with improved async loading
-- **Opacity Controls**: Fine-tune layer transparency for optimal visualization
-- **Real-time Legend**: Dynamic legend updates based on active layers
-- **Metadata Panel**: Detailed information about imagery acquisition and processing
+- **Multi-Method Detection**: 6 integrated kelp detection algorithms
+- **Species Analysis**: Support for 5 BC kelp species identification
+- **Carbon Monitoring**: Biomass estimation and carbon sequestration calculations
+- **Advanced Analytics**: Comprehensive analysis framework with multiple validation approaches
+- **Multi-Stakeholder Reporting**: Culturally sensitive reports for different communities
+- **Validation Framework**: SKEMA methodology integration and benchmarking
 
-### **⚡ Performance & Reliability**
-- **Progressive Loading**: Priority-based layer loading for optimal user experience
-- **Image Caching**: Browser-side caching with automatic cleanup
-- **Error Recovery**: Exponential backoff retry mechanisms
-- **Performance Monitoring**: Real-time performance dashboard and metrics
+## 🚀 System Features
 
-### **🔬 Scientific Analysis**
-- **Carbon Sequestration Estimates**: Biomass-based carbon storage calculations
-- **Temporal Analysis**: Multi-date comparison capabilities
-- **Quality Metrics**: Cloud coverage and data quality assessment
-- **Export Capabilities**: Data export for further scientific analysis
+### **Core Kelp Detection**
+- ✅ Multi-method kelp detection (6 algorithms)
+- ✅ Species-specific analysis (5 BC kelp species)
+- ✅ Submerged kelp detection capabilities
+- ✅ Real-time satellite data processing
+- ✅ Quality assurance and validation
 
-### **🌿 Validation Framework (SKEMA Integration)**
-- **BC Kelp Forest Validation**: Specialized validation protocols for British Columbia kelp forests
-- **Field Campaign Management**: Complete workflow for ground truth data collection
-- **NDRE vs NDVI Comparison**: Research-validated spectral index performance assessment
-- **Mock Data Generation**: Realistic BC kelp forest data for testing and development
-- **Performance Metrics**: SKEMA research-aligned validation scoring (accuracy, area improvement, submerged detection)
+### **Carbon Monitoring**
+- ✅ Biomass estimation algorithms
+- ✅ Carbon sequestration calculations
+- ✅ Temporal trend analysis
+- ✅ Historical baseline comparisons
+- ✅ Uncertainty quantification
 
-## 🚀 **Quick Start**
+### **Advanced Analytics**
+- ✅ 6 integrated analysis types
+- ✅ Cross-analysis consensus estimation
+- ✅ Performance monitoring
+- ✅ Interactive demonstrations
+- ✅ 614+ comprehensive test methods
 
-### **Prerequisites**
-- Python 3.12+
-- Poetry (for dependency management)
-- Modern web browser (Chrome, Firefox, Safari, Edge)
+### **Multi-Stakeholder Reporting**
+- ✅ First Nations culturally sensitive reports
+- ✅ Scientific peer-review quality analysis
+- ✅ Management decision-support tools
+- ✅ Interactive visualizations
+- ✅ Multiple export formats
+
+## 🧪 Testing Status
+
+Our comprehensive test suite includes:
+
+```bash
+# Current test results (as of January 10, 2025)
+Total Tests: 614
+✅ Passing: 598 (97.4%)
+❌ Failing: 16 (2.6%)
+⏭️ Skipped: 4
+```
+
+### **Test Categories**
+- **Unit Tests**: Component-level testing
+- **Integration Tests**: System integration testing  
+- **E2E Tests**: End-to-end workflow testing
+- **Performance Tests**: System performance validation
+
+### **Known Issues**
+- Some async test configuration issues
+- Minor type consistency issues in data acquisition
+- Species classifier edge cases
+- Submerged kelp detection parameter validation
+
+## 🔧 Quick Start
 
 ### **Installation**
 
@@ -55,325 +84,191 @@ A sophisticated satellite imagery analysis application for assessing kelp forest
 git clone https://github.com/your-org/kelpie-carbon-v1.git
 cd kelpie-carbon-v1
 
-# Quick setup for developers
-make setup
-
-# Or manual installation
+# Install dependencies with Poetry (recommended)
+pip install poetry
 poetry install
-poetry shell
-```
 
-> 📚 **New Developer?** Check out our [Developer Onboarding Guide](docs/DEVELOPER_ONBOARDING.md) for a complete setup walkthrough!
+# Or install with pip
+pip install -e .
 
-### **Running the Application**
-
-#### **Using the CLI (Recommended)**
-```bash
-# Start the web server with automatic port detection
-poetry run kelpie-carbon-v1 serve --auto-port --reload
-
-# Or use the convenient Makefile
-make serve-auto
-
-# Start with custom settings
-poetry run kelpie-carbon-v1 serve --host 0.0.0.0 --port 8080 --reload
-
-# Run analysis from command line
-poetry run kelpie-carbon-v1 analyze 36.8 -121.9 2023-08-01 2023-08-31 --output results.json
-
-# Generate BC validation dataset (SKEMA Integration)
-python -c "
-from kelpie_carbon_v1.validation import ValidationDataManager, MockValidationGenerator
-manager = ValidationDataManager('validation_data')
-generator = MockValidationGenerator(manager)
-campaign_id = generator.create_bc_validation_dataset('saanich_inlet')
-print(f'Created BC validation campaign: {campaign_id}')
-"
-
-# Show configuration
-poetry run kelpie-carbon-v1 config
-
-# Run tests
-make test
-```
-
-#### **Using Uvicorn Directly**
-```bash
-# Start the FastAPI server
-poetry run uvicorn src.kelpie_carbon_v1.api.main:app --host 0.0.0.0 --port 8000
-
-# Open your browser to http://localhost:8000
-```
-
-### **Environment Configuration**
-
-The application supports environment-based configuration:
-
-```bash
-# Set environment (development is default)
-export KELPIE_ENV=development  # or production
-
-# Start server with environment-specific settings
-poetry run kelpie-carbon-v1 serve
+# Run system verification
+poetry run pytest tests/ -x  # Stop on first failure
 ```
 
 ### **Basic Usage**
 
-1. **Select Area of Interest (AOI)**: Click on the map to choose your study area
-2. **Set Date Range**: Choose start and end dates for satellite imagery
-3. **Run Analysis**: Click "Run Analysis" to process satellite data
-4. **Explore Results**: Use interactive controls to visualize different layers
-5. **Monitor Performance**: Press `Ctrl+Shift+P` for performance dashboard
+```python
+from kelpie_carbon_v1.analytics import AnalyticsFramework
+from kelpie_carbon_v1.analytics import StakeholderReports
 
-## 📖 **Documentation**
+# Initialize analytics framework
+analytics = AnalyticsFramework()
 
-### **Project Structure**
+# Run comprehensive analysis
+results = analytics.run_comprehensive_analysis(
+    dataset_path="data/sample_kelp_data.nc",
+    analysis_types=['validation', 'temporal', 'species']
+)
+
+# Generate stakeholder reports
+reporter = StakeholderReports()
+reports = reporter.generate_all_reports(results, region="Broughton_Archipelago")
+```
+
+### **Demo & Validation**
+
+```bash
+# Run core functionality tests
+poetry run pytest tests/unit/ -v
+
+# Run integration tests
+poetry run pytest tests/integration/ -v
+
+# Check system health
+poetry run pytest tests/unit/test_api.py -v
+```
+
+## 📁 Project Structure
+
 ```
 kelpie-carbon-v1/
-├── src/kelpie_carbon_v1/          # Main application code
-│   ├── api/                       # FastAPI backend
-│   │   ├── main.py               # API entry point with config & logging
-│   │   └── imagery.py            # Satellite imagery endpoints
-│   ├── core/                      # Core analysis modules
-│   │   ├── fetch.py              # Satellite data fetching
-│   │   ├── model.py              # Machine learning models
-│   │   ├── mask.py               # Masking operations
-│   │   └── indices.py            # Spectral index calculations
-│   ├── imagery/                   # Image processing utilities
-│   │   ├── generators.py         # Image generation
-│   │   ├── overlays.py           # Analysis overlays
-│   │   └── utils.py              # Utility functions
-│   ├── validation/                # SKEMA validation framework
-│   │   ├── data_manager.py       # Campaign and ground truth data management
-│   │   ├── mock_data.py          # BC kelp forest mock data generation
-│   │   ├── metrics.py            # NDRE vs NDVI validation metrics
-│   │   └── field_protocols.py    # BC field campaign protocols
-│   ├── web/                       # Frontend application
-│   │   └── static/               # Static web assets
-│   │       ├── index.html        # Main web interface
-│   │       ├── app.js            # Main application logic
-│   │       ├── layers.js         # Layer management
-│   │       ├── controls.js       # Interactive controls
-│   │       ├── loading.js        # Progressive loading
-│   │       ├── performance.js    # Performance monitoring
-│   │       └── style.css         # Styling
-│   ├── config.py                 # Configuration management
-│   ├── logging_config.py         # Logging setup
-│   └── cli.py                    # Enhanced CLI interface
-├── config/                        # Configuration files
-│   ├── base.yml                  # Base configuration
-│   ├── development.yml           # Development settings
-│   └── production.yml            # Production settings
-├── tests/                         # Test suite (organized)
-├── docs/                          # Documentation
-│   ├── VALIDATION_DATA_FRAMEWORK.md  # BC validation framework guide
-│   ├── SKEMA_INTEGRATION_TASK_LIST.md # Task tracking and progress
-│   └── TASK_2_COMPLETION_SUMMARY.md  # Task 2 completion details
-└── pyproject.toml                # Project configuration
+├── src/kelpie_carbon_v1/           # Core source code
+│   ├── analytics/                  # Advanced analytics framework
+│   ├── validation/                 # Validation and benchmarking
+│   ├── core/                       # Core processing algorithms
+│   ├── processing/                 # Image processing pipeline
+│   ├── detection/                  # Kelp detection methods
+│   ├── api/                        # REST API layer
+│   ├── web/                        # Web interface
+│   └── utils/                      # Utility functions
+├── tests/                          # Comprehensive test suite (614+ tests)
+│   ├── unit/                       # Unit tests
+│   ├── integration/                # Integration tests
+│   ├── e2e/                        # End-to-end tests
+│   └── performance/                # Performance tests
+├── docs/                           # Technical documentation
+├── scripts/                        # Demo and utility scripts
+├── validation/                     # Validation reports and data
+└── config/                         # Configuration files
 ```
 
-### **📚 Documentation**
-Comprehensive documentation is available in the `docs/` directory:
+## 📋 Documentation
 
-- **[📚 Documentation Index](docs/README.md)** - Complete documentation navigation
-- **[🎯 Project Summary](docs/PROJECT_SUMMARY.md)** - Overview and features
-- **[👨‍💻 Developer Guide](docs/DEVELOPER_ONBOARDING.md)** - Setup and development
-- **[🏗️ Architecture](docs/ARCHITECTURE.md)** - System design and components
-- **[📡 API Reference](docs/API_REFERENCE.md)** - Complete API documentation
-- **[🧪 Testing Guide](docs/TESTING_GUIDE.md)** - Testing strategies and structure
+### **User Documentation**
+- **[User Guide](docs/USER_GUIDE.md)** - Complete user manual
+- **[API Reference](docs/API_REFERENCE.md)** - System interface documentation
+- **[Architecture Guide](docs/ARCHITECTURE.md)** - System design documentation
+- **[Testing Guide](docs/TESTING_GUIDE.md)** - Testing procedures and guidelines
 
-### **API Documentation**
-When the server is running, visit:
-- **Interactive API Docs**: http://localhost:8000/docs
-- **OpenAPI Schema**: http://localhost:8000/openapi.json
+### **Developer Documentation**
+- **[Developer Onboarding](docs/DEVELOPER_ONBOARDING.md)** - Setup guide for new developers
+- **[Development Guide](docs/DEVELOPMENT_GUIDE.md)** - Development workflows
+- **[Agent Guide](docs/agent-guide.md)** - Guide for AI agents working on the codebase
+- **[Current Task List](docs/CURRENT_TASK_LIST.md)** - Active development priorities
 
-## 🧪 **Testing**
+### **Deployment & Operations**
+- **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Production deployment instructions
+- **[Contributing Guide](CONTRIBUTING.md)** - Contribution guidelines
 
-The test suite is organized into categories for better maintainability:
+## 🎯 Current Status
 
-### **Quick Test Commands**
-```bash
-# Run all tests
-poetry run pytest
+### **System Maturity**
+- **Core Functionality**: ✅ Operational (97.4% test pass rate)
+- **Analytics Framework**: ✅ Functional with comprehensive features
+- **API Layer**: ✅ Stable REST API with FastAPI
+- **Documentation**: ✅ Comprehensive and up-to-date
+- **Testing**: 🚧 Minor issues in edge cases and async components
 
-# Run by category
-poetry run pytest tests/unit/              # Unit tests (fast)
-poetry run pytest tests/integration/       # Integration tests
-poetry run pytest tests/e2e/              # End-to-end tests
-poetry run pytest tests/performance/       # Performance tests
+### **Development Priorities**
+1. **Fix Test Failures**: Address the 16 failing tests
+2. **Async Configuration**: Proper async test setup
+3. **Type Safety**: Resolve remaining type consistency issues
+4. **Performance Optimization**: Continue optimization efforts
+5. **Validation Enhancement**: Expand SKEMA validation coverage
 
-# Run with coverage
-poetry run pytest --cov=src --cov-report=html
-```
+### **Ready for Use**
+- ✅ **Core Analysis**: Kelp detection and carbon monitoring
+- ✅ **Reporting**: Multi-stakeholder report generation
+- ✅ **API Integration**: REST API for external systems
+- ✅ **Documentation**: Complete user and developer guides
+- 🚧 **Production Deployment**: Pending resolution of minor test issues
 
-For detailed testing information, see **[🧪 Tests README](tests/README.md)**
+## 🤝 Stakeholder Support
 
-### **Test Structure**
-```
-tests/
-├── unit/           # Unit tests (fast, isolated)
-├── integration/    # Integration tests (external APIs)
-├── e2e/           # End-to-end tests (complete workflows)
-└── performance/   # Performance tests (optimization)
-```
+### **First Nations Communities**
+- Culturally sensitive reporting with traditional knowledge integration
+- Seasonal calendars and traditional use considerations
+- Community engagement and capacity building materials
 
-## 🏗️ **Architecture**
+### **Scientific Community**  
+- Peer-review quality methodology and documentation
+- Statistical validation and uncertainty quantification
+- Open architecture for research collaboration
 
-### **Backend Architecture**
-```mermaid
-graph TB
-    A[FastAPI Server] --> B[Analysis Engine]
-    A --> C[Imagery API]
-    B --> D[Satellite Data Fetcher]
-    B --> E[ML Models]
-    C --> F[Image Generators]
-    C --> G[Overlay Processors]
-    D --> H[Microsoft Planetary Computer]
-    E --> I[Scikit-learn Models]
-    F --> J[PIL/Matplotlib]
-    G --> K[NumPy/OpenCV]
-```
+### **Management & Operations**
+- Decision-support tools with clear recommendations
+- Resource requirement assessments
+- Implementation timeline guidance
 
-### **Frontend Architecture**
-```mermaid
-graph TB
-    A[HTML Interface] --> B[App.js Controller]
-    B --> C[Layer Manager]
-    B --> D[Controls Manager]
-    B --> E[Loading Manager]
-    B --> F[Performance Monitor]
-    C --> G[Leaflet Map]
-    D --> H[UI Controls]
-    E --> I[Progressive Loading]
-    F --> J[Metrics Dashboard]
-```
+### **Regulatory Bodies**
+- SKEMA validation framework integration
+- Mathematical methodology documentation
+- Statistical evidence for performance validation
 
-### **Data Flow**
-1. **User Selection**: AOI and date range selection
-2. **Data Fetching**: Sentinel-2 data retrieval from Planetary Computer
-3. **Processing**: Spectral analysis, masking, and ML inference
-4. **Visualization**: Dynamic layer generation and caching
-5. **Interaction**: Real-time controls and performance monitoring
+## 🔬 Research & Validation
 
-## 🔧 **Configuration**
+### **Validation Framework**
+The system includes comprehensive validation capabilities:
 
-### **Environment Variables**
-```bash
-# Optional: Custom data directories
-KELPIE_DATA_DIR=/path/to/data
-KELPIE_CACHE_DIR=/path/to/cache
+- **SKEMA Integration**: Comparison with established methodology
+- **Statistical Validation**: Multi-site testing framework
+- **Performance Benchmarking**: Accuracy and reliability metrics
+- **Quality Assurance**: Comprehensive testing and validation processes
 
-# Optional: Performance tuning
-KELPIE_MAX_WORKERS=4
-KELPIE_CACHE_SIZE=1000
-```
+### **Research Integration**
+Built on established research from:
+- University of Victoria SKEMA methodology
+- Sentinel-2 satellite imagery analysis
+- BC coastal kelp ecology research
+- Traditional ecological knowledge integration
 
-### **Performance Tuning**
-- **Cache Size**: Adjust browser cache limits in `loading.js`
-- **Worker Threads**: Configure parallel processing in `main.py`
-- **Image Quality**: Modify compression settings in `imagery.py`
+## 📞 Support & Contribution
 
-## 🤝 **Contributing**
+### **Getting Help**
+- **Documentation**: Comprehensive guides in `docs/`
+- **Examples**: Working examples in `scripts/`
+- **Testing**: Run test suite with `poetry run pytest tests/`
 
-### **Development Setup**
-```bash
-# Fork and clone the repository
-git clone https://github.com/your-username/kelpie-carbon-v1.git
-cd kelpie-carbon-v1
+### **Contributing**
+- **Development**: See [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Testing**: Ensure tests pass before submitting changes
+- **Documentation**: Help maintain accurate documentation
+- **Validation**: Contribute to validation datasets and methodologies
 
-# Install development dependencies
-poetry install --with dev
+## 🎉 Acknowledgments
 
-# Install pre-commit hooks
-poetry run pre-commit install
+### **Research Partners**
+- University of Victoria SKEMA research team
+- BC coastal kelp ecology researchers
+- First Nations traditional knowledge holders
+- Satellite imagery analysis community
 
-# Run tests before committing
-poetry run pytest
-```
-
-### **Code Style**
-- **Python**: Follow PEP 8, use `black` for formatting
-- **JavaScript**: Use ES6+, follow Airbnb style guide
-- **Documentation**: Use Google docstring format
-
-### **Pull Request Process**
-1. Create feature branch from `main`
-2. Implement changes with tests
-3. Update documentation as needed
-4. Ensure all tests pass
-5. Submit pull request with clear description
-
-## 📊 **Performance Metrics**
-
-### **Typical Performance**
-- **Page Load**: < 2 seconds
-- **Analysis Time**: 30-60 seconds (depends on area size)
-- **Layer Loading**: < 5 seconds (cached: < 1 second)
-- **Memory Usage**: < 100MB browser heap
-
-### **Monitoring**
-- **Real-time Dashboard**: `Ctrl+Shift+P` in browser
-- **Server Logs**: Monitor FastAPI console output
-- **Performance Export**: JSON metrics available via dashboard
-
-## 🐛 **Troubleshooting**
-
-### **Common Issues**
-
-#### **Server Won't Start**
-```bash
-# Check if port 8000 is already in use
-netstat -an | grep 8000
-
-# Use different port
-poetry run uvicorn src.kelpie_carbon_v1.api.main:app --port 8001
-```
-
-#### **Satellite Data Not Loading**
-- Check internet connection
-- Verify Microsoft Planetary Computer API accessibility
-- Review server logs for authentication issues
-
-#### **Performance Issues**
-- Clear browser cache and restart
-- Check available system memory
-- Use performance dashboard to identify bottlenecks
-
-### **Error Codes**
-- **422**: Invalid input data or missing parameters
-- **404**: Analysis ID not found or expired
-- **500**: Server processing error (check logs)
-
-## 📚 **Scientific Background**
-
-### **Kelp Forest Importance**
-Kelp forests are among the most productive ecosystems on Earth, sequestering significant amounts of carbon dioxide. This application helps quantify their contribution to blue carbon storage.
-
-### **Remote Sensing Approach**
-- **Sentinel-2**: 10-60m resolution multispectral imagery
-- **Spectral Indices**: Vegetation and algae-specific calculations
-- **Machine Learning**: Automated kelp detection and classification
-
-### **Carbon Calculations**
-Biomass estimates are converted to carbon storage using established allometric relationships and carbon content factors from peer-reviewed literature.
-
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 **Acknowledgments**
-
-- **Microsoft Planetary Computer** for Sentinel-2 data access
-- **ESA Copernicus Program** for Sentinel-2 satellite imagery
-- **Leaflet.js** for interactive mapping capabilities
-- **FastAPI** for high-performance API framework
-
-## 📞 **Support**
-
-- **Issues**: [GitHub Issues](https://github.com/your-org/kelpie-carbon-v1/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-org/kelpie-carbon-v1/discussions)
-- **Documentation**: [Project Wiki](https://github.com/your-org/kelpie-carbon-v1/wiki)
+### **Technical Contributors**
+- Advanced analytics framework development
+- Multi-stakeholder reporting system design
+- SKEMA validation benchmarking implementation
+- Comprehensive testing and quality assurance
 
 ---
 
-**Made with 🌊 for ocean conservation and blue carbon research**
+## 🚧 Development Status
+
+**The Kelpie Carbon v1 system is in active development with core functionality operational and comprehensive testing in place. The system is suitable for research and development use, with production deployment pending resolution of minor test issues.**
+
+**Next Steps**: Fix remaining test failures, enhance async configuration, and complete final validation steps.
+
+---
+
+**Project**: Kelpie Carbon v1  
+**Status**: 🚧 **Active Development** (97.4% functional)  
+**Impact**: 🌊 **Advanced kelp monitoring system for BC coastal waters**

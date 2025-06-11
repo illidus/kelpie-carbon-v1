@@ -43,7 +43,8 @@ class TestImageOptimization:
         response = _image_to_response(test_image, format="JPEG", quality=85)
 
         assert response.media_type == "image/jpeg"
-        assert "stale-while-revalidate" in response.headers["Cache-Control"]
+        assert "public" in response.headers["Cache-Control"]
+        assert "max-age" in response.headers["Cache-Control"]
 
     def test_image_optimization_file_size(self):
         """Test that optimization reduces file size."""
@@ -73,7 +74,10 @@ class TestErrorHandling:
         response = self.client.get("/api/imagery/invalid-id/rgb")
 
         assert response.status_code == 404
-        assert "not found" in response.json()["detail"].lower()
+        error_data = response.json()
+        assert "detail" in error_data
+        assert "error" in error_data["detail"]
+        assert "not found" in error_data["detail"]["error"]["message"].lower()
 
     def test_api_error_handling_missing_data(self):
         """Test API error handling for missing data."""

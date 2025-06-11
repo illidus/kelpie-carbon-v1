@@ -1,4 +1,5 @@
 """Tests for simplified configuration system."""
+
 import os
 
 import pytest

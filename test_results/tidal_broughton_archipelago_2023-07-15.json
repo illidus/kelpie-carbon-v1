@@ -1,0 +1,88 @@
+{
+  "timestamp": "2025-06-10T01:08:13.404266",
+  "summary": {
+    "total_conditions": 4,
+    "successful_tests": 0,
+    "failed_tests": 4,
+    "success_rate": 0.0,
+    "average_detection_rate": 0,
+    "average_consistency": 0
+  },
+  "condition_categories": {
+    "tidal_effects": {
+      "tested": 4,
+      "successful": 0
+    },
+    "water_clarity": {
+      "tested": 0,
+      "successful": 0
+    },
+    "seasonal_variation": {
+      "tested": 0,
+      "successful": 0
+    }
+  },
+  "detailed_results": [
+    {
+      "condition_name": "low_tide_low_current",
+      "description": "Low tide with low current conditions (<10 cm/s)",
+      "detection_rate": 0.3446425,
+      "consistency_score": 0,
+      "success": false,
+      "performance_metrics": {
+        "mean_detection": 0.3446425,
+        "std_detection": 0.38512268784602915,
+        "max_detection": 0.775,
+        "min_detection": 0.0,
+        "spatial_consistency": 0
+      }
+    },
+    {
+      "condition_name": "low_tide_high_current",
+      "description": "Low tide with high current conditions (>10 cm/s)",
+      "detection_rate": 0.2868315,
+      "consistency_score": 0,
+      "success": false,
+      "performance_metrics": {
+        "mean_detection": 0.2868315,
+        "std_detection": 0.32052146278798554,
+        "max_detection": 0.645,
+        "min_detection": 0.0,
+        "spatial_consistency": 0
+      }
+    },
+    {
+      "condition_name": "high_tide_low_current",
+      "description": "High tide with low current conditions",
+      "detection_rate": 0.4447,
+      "consistency_score": 0,
+      "success": false,
+      "performance_metrics": {
+        "mean_detection": 0.4447,
+        "std_detection": 0.49693250044648923,
+        "max_detection": 1.0,
+        "min_detection": 0.0,
+        "spatial_consistency": 0
+      }
+    },
+    {
+      "condition_name": "high_tide_high_current",
+      "description": "High tide with high current conditions",
+      "detection_rate": 0.4447,
+      "consistency_score": 0,
+      "success": false,
+      "performance_metrics": {
+        "mean_detection": 0.4447,
+        "std_detection": 0.49693250044648923,
+        "max_detection": 1.0,
+        "min_detection": 0.0,
+        "spatial_consistency": 0
+      }
+    }
+  ],
+  "recommendations": [
+    "Consider implementing more robust tidal correction factors for improved accuracy",
+    "Enhance Water Anomaly Filter (WAF) processing for turbid water conditions",
+    "Consider recalibrating SKEMA detection parameters for better environmental robustness"
+  ]
+}

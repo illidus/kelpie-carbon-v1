@@ -1,4 +1,5 @@
 """Integration tests using real Sentinel-2 satellite data for model training and prediction."""
+
 from pathlib import Path
 from typing import List, Tuple
 from unittest.mock import MagicMock, patch

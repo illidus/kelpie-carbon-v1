@@ -1,4 +1,5 @@
 """Tests verifying Phase 9 uses real Sentinel-2 satellite data for model training and prediction."""
+
 from typing import List, Tuple
 
 import numpy as np
@@ -205,7 +206,9 @@ def test_phase_9_real_satellite_integration():
 
         # Step 5: Train model with real data
         metrics = model.train(combined_training)
-        print(f"✅ Step 5: Trained model with real data - R²: {metrics['train_r2']:.3f}")
+        print(
+            f"✅ Step 5: Trained model with real data - R²: {metrics['train_r2']:.3f}"
+        )
 
         # Step 6: Make prediction
         prediction = model.predict(masked_data)

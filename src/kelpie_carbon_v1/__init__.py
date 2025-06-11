@@ -1,6 +1,6 @@
 """Kelpie-Carbon v1 package.
 
-A sophisticated satellite imagery analysis application for assessing 
+A sophisticated satellite imagery analysis application for assessing
 kelp forest carbon sequestration using Sentinel-2 data.
 """
 
@@ -23,17 +23,27 @@ from .core import (
     predict_biomass,
 )
 
-# Validation framework (Task 2 - SKEMA Integration)
+# Real-world validation framework (Task A2.5)
 from .validation import (
-    ValidationDataManager,
-    ValidationMetrics,
-    MockValidationGenerator,
-    FieldCampaignProtocols,
+    RealWorldValidator,
+    ValidationSite,
+    ValidationResult,
+    validate_primary_sites,
+    validate_with_controls,
+)
+
+# Analytics framework
+from .analytics import (
+    AnalyticsFramework,
+    create_analytics_framework,
+    FirstNationsReport,
+    ScientificReport,
+    ManagementReport,
 )
 
 __all__ = [
     "__version__",
-    "__author__", 
+    "__author__",
     "__email__",
     "__description__",
     "get_settings",
@@ -43,12 +53,19 @@ __all__ = [
     "fetch_sentinel_tiles",
     "calculate_indices_from_dataset",
     "apply_mask",
-    "get_mask_statistics", 
+    "get_mask_statistics",
     "KelpBiomassModel",
     "predict_biomass",
-    # Validation framework
-    "ValidationDataManager",
-    "ValidationMetrics",
-    "MockValidationGenerator",
-    "FieldCampaignProtocols",
+    # Analytics framework
+    "AnalyticsFramework",
+    "create_analytics_framework",
+    "FirstNationsReport",
+    "ScientificReport",
+    "ManagementReport",
+    # Real-world validation framework
+    "RealWorldValidator",
+    "ValidationSite",
+    "ValidationResult",
+    "validate_primary_sites",
+    "validate_with_controls",
 ]

@@ -1,0 +1,106 @@
+{
+  "validation_settings": {
+    "test_sites": [
+      {
+        "name": "British Columbia - Nereocystis",
+        "coordinates": {
+          "lat": 50.1163,
+          "lon": -125.2735
+        },
+        "species": "Nereocystis luetkeana",
+        "data_source": "Sentinel-2",
+        "validation_type": "kelp_canopy_surface"
+      },
+      {
+        "name": "California - Macrocystis",
+        "coordinates": {
+          "lat": 36.6002,
+          "lon": -121.9015
+        },
+        "species": "Macrocystis pyrifera",
+        "data_source": "Sentinel-2",
+        "validation_type": "kelp_canopy_surface"
+      },
+      {
+        "name": "Tasmania - Giant Kelp",
+        "coordinates": {
+          "lat": -43.1,
+          "lon": 147.3
+        },
+        "species": "Macrocystis pyrifera",
+        "data_source": "Sentinel-2",
+        "validation_type": "kelp_canopy_surface"
+      }
+    ],
+    "performance_metrics": [
+      "accuracy",
+      "precision",
+      "recall",
+      "f1_score",
+      "auc_pr",
+      "auc_roc",
+      "iou",
+      "dice_coefficient"
+    ],
+    "processing_metrics": [
+      "inference_time",
+      "memory_usage",
+      "cpu_usage",
+      "model_size"
+    ]
+  },
+  "research_benchmarks": {
+    "published_papers": [
+      {
+        "title": "Enhanced U-Net for Kelp Detection",
+        "accuracy_metric": "AUC-PR",
+        "reported_value": 0.2739,
+        "baseline_comparison": "ResNet (0.1980)",
+        "improvement": "38% over baseline"
+      },
+      {
+        "title": "Vision Transformers for Satellite Imagery",
+        "accuracy_metric": "Accuracy",
+        "reported_value": 0.85,
+        "notes": "3rd place in kelp detection competition"
+      },
+      {
+        "title": "Traditional CNN Approaches",
+        "accuracy_metric": "Accuracy",
+        "reported_value": 0.7,
+        "baseline": "Typical satellite imagery classification"
+      }
+    ],
+    "our_targets": {
+      "sam_spectral": {
+        "min": 0.75,
+        "target": 0.85,
+        "stretch": 0.9
+      },
+      "unet_transfer": {
+        "min": 0.7,
+        "target": 0.85,
+        "stretch": 0.95
+      },
+      "classical_ml": {
+        "improvement_min": 0.05,
+        "improvement_target": 0.12
+      },
+      "ensemble": {
+        "target": 0.9,
+        "stretch": 0.95
+      }
+    }
+  },
+  "cost_analysis": {
+    "traditional_training": {
+      "min": 750,
+      "max": 1200
+    },
+    "our_approach": {
+      "min": 0,
+      "max": 50
+    },
+    "savings_target": 0.95
+  }
+}

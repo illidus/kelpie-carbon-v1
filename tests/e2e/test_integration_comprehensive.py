@@ -516,8 +516,10 @@ class TestPerformanceIntegration:
 
         error_data = response.json()
         assert "detail" in error_data
-        assert isinstance(error_data["detail"], str)
-        assert len(error_data["detail"]) > 0
+        assert "error" in error_data["detail"]
+        assert "message" in error_data["detail"]["error"]
+        assert isinstance(error_data["detail"]["error"]["message"], str)
+        assert len(error_data["detail"]["error"]["message"]) > 0
 
     @pytest.mark.performance
     def test_response_times(self):

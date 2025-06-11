@@ -1,4 +1,5 @@
 """Tests for API module."""
+
 import pytest
 
 
@@ -69,7 +70,7 @@ def test_run_analysis_endpoint_invalid_request(test_client):
     """Test the /api/run endpoint with invalid request."""
     invalid_request = {
         "aoi": {"lat": "invalid"},  # Should be float
-        "start_date": "2023-01-01"
+        "start_date": "2023-01-01",
         # Missing end_date
     }
 

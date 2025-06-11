@@ -1,4 +1,5 @@
 """Tests for satellite imagery visualization functionality."""
+
 import io
 
 import numpy as np

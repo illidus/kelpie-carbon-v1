@@ -1,4 +1,5 @@
 """Integration tests for the complete kelp analysis pipeline."""
+
 from unittest.mock import MagicMock, patch
 
 import numpy as np

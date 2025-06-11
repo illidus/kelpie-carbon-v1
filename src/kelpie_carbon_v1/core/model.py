@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any, Union
 
 import joblib
 import numpy as np
@@ -71,11 +71,11 @@ class KelpBiomassModel:
                     features[f"{band}_p25"] = [np.nanpercentile(band_data, 25)]
                 else:
                     # Default values for empty or all-NaN arrays
-                    features[f"{band}_mean"] = [0.0]
-                    features[f"{band}_std"] = [0.0]
-                    features[f"{band}_median"] = [0.0]
-                    features[f"{band}_p75"] = [0.0]
-                    features[f"{band}_p25"] = [0.0]
+                    features[f"{band}_mean"] = [np.float64(0.0)]
+                    features[f"{band}_std"] = [np.float64(0.0)]
+                    features[f"{band}_median"] = [np.float64(0.0)]
+                    features[f"{band}_p75"] = [np.float64(0.0)]
+                    features[f"{band}_p25"] = [np.float64(0.0)]
 
         # Calculate spectral indices
         if all(band in dataset for band in ["red", "red_edge", "nir", "swir1"]):
@@ -90,30 +90,35 @@ class KelpBiomassModel:
                     features[f"{index_name}_median"] = [np.nanmedian(valid_index)]
                 else:
                     # Default values for empty or all-NaN arrays
-                    features[f"{index_name}_mean"] = [0.0]
-                    features[f"{index_name}_std"] = [0.0]
-                    features[f"{index_name}_median"] = [0.0]
+                    features[f"{index_name}_mean"] = [np.float64(0.0)]
+                    features[f"{index_name}_std"] = [np.float64(0.0)]
+                    features[f"{index_name}_median"] = [np.float64(0.0)]
 
         # Environmental features
         if "water_mask" in dataset:
             water_coverage = (
                 np.sum(dataset["water_mask"] == 1) / dataset["water_mask"].size
             )
-            features["water_coverage"] = [water_coverage]
+            features["water_coverage"] = [np.float64(water_coverage)]
 
         if "kelp_mask" in dataset:
             kelp_coverage = (
                 np.sum(dataset["kelp_mask"] == 1) / dataset["kelp_mask"].size
             )
-            features["kelp_coverage"] = [kelp_coverage]
+            features["kelp_coverage"] = [np.float64(kelp_coverage)]
 
             # Kelp patch characteristics
             kelp_patches = self._analyze_kelp_patches(dataset["kelp_mask"].values)
-            features.update(kelp_patches)
+            # Convert kelp patch values to proper types
+            from typing import cast
+            kelp_patches_typed = {k: [float(v[0])] if v else [0.0] for k, v in kelp_patches.items()}
+            features.update(cast("Dict[str, List[Any]]", kelp_patches_typed))
 
-        # Spatial features
-        spatial_features = self._calculate_spatial_features(dataset, kelp_pixels)
-        features.update(spatial_features)
+        # Spatial features  
+        spatial_features = self._calculate_spatial_features(dataset, kelp_pixels.values if hasattr(kelp_pixels, 'values') else kelp_pixels)
+        # Convert spatial feature values to proper types
+        spatial_features_typed = {k: [float(v[0])] if v else [0.0] for k, v in spatial_features.items()}
+        features.update(cast("Dict[str, List[Any]]", spatial_features_typed))
 
         df = pd.DataFrame(features)
         self.feature_names = list(df.columns)
@@ -122,10 +127,10 @@ class KelpBiomassModel:
 
     def _calculate_spectral_indices(self, dataset: xr.Dataset) -> Dict[str, np.ndarray]:
         """Calculate spectral indices for biomass prediction."""
-        red = dataset["red"].values.astype(np.float32)
-        red_edge = dataset["red_edge"].values.astype(np.float32)
-        nir = dataset["nir"].values.astype(np.float32)
-        swir1 = dataset["swir1"].values.astype(np.float32)
+        red: np.ndarray = dataset["red"].values.astype(np.float32)
+        red_edge: np.ndarray = dataset["red_edge"].values.astype(np.float32)
+        nir: np.ndarray = dataset["nir"].values.astype(np.float32)
+        swir1: np.ndarray = dataset["swir1"].values.astype(np.float32)
 
         indices = {}
 
@@ -140,11 +145,12 @@ class KelpBiomassModel:
         # NDRE (Normalized Difference Red Edge) - SKEMA Enhanced Formula
         # Updated to use proper NDRE formula: (Red_Edge - Red) / (Red_Edge + Red)
         # Uses optimal 740nm band if available for submerged kelp detection
+        red_edge_optimal: np.ndarray
         if "red_edge_2" in dataset:
             red_edge_optimal = dataset["red_edge_2"].values.astype(np.float32)  # 740nm
         else:
             red_edge_optimal = red_edge  # fallback to 705nm
-            
+
         with np.errstate(divide="ignore", invalid="ignore"):
             indices["ndre"] = (red_edge_optimal - red) / (red_edge_optimal + red)
 
@@ -175,9 +181,11 @@ class KelpBiomassModel:
     def _analyze_kelp_patches(self, kelp_mask: np.ndarray) -> Dict[str, List[float]]:
         """Analyze kelp patch characteristics."""
         from scipy import ndimage
+        from typing import Tuple, cast
 
         # Label connected components
-        labeled_array, num_patches = ndimage.label(kelp_mask)
+        labeled_result = ndimage.label(kelp_mask)
+        labeled_array, num_patches = cast(Tuple[np.ndarray, int], labeled_result)
 
         if num_patches == 0:
             return {
@@ -191,23 +199,23 @@ class KelpBiomassModel:
         patch_sizes = np.bincount(labeled_array.ravel())[1:]  # Exclude background
 
         return {
-            "num_kelp_patches": [num_patches],
-            "avg_patch_size": [np.mean(patch_sizes)],
-            "largest_patch_size": [np.max(patch_sizes)],
-            "patch_density": [num_patches / kelp_mask.size],
+            "num_kelp_patches": [float(num_patches)],
+            "avg_patch_size": [float(np.mean(patch_sizes))],
+            "largest_patch_size": [float(np.max(patch_sizes))],
+            "patch_density": [float(num_patches / kelp_mask.size)],
         }
 
     def _calculate_spatial_features(
-        self, dataset: xr.Dataset, kelp_pixels: np.ndarray
+        self, dataset: xr.Dataset, kelp_pixels: Union[np.ndarray, Any]
     ) -> Dict[str, List[float]]:
         """Calculate spatial features from the dataset."""
         features = {}
 
         # Image dimensions
         height, width = dataset.sizes["y"], dataset.sizes["x"]
-        features["image_height"] = [height]
-        features["image_width"] = [width]
-        features["total_pixels"] = [height * width]
+        features["image_height"] = [float(height)]
+        features["image_width"] = [float(width)]
+        features["total_pixels"] = [float(height * width)]
 
         # Coordinate-based features
         if "x" in dataset.coords and "y" in dataset.coords:
@@ -215,12 +223,12 @@ class KelpBiomassModel:
             y_coords = dataset.coords["y"].values
 
             # Center coordinates
-            features["center_lon"] = [np.mean(x_coords)]
-            features["center_lat"] = [np.mean(y_coords)]
+            features["center_lon"] = [float(np.mean(x_coords))]
+            features["center_lat"] = [float(np.mean(y_coords))]
 
             # Extent
-            features["lon_range"] = [np.ptp(x_coords)]
-            features["lat_range"] = [np.ptp(y_coords)]
+            features["lon_range"] = [float(np.ptp(x_coords))]
+            features["lat_range"] = [float(np.ptp(y_coords))]
 
         return features
 
@@ -294,7 +302,7 @@ class KelpBiomassModel:
         self.is_trained = True
         return metrics
 
-    def predict(self, dataset: xr.Dataset) -> Dict[str, float]:
+    def predict(self, dataset: xr.Dataset) -> Dict[str, Any]:
         """Predict biomass for a given dataset.
 
         Args:
@@ -330,9 +338,12 @@ class KelpBiomassModel:
         biomass_prediction = self.model.predict(X_scaled)[0]
 
         # Calculate prediction confidence using tree predictions
-        tree_predictions = np.array(
-            [tree.predict(X_scaled)[0] for tree in self.model.estimators_]
-        )
+        if hasattr(self.model, 'estimators_') and self.model.estimators_ is not None:
+            tree_predictions = np.array(
+                [tree.predict(X_scaled)[0] for tree in self.model.estimators_]
+            )
+        else:
+            tree_predictions = np.array([biomass_prediction])
         confidence = 1.0 - (
             np.std(tree_predictions) / (np.mean(tree_predictions) + 1e-8)
         )
@@ -351,30 +362,47 @@ class KelpBiomassModel:
         return {
             "biomass_kg_per_hectare": max(0, biomass_prediction),  # Ensure non-negative
             "prediction_confidence": np.clip(confidence, 0, 1),
-            "top_features": [f"{name}: {importance:.3f}" for name, importance in top_features],
+            "top_features": [
+                f"{name}: {importance:.3f}" for name, importance in top_features
+            ],
             "model_type": "Random Forest",
             "feature_count": len(self.feature_names),
         }
 
-    def _predict_with_synthetic_model(self, dataset: xr.Dataset) -> Dict[str, float]:
+    def _predict_with_synthetic_model(self, dataset: xr.Dataset) -> Dict[str, Any]:
         """Fallback prediction using a synthetic model based on spectral indices."""
         # Extract basic features
         features = self.extract_features(dataset)
 
         # Simple biomass estimation based on kelp coverage and spectral indices
-        kelp_coverage = features.get("kelp_coverage", [0])[0]
-        if hasattr(kelp_coverage, "values"):
-            kelp_coverage = float(kelp_coverage.values)
+        from typing import cast, Any
+        kelp_coverage_raw = features.get("kelp_coverage", [0])[0]
+        if hasattr(kelp_coverage_raw, "values"):
+            kelp_coverage = float(cast(Any, kelp_coverage_raw.values))
+        else:
+            kelp_coverage = float(cast(Any, kelp_coverage_raw))
 
         # Base biomass estimation (kg/hectare)
         base_biomass = float(kelp_coverage) * 5000  # 5000 kg/hectare for full coverage
 
         # Adjust based on spectral indices if available
         if "fai_mean" in features.columns:
-            fai_val = features["fai_mean"].iloc[0]
-            if hasattr(fai_val, "values"):
-                fai_val = float(fai_val.values)
-            fai_factor = max(0, float(fai_val) + 0.01) * 2000
+            from typing import cast
+            fai_val_raw = features["fai_mean"].iloc[0]
+            try:
+                if hasattr(fai_val_raw, "values"):
+                    # Extract scalar value from numpy array or pandas extension
+                    val_extracted = fai_val_raw.values
+                    if hasattr(val_extracted, 'item'):
+                        fai_val = float(val_extracted.item())
+                    else:
+                        fai_val = float(cast(Any, val_extracted))
+                else:
+                    # Handle scalar values
+                    fai_val = float(cast(Any, fai_val_raw)) if not pd.isna(fai_val_raw) else 0.0
+            except (TypeError, ValueError, AttributeError):
+                fai_val = 0.0
+            fai_factor = max(0, fai_val + 0.01) * 2000
             base_biomass += fai_factor
 
         if "red_edge_ndvi_mean" in features.columns:
@@ -437,7 +465,7 @@ class KelpBiomassModel:
 
 def predict_biomass(
     dataset: xr.Dataset, model_path: Optional[str] = None
-) -> Dict[str, float]:
+) -> Dict[str, Any]:
     """Main function to predict biomass from satellite dataset.
 
     Args:

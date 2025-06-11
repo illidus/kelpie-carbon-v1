@@ -7,11 +7,7 @@ This package provides integration with external datasets for validation and trai
 from .skema_integration import (
     SKEMAValidationPoint,
     SKEMADataIntegrator,
-    get_skema_validation_data
+    get_skema_validation_data,
 )
 
-__all__ = [
-    'SKEMAValidationPoint',
-    'SKEMADataIntegrator', 
-    'get_skema_validation_data'
-] 
+__all__ = ["SKEMAValidationPoint", "SKEMADataIntegrator", "get_skema_validation_data"]

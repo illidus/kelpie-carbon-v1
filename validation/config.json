@@ -1,0 +1,39 @@
+{
+  "research_benchmarks": {
+    "enhanced_unet": {
+      "auc_pr": 0.2739,
+      "improvement": "38% over ResNet"
+    },
+    "vision_transformers": {
+      "accuracy": 0.85,
+      "notes": "3rd place competition"
+    },
+    "traditional_cnn": {
+      "accuracy": 0.7,
+      "type": "baseline"
+    },
+    "skema_spectral": {
+      "accuracy": 0.7,
+      "type": "current baseline"
+    }
+  },
+  "our_targets": {
+    "sam_spectral": {
+      "min": 0.75,
+      "target": 0.85
+    },
+    "unet_transfer": {
+      "min": 0.7,
+      "target": 0.85
+    },
+    "classical_ml": {
+      "improvement_min": 0.05,
+      "improvement_target": 0.12
+    }
+  },
+  "cost_analysis": {
+    "traditional_training": 1000,
+    "our_approach": 25,
+    "savings_percentage": 97.5
+  }
+}

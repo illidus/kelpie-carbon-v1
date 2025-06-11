@@ -1,4 +1,5 @@
 """Tests for web interface functionality."""
+
 import pytest
 from fastapi.testclient import TestClient
 

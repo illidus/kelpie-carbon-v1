@@ -1,9 +1,8 @@
 """Test species classification functionality."""
 
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import numpy as np
-import pytest
 
 from src.kelpie_carbon_v1.processing.species_classifier import (
     BiomassEstimate,
@@ -386,13 +385,13 @@ def test_enhanced_biomass_estimation_low_confidence():
     """Test enhanced biomass estimation with low classification confidence."""
     classifier = SpeciesClassifier(enable_morphology=False)
 
-    kelp_mask = np.ones((5, 5), dtype=bool)  # Small patch
+    kelp_mask = np.ones((3, 3), dtype=bool)  # Very small patch (9 pixels = 900 m² < 1000)
     morphological_features = {
         "pneumatocyst_count": 0,  # No features detected
         "blade_count": 0,
         "frond_count": 0,
         "morphology_confidence": 0.4,  # Low confidence
-        "total_area": 25.0,
+        "total_area": 9.0,
     }
 
     # Test with low classification confidence

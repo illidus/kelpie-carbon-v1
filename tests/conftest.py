@@ -1,4 +1,5 @@
 """Pytest configuration and shared fixtures for Kelpie Carbon v1 tests."""
+
 import pytest
 import tempfile
 import shutil
@@ -39,7 +40,7 @@ def sample_coordinates():
         "lat": 36.8,
         "lng": -121.9,
         "start_date": "2023-08-01",
-        "end_date": "2023-08-31"
+        "end_date": "2023-08-31",
     }
 
 
@@ -56,29 +57,23 @@ def invalid_coordinates():
 # Test markers for categorizing tests
 pytest_plugins = []
 
+
 def pytest_configure(config):
     """Configure pytest with custom markers."""
     config.addinivalue_line(
         "markers", "unit: marks tests as unit tests (fast, isolated)"
     )
     config.addinivalue_line(
-        "markers", "integration: marks tests as integration tests (slower, with external dependencies)"
+        "markers",
+        "integration: marks tests as integration tests (slower, with external dependencies)",
     )
     config.addinivalue_line(
         "markers", "e2e: marks tests as end-to-end tests (slowest, full system)"
     )
-    config.addinivalue_line(
-        "markers", "api: marks tests as API tests"
-    )
-    config.addinivalue_line(
-        "markers", "core: marks tests as core functionality tests"
-    )
+    config.addinivalue_line("markers", "api: marks tests as API tests")
+    config.addinivalue_line("markers", "core: marks tests as core functionality tests")
     config.addinivalue_line(
         "markers", "imagery: marks tests as imagery processing tests"
     )
-    config.addinivalue_line(
-        "markers", "cli: marks tests as CLI tests"
-    )
-    config.addinivalue_line(
-        "markers", "slow: marks tests as slow running"
-    ) 
+    config.addinivalue_line("markers", "cli: marks tests as CLI tests")
+    config.addinivalue_line("markers", "slow: marks tests as slow running")

@@ -42,6 +42,9 @@ When adding new summaries:
 - **[task_c2_1_species_classification_implementation.md](task_c2_1_species_classification_implementation.md)** - **NEW**: Task C2.1 multi-species classification system
 - **[task_c2_2_morphology_detection_implementation.md](task_c2_2_morphology_detection_implementation.md)** - **NEW**: Task C2.2 morphology-based detection algorithms
 - **[task_c2_3_enhanced_biomass_estimation_implementation.md](task_c2_3_enhanced_biomass_estimation_implementation.md)** - **NEW**: Task C2.3 enhanced species-specific biomass estimation
+- **[task_c2_4_field_survey_integration_implementation.md](task_c2_4_field_survey_integration_implementation.md)** - **NEW**: Task C2.4 field survey data integration (comprehensive validation framework)
+- **[task_c3_temporal_validation_implementation.md](task_c3_temporal_validation_implementation.md)** - **NEW**: Task C3 temporal validation & environmental drivers (UVic Broughton Archipelago methodology)
+- **[task_c4_submerged_kelp_detection_implementation.md](task_c4_submerged_kelp_detection_implementation.md)** - **NEW**: Task C4 submerged kelp detection enhancement (red-edge depth detection 0-150cm)
 - **[TASK_2_COMPLETION_SUMMARY.md](TASK_2_COMPLETION_SUMMARY.md)** - Task 2 completion details and status
 - **[UPDATE_TASKS_COMPLETED.md](UPDATE_TASKS_COMPLETED.md)** - Completed update tasks summary
 - **[IMMEDIATE_IMPLEMENTATION_PLAN.md](IMMEDIATE_IMPLEMENTATION_PLAN.md)** - Immediate implementation planning

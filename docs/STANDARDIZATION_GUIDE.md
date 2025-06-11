@@ -219,6 +219,13 @@ test_[aspect]_performance.py
 4. ✅ **Link Related Docs**: Reference relevant documentation
 5. ✅ **Include Test Results**: Document testing outcomes
 
+### **When Managing Task Lists**
+1. ✅ **Use Primary Task List**: ALL active tasks go in `docs/CURRENT_TASK_LIST.md`
+2. ✅ **Update Status**: Mark completed tasks, update progress
+3. ✅ **Add New Tasks**: Append to appropriate priority section
+4. ✅ **Cross-Reference**: Link to detailed task lists in appropriate directories
+5. ✅ **Maintain Priority Order**: Keep HIGH → MEDIUM → LOW structure
+
 ---
 
 ## 🚨 **Critical Violations (DO NOT COMMIT)**
@@ -303,6 +310,92 @@ test_[aspect]_performance.py
 ## 📚 References
 [Scientific papers, external resources, related research]
 ```
+
+### **Task List Management Template**
+```markdown
+### **Task [ID]: [Task Name]** [Emoji]
+**Status**: [🟡 IN_PROGRESS/🟢 COMPLETED/🔴 BLOCKED/⚪ NOT_STARTED]
+**Priority**: [HIGH/MEDIUM/LOW]
+**Estimated Duration**: [Time estimate]
+**Prerequisite**: [Dependencies]
+
+#### **Objective**
+[Clear description of task goals]
+
+#### **Sub-tasks**
+- [ ] **[ID.1]**: [Specific actionable item]
+- [ ] **[ID.2]**: [Specific actionable item]
+- [ ] **[ID.3]**: [Specific actionable item]
+
+#### **Deliverables**
+- [ ] [Specific output 1]
+- [ ] [Specific output 2]
+
+#### **Success Metrics**
+- [Measurable criteria for completion]
+```
+
+---
+
+## 📋 **Task List Management (MANDATORY)**
+
+### **Primary Task List** (`docs/CURRENT_TASK_LIST.md`)
+**This is the SINGLE SOURCE OF TRUTH for all active tasks.**
+
+#### **Structure Requirements**
+```markdown
+# 📋 Current Task List - Kelpie Carbon v1
+
+## 🚨 **IMMEDIATE HIGH PRIORITY TASKS**
+[Urgent tasks that must be completed first]
+
+## 🎯 **MEDIUM PRIORITY TASKS** 
+[Important tasks for next phase]
+
+## 📚 **LOW PRIORITY TASKS**
+[Future enhancements and optimizations]
+
+## ✅ **RECENTLY COMPLETED TASKS**
+[Completed tasks for reference - move here when done]
+```
+
+#### **Task Management Rules**
+1. ✅ **Single Source**: ALL active tasks MUST be in `docs/CURRENT_TASK_LIST.md`
+2. ✅ **Priority Order**: Maintain HIGH → MEDIUM → LOW structure
+3. ✅ **Status Updates**: Update progress regularly with status indicators
+4. ✅ **Completion Movement**: Move completed tasks to "Recently Completed" section
+5. ✅ **Cross-References**: Link to detailed task lists when they exist elsewhere
+
+### **Detailed Task Lists** (Optional Supplements)
+When tasks are complex enough to warrant detailed breakdowns:
+
+#### **Placement Rules**
+- **Research Tasks**: Detailed lists can go in `docs/research/` (e.g., `SKEMA_INTEGRATION_TASK_LIST.md`)
+- **Implementation Tasks**: Detailed lists can go in `docs/implementation/` 
+- **Validation Tasks**: Detailed lists can go in `docs/` root for major validation efforts
+
+#### **Integration Requirements**
+1. ✅ **Reference in Primary**: Always link from `CURRENT_TASK_LIST.md` to detailed lists
+2. ✅ **Update Both**: Keep both primary and detailed lists synchronized
+3. ✅ **Clear Hierarchy**: Detailed lists supplement, never replace primary list
+
+### **Task Addition Process**
+When adding new tasks (agents and humans):
+
+1. ✅ **Assess Priority**: HIGH/MEDIUM/LOW based on project impact
+2. ✅ **Place in Primary List**: Add to appropriate priority section
+3. ✅ **Use Template**: Follow task template structure
+4. ✅ **Add Dependencies**: Note prerequisites and blockers
+5. ✅ **Link Details**: Reference detailed task lists if they exist
+
+### **Task Update Process**
+When updating task progress:
+
+1. ✅ **Update Status**: Change status indicators (🟡→🟢, etc.)
+2. ✅ **Mark Sub-tasks**: Check off completed sub-tasks
+3. ✅ **Update Metrics**: Report progress in quantifiable terms
+4. ✅ **Move When Done**: Move completed tasks to "Recently Completed"
+5. ✅ **Update Cross-References**: Synchronize with detailed lists
 
 ---
 

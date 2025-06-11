@@ -7,9 +7,9 @@ from .model import KelpBiomassModel, predict_biomass
 
 __all__ = [
     "fetch_sentinel_tiles",
-    "calculate_indices_from_dataset", 
+    "calculate_indices_from_dataset",
     "apply_mask",
     "get_mask_statistics",
     "KelpBiomassModel",
     "predict_biomass",
-] 
+]

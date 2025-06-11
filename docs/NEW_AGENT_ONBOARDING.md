@@ -1,260 +1,238 @@
-# 🤖 New AI Agent Onboarding Guide
+# 📚 New Agent Onboarding - Essential First Steps
 
-**Date**: January 9, 2025  
-**Purpose**: Get new AI agents productive immediately with the established project structure  
-**Critical**: Follow this guide EXACTLY to maintain project integrity
-
----
-
-## 🚨 **CRITICAL FIRST STEPS - READ BEFORE DOING ANYTHING**
-
-### **1. Read These Documents FIRST (In Order)**
-1. **[📏 STANDARDIZATION_GUIDE.md](STANDARDIZATION_GUIDE.md)** - **MANDATORY** organizational standards
-2. **[🤖 agent-guide.md](agent-guide.md)** - Your comprehensive instructions and workflow
-3. **[📚 README.md](README.md)** - Project navigation hub
-4. **[🏗️ ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture overview
-
-### **2. Project Status Check**
-- ✅ **Status**: Production-ready system (All 5 phases complete)
-- ✅ **Test Suite**: 205 tests passing, 7 skipped
-- ✅ **Documentation**: Fully organized and structured
-- ✅ **Test Organization**: Categorized by type (unit, integration, e2e, performance)
+**Date**: January 10, 2025  
+**Purpose**: Complete onboarding guide for new AI agents joining the Kelpie Carbon v1 project  
+**System Status**: 97% functional (598/614 tests passing)
 
 ---
 
-## 📋 **Essential Project Context**
+## 🎯 **Project Overview**
 
-### **What This Project Is**
-- **Name**: Kelpie Carbon v1
-- **Purpose**: Real-time kelp forest carbon sequestration assessment using satellite imagery
-- **Tech Stack**: FastAPI + Python 3.12, Leaflet.js, Sentinel-2 data processing
-- **Current Status**: Production-ready with comprehensive test coverage
+The **Kelpie Carbon v1** project is a comprehensive kelp detection and carbon monitoring system for British Columbia coastal waters. The system integrates satellite imagery analysis, machine learning models, and multi-stakeholder reporting capabilities.
 
-### **Key Capabilities** ✅
-- Real-time Sentinel-2 satellite data processing
-- Interactive web interface with progressive loading
-- Spectral index calculations (NDVI, FAI, NDRE) 
-- Machine learning kelp detection
-- Carbon sequestration estimation
-
-### **Current Focus Areas**
-- **Next Priority**: SKEMA integration for enhanced kelp detection
-- **Research Phase**: Validating SKEMA formulas against known kelp farm locations
-- **Quality Focus**: Maintaining 100% test coverage and clean architecture
+### **Current Status**
+- **Core Functionality**: ✅ Operational (97.4% test pass rate)
+- **System Components**: ✅ All major modules functional
+- **Documentation**: ✅ Comprehensive and up-to-date
+- **Development Focus**: 🔧 Resolving 16 remaining test failures
 
 ---
 
-## 🎯 **Your Immediate Actions**
+## 📊 **System Health Overview**
 
-### **Step 1: Verify Project Structure Understanding**
-Check that you understand the **MANDATORY** structure:
-
-```
-docs/
-├── README.md                          # 🚪 Navigation hub - START HERE
-├── STANDARDIZATION_GUIDE.md           # 📏 MANDATORY standards
-├── agent-guide.md                     # 🤖 Your primary guide
-├── [Core Documentation]               # User guides, API docs, architecture
-├── research/                          # 🔬 Research & validation docs ONLY
-└── implementation/                    # 📋 Implementation history ONLY
-
-tests/
-├── unit/                              # ⚡ Fast, isolated tests
-├── integration/                       # 🔗 Component interaction tests  
-├── e2e/                              # 🌐 End-to-end workflow tests
-└── performance/                       # ⚡ Performance tests
-```
-
-### **Step 2: Review Current Task List**
-Read the current task list at:
-- **[📋 CURRENT_TASK_LIST.md](CURRENT_TASK_LIST.md)** - Your work priorities
-- **[🔬 research/SKEMA_INTEGRATION_TASK_LIST.md](research/SKEMA_INTEGRATION_TASK_LIST.md)** - SKEMA research tasks
-
-### **Step 3: Verify Development Environment**
+### **Test Status** (as of January 10, 2025)
 ```bash
-# Ensure all tests pass before starting work
-poetry run pytest
+Total Tests: 614
+✅ Passing: 598 (97.4%)
+❌ Failing: 16 (2.6%)
+⏭️ Skipped: 4
+```
 
-# Check code quality
-poetry run black --check src/ tests/
-poetry run mypy src/
-poetry run flake8 src/ tests/
+### **Core Components Status**
+- ✅ **Analytics Framework**: Fully operational (2,031 lines)
+- ✅ **Validation Suite**: Comprehensive testing (8,467 lines)
+- ✅ **Core Processing**: Satellite data processing (1,526 lines)
+- ✅ **API Layer**: FastAPI REST interface stable
+- ✅ **Web Interface**: Interactive mapping functional
+- ✅ **Reporting**: Multi-stakeholder reports generating
+
+### **Known Issues** (16 failing tests)
+- 🔧 **Async Configuration**: Temporal validation tests need proper async setup
+- 🔧 **Type Consistency**: Minor floating point and type casting issues
+- 🔧 **Edge Cases**: Species classifier and submerged detection parameter validation
+
+---
+
+## 📁 **Codebase Structure**
+
+```
+kelpie-carbon-v1/
+├── src/kelpie_carbon_v1/           # Core source code (~15,000+ lines)
+│   ├── analytics/                  # Analytics framework (2,031 lines)
+│   ├── validation/                 # Validation suite (8,467 lines)
+│   ├── core/                       # Core processing (1,526 lines)
+│   ├── processing/                 # Image processing (2,317 lines)
+│   ├── detection/                  # Detection algorithms (679 lines)
+│   ├── api/                        # REST API layer
+│   ├── web/                        # Web interface
+│   └── utils/                      # Utility functions
+├── tests/                          # Comprehensive test suite (614 tests)
+│   ├── unit/                       # Unit tests (majority)
+│   ├── integration/                # Integration tests
+│   ├── e2e/                        # End-to-end tests
+│   └── performance/                # Performance tests
+├── docs/                           # Technical documentation
+│   ├── research/                   # Research and validation docs
+│   └── implementation/             # Historical implementation docs
+├── scripts/                        # Demo and utility scripts
+├── validation/                     # Validation reports and data
+└── config/                         # Configuration files
 ```
 
 ---
 
-## 🔄 **Development Workflow**
+## 🚀 **Getting Started**
 
-### **Before Making ANY Changes**
-1. ✅ **Read standardization guide** - Understand mandatory rules
-2. ✅ **Check task list** - Ensure your work aligns with priorities  
-3. ✅ **Verify tests pass** - Start with clean baseline
-4. ✅ **Review architecture** - Understand component interactions
+### **1. Environment Setup**
 
-### **When Working on Tasks**
-1. **Identify Category**: Is this core functionality, research, or implementation history?
-2. **Update Tests**: Add/modify tests in appropriate category (unit/integration/e2e/performance)
-3. **Document Work**: Use templates from STANDARDIZATION_GUIDE.md
-4. **Maintain Quality**: Ensure all tests pass before committing
+```bash
+# Clone and enter project
+git clone https://github.com/your-org/kelpie-carbon-v1.git
+cd kelpie-carbon-v1
 
-### **When Creating Documentation**
-1. **Determine Placement**: Core (docs/), Research (docs/research/), or Implementation (docs/implementation/)
-2. **Use Templates**: Follow mandatory templates in STANDARDIZATION_GUIDE.md
-3. **Update READMEs**: Add entries to appropriate directory README
-4. **Cross-Reference**: Link from related documents
+# Install dependencies
+pip install poetry
+poetry install
 
----
+# Verify installation
+poetry run pytest tests/unit/test_api.py -v  # Should pass
+```
 
-## 🎯 **Current Priority Tasks**
+### **2. System Verification**
 
-### **Immediate High Priority**
-1. **Fix Pre-commit Hooks** - Address current linting/type checking issues
-2. **SKEMA Integration Phase 3** - Begin model validation with known kelp farm locations
-3. **Enhanced Testing** - Validate system against SKEMA-recognized kelp farms
+```bash
+# Check overall test status
+poetry run pytest tests/ --tb=short -q
 
-### **SKEMA Integration Focus**
-- **Goal**: Integrate SKEMA formulas and validate against known kelp farm coordinates
-- **Critical**: Test lat/lng coordinates that SKEMA recognizes as true kelp farms
-- **Success Metric**: Our indices successfully detect SKEMA-validated kelp locations
+# Test core functionality
+poetry run pytest tests/unit/test_model.py -v      # ML models
+poetry run pytest tests/unit/test_fetch.py -v      # Data fetching
+poetry run pytest tests/unit/test_analytics.py -v  # Analytics framework
+```
 
-### **Quality Maintenance**
-- **Test Coverage**: Maintain 100% passing tests
-- **Documentation**: Keep all docs current and cross-referenced
-- **Code Quality**: Fix any linting/type checking issues
+### **3. Identify Current Issues**
 
----
-
-## 📋 **Task Management Standards**
-
-### **When You Complete Tasks**
-1. **Create Implementation Summary**: Use template in docs/implementation/
-2. **Update Task Lists**: Mark completed items, add new discoveries
-3. **Document Results**: Include metrics, test results, lessons learned
-4. **Cross-Reference**: Link to related documentation updates
-
-### **Task Documentation Template**
-```markdown
-# [TASK] Implementation Summary
-
-**Date**: [YYYY-MM-DD]
-**Status**: COMPLETED
-**Type**: [Feature/Research/Optimization/Bug Fix]
-
-## 🎯 Objective
-[What was accomplished]
-
-## ✅ Completed Work
-- [Specific item 1]
-- [Specific item 2]
-
-## 📊 Results
-[Metrics, improvements, discoveries]
-
-## 🧪 Testing
-**Test Results**: [Pass/Fail counts]
-**New Tests**: [Any new tests added]
-
-## 🔗 Related Documentation
-- [Links to updated docs]
-
-## 📝 Next Steps
-[What this enables for future work]
+```bash
+# Check specific failing test categories
+poetry run pytest tests/unit/test_temporal_validation.py -v     # Async issues
+poetry run pytest tests/unit/test_real_data_acquisition.py -v   # Type issues
+poetry run pytest tests/unit/test_species_classifier.py -v      # Edge cases
+poetry run pytest tests/unit/test_submerged_kelp_detection.py -v # Parameter validation
 ```
 
 ---
 
-## 🚨 **Critical Don'ts - NEVER Do These**
+## 📖 **Essential Documentation**
 
-### **Structure Violations**
-- ❌ **NEVER** put implementation summaries in `docs/` root
-- ❌ **NEVER** put research docs in `docs/` root  
-- ❌ **NEVER** mix test types in wrong directories
-- ❌ **NEVER** skip updating README files when adding documentation
-- ❌ **NEVER** break cross-references without fixing them
+### **Start Here** (Critical Reading)
+1. **[README.md](../README.md)** - Project overview and current status
+2. **[docs/USER_GUIDE.md](USER_GUIDE.md)** - System usage and capabilities
+3. **[docs/ARCHITECTURE.md](ARCHITECTURE.md)** - System design and components
+4. **[docs/TESTING_GUIDE.md](TESTING_GUIDE.md)** - Testing framework and procedures
 
-### **Development Violations**
-- ❌ **NEVER** commit code without running tests
-- ❌ **NEVER** ignore the standardization guide rules
-- ❌ **NEVER** create documentation without using templates
-- ❌ **NEVER** work on tasks not in the current task list
+### **Development Focus**
+1. **[docs/CURRENT_TASK_LIST.md](CURRENT_TASK_LIST.md)** - Current priorities
+2. **[docs/DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** - Development workflows
+3. **[docs/API_REFERENCE.md](API_REFERENCE.md)** - API interface documentation
 
----
-
-## ✅ **Success Checklist**
-
-Before considering any work session complete:
-
-### **Code Quality**
-- [ ] All tests passing (pytest shows 205+ passed)
-- [ ] No linting errors (flake8 passes)  
-- [ ] No type errors (mypy passes)
-- [ ] Code formatted (black passes)
-
-### **Documentation**
-- [ ] Any new docs placed in correct directory
-- [ ] README files updated for new content
-- [ ] Cross-references working
-- [ ] Templates followed
-
-### **Task Management** 
-- [ ] Task list updated with progress
-- [ ] Implementation summary created (if task completed)
-- [ ] Next steps documented
-- [ ] Related documentation linked
+### **Quality Standards**
+1. **[docs/STANDARDIZATION_GUIDE.md](STANDARDIZATION_GUIDE.md)** - **MANDATORY** organizational standards
+2. **[docs/agent-guide.md](agent-guide.md)** - AI agent best practices
+3. **[CONTRIBUTING.md](../CONTRIBUTING.md)** - Contribution guidelines
 
 ---
 
-## 🎯 **Current SKEMA Integration Status**
+## 🎯 **Current Development Priorities**
 
-### **Research Phase Complete** ✅
-- Task 1: SKEMA framework research - COMPLETED
-- NDRE implementation - COMPLETED  
-- Red-edge enhancement specification - COMPLETED
+### **Immediate (This Week)**
+1. **Fix Async Tests** - Configure pytest-asyncio for temporal validation
+2. **Resolve Type Issues** - Fix floating point precision and casting
+3. **Address Edge Cases** - Improve error handling in species classification
 
-### **Next Critical Phase** 🎯
-- **Task 3**: Model validation with SKEMA-recognized kelp farm locations
-- **Goal**: Prove our indices detect kelp at coordinates SKEMA validates as true kelp farms
-- **Success Metric**: High correlation between our detection and SKEMA ground truth
+### **Short-term (Next 2 Weeks)**
+1. **Achieve 100% Test Pass Rate** - Resolve all 16 failing tests
+2. **Enhance Error Handling** - Robust edge case management
+3. **Performance Optimization** - Address any performance concerns
 
-### **Key SKEMA Integration Components**
-- Enhanced NDRE (Normalized Difference Red Edge) processing
-- Multi-spectral index calculations (FAI, NDVI, NDRE)
-- Deep learning model integration
-- Temporal validation across environmental conditions
+### **Medium-term (Next Month)**
+1. **Production Hardening** - Complete production readiness
+2. **Documentation Polish** - Ensure all docs reflect current reality
+3. **Validation Enhancement** - Expand SKEMA validation coverage
 
 ---
 
-## 📞 **Getting Help**
+## 🔧 **Development Workflow**
+
+### **Daily Workflow**
+1. **Check Test Status**: `poetry run pytest tests/ --tb=short -q`
+2. **Focus on Specific Issue**: Work on one failing test category
+3. **Verify Fix**: Ensure fix doesn't break other tests
+4. **Document Progress**: Update relevant documentation
+
+### **Before Making Changes**
+```bash
+# Always verify current state first
+poetry run pytest tests/ -x  # Stop on first failure
+git status                   # Check current changes
+```
+
+### **After Making Changes**
+```bash
+# Verify your changes
+poetry run pytest tests/unit/test_[affected_module].py -v
+poetry run pytest tests/ --tb=short -q  # Check overall impact
+```
+
+---
+
+## 🎯 **Success Metrics**
+
+### **Your Mission**
+- **Primary Goal**: Fix the 16 failing tests to achieve 100% pass rate
+- **Quality Goal**: Maintain the high code quality and test coverage
+- **Documentation Goal**: Keep documentation accurate and current
+
+### **Progress Tracking**
+- **Test Status**: Monitor pass rate improvement
+- **Code Quality**: Ensure no regressions in working code
+- **Documentation**: Update docs to reflect any changes
+
+---
+
+## 🤝 **Getting Help**
 
 ### **Documentation Resources**
-1. **Confused about structure?** → Read [STANDARDIZATION_GUIDE.md](STANDARDIZATION_GUIDE.md)
-2. **Need development guidance?** → Read [agent-guide.md](agent-guide.md)  
-3. **Want to understand architecture?** → Read [ARCHITECTURE.md](ARCHITECTURE.md)
-4. **Looking for specific APIs?** → Read [API_REFERENCE.md](API_REFERENCE.md)
+- **Architecture Questions**: See `docs/ARCHITECTURE.md`
+- **API Questions**: See `docs/API_REFERENCE.md`
+- **Testing Questions**: See `docs/TESTING_GUIDE.md`
+- **Workflow Questions**: See `docs/DEVELOPMENT_GUIDE.md`
 
-### **Common Issues & Solutions**
-- **Tests failing?** → Check test categorization and dependencies
-- **Documentation placement unclear?** → Use the file placement rules in standardization guide
-- **Pre-commit hooks failing?** → This is a current known issue, add to task list
-- **SKEMA integration questions?** → Check research/ directory for specifications
-
----
-
-## 🏁 **Ready to Start**
-
-Once you've read all required documents and understand the structure:
-
-1. **Check current task list** → [CURRENT_TASK_LIST.md](CURRENT_TASK_LIST.md)
-2. **Pick highest priority task** → Focus on SKEMA integration or pre-commit fixes
-3. **Follow development workflow** → Test, code, document, test again
-4. **Maintain standards** → Use templates, update READMEs, cross-reference
-
-**Remember**: This project has been carefully organized for maintainability. Following the established patterns ensures continued success and makes your work valuable for future agents and developers.
-
-**Goal**: Integrate SKEMA methodology and validate our kelp detection against known kelp farm locations to prove system effectiveness.
+### **Code Navigation**
+- **Core Functionality**: `src/kelpie_carbon_v1/core/`
+- **Analytics**: `src/kelpie_carbon_v1/analytics/`
+- **API Layer**: `src/kelpie_carbon_v1/api/`
+- **Tests**: `tests/` (organized by category)
 
 ---
 
-**Last Updated**: January 9, 2025  
-**Next Review**: After each major task completion  
-**Purpose**: Ensure new agents are immediately productive while maintaining project integrity 
+## 📋 **Quality Standards**
+
+### **Code Quality**
+- **Type Safety**: Maintain strong typing throughout
+- **Test Coverage**: Don't reduce test coverage
+- **Documentation**: Update docs for any changes
+- **Error Handling**: Robust error management
+
+### **Development Practices**
+- **Small Changes**: Focus on specific issues
+- **Test First**: Always run tests before and after changes
+- **Documentation Updates**: Keep docs current
+- **Realistic Claims**: Use accurate language about system state
+
+---
+
+## 🎉 **You're Ready!**
+
+**Welcome to the Kelpie Carbon v1 project!** You're joining a sophisticated, well-tested system with:
+- **614 comprehensive tests** (97.4% passing)
+- **~15,000 lines** of production code
+- **Comprehensive documentation** covering all aspects
+- **Clear issues to resolve** with specific failing tests identified
+
+**Your immediate focus**: Fix the 16 failing tests to complete the system's reliability. The codebase is excellent, the architecture is solid, and the issues are specific and well-identified.
+
+**Remember**: You're polishing an already outstanding system. Focus on the specific test failures, maintain the high quality standards, and help achieve 100% test reliability.
+
+---
+
+**Current Reality**: 614 tests, 598 passing (97.4%), sophisticated system, clear path forward. 
