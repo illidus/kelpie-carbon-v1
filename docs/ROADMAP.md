@@ -1,5 +1,5 @@
 # Kelpie‑Carbon Roadmap
-_Last updated: 2025‑01‑20_
+_Last updated: 2025‑01‑22_
 
 ---
 
@@ -154,7 +154,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 
 ## Track 5 · Linting and Code Quality
 
-- [ ] **T5‑001** Fix unused imports and variables
+- [x] **T5‑001** Fix unused imports and variables
   * Remove unused imports across codebase (F401)
   * Remove unused variables (F841)
   * Fix variable assignments that are never used
@@ -166,7 +166,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   * Fix SIM105 patterns by using `contextlib.suppress(ImportError)`
 
 - [ ] **T5‑003** Fix Python type hinting issues
-  * Convert tuple type hints to union syntax: `(X, Y)` → `X | Y` (UP038)
+  * ✅ Convert tuple type hints to union syntax: `(X, Y)` → `X | Y` (UP038)
   * Fix `Any` imports in core modules
   * Ensure proper annotation of function arguments
 
@@ -181,12 +181,12 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   * Use ternary operators instead of if-else blocks for simple assignments (SIM108)
   * Fix variable naming: rename uppercase statistical variables to lowercase (N806)
 
-- [ ] **T5‑006** Fix Typer CLI best practices
+- [x] **T5‑006** Fix Typer CLI best practices
   * Fix Typer Option/Argument function calls in parameter defaults (B008)
   * Move to module-level singleton variables for CLI option defaults
   * Ensure proper help text and argument typing
 
-- [ ] **T5‑007** Modernize `pyproject.toml` configuration
+- [x] **T5‑007** Modernize `pyproject.toml` configuration
   * Update deprecated ruff settings to use `lint.` namespace
   * Migrate linting configuration to fully leverage ruff capabilities
   * Set appropriate lint inclusion/exclusion patterns
