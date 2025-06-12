@@ -118,6 +118,7 @@ exclude = [
     "dist",
     "node_modules",
     "venv",
+    "scripts",
 ]
 
 # Allow unused variables when underscore-prefixed.
