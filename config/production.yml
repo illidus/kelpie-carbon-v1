@@ -46,7 +46,7 @@ ml_models:
     preprocessing:
       normalize: true
       remove_outliers: true
-  
+
   biomass_estimation:
     model_type: "regression"
     units: "tons_per_hectare"
@@ -60,13 +60,13 @@ image_generation:
     quality: 80  # Optimized for size vs quality
     enhancement: true
     progressive: true
-    
+
   spectral_indices:
     format: "PNG"
     colormap: "viridis"
     transparency: true
     compression_level: 6
-    
+
   overlays:
     format: "PNG"
     default_alpha: 0.6
@@ -121,13 +121,13 @@ security:
     enabled: true
     requests_per_minute: 60
     burst_size: 100
-  
+
   headers:
     hsts_max_age: 31536000  # 1 year
     content_type_nosniff: true
     frame_options: "DENY"
     xss_protection: "1; mode=block"
-  
+
   ssl:
     redirect_https: true
     ssl_version: "TLSv1.2"
@@ -149,19 +149,19 @@ external_services:
     timeout: 60
     retry_attempts: 3
     retry_delay: 5
-    
+
   sentry:
     enabled: true
     dsn: "${SENTRY_DSN}"
     environment: "production"
     traces_sample_rate: 0.1
-    
+
   monitoring:
     prometheus:
       enabled: true
       port: 9090
       path: "/metrics"
-    
+
     grafana:
       enabled: true
       dashboard_url: "${GRAFANA_URL}"
@@ -189,13 +189,13 @@ monitoring:
   metrics_endpoint: "/metrics"
   health_check_endpoint: "/health"
   readiness_check_endpoint: "/ready"
-  
+
   alerts:
     high_memory_usage: 0.85
     high_cpu_usage: 0.80
     high_error_rate: 0.05
     slow_response_time: 5.0  # seconds
-  
+
   retention:
     metrics: "30d"
     logs: "90d"
@@ -215,11 +215,11 @@ backup:
   schedule: "0 2 * * *"  # Daily at 2 AM
   retention: "30d"
   destination: "${BACKUP_DESTINATION}"
-  
+
   includes:
     - "/var/log/kelpie"
     - "/etc/kelpie"
-  
+
   excludes:
     - "/tmp"
     - "/var/cache"
@@ -248,4 +248,4 @@ environment:
   DATABASE_URL: "${DATABASE_URL}"
   REDIS_URL: "${REDIS_URL}"
   SENTRY_DSN: "${SENTRY_DSN}"
-  PLANETARY_COMPUTER_KEY: "${PLANETARY_COMPUTER_KEY}" 
+  PLANETARY_COMPUTER_KEY: "${PLANETARY_COMPUTER_KEY}"

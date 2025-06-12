@@ -17,7 +17,7 @@ from unittest.mock import patch
 import pytest
 from fastapi import HTTPException
 
-from src.kelpie_carbon.api.errors import (
+from src.kelpie_carbon.core.api.errors import (
     ErrorCode,
     StandardizedError,
     create_not_found_error,

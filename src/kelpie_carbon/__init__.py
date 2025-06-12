@@ -65,7 +65,7 @@ try:
     from .core import api
 
     # Make API available at package level for backwards compatibility
-    # This allows imports like: from kelpie_carbon.api.models import CoordinateModel
+    # This allows imports like: from kelpie_carbon.core.api.models import CoordinateModel
 except ImportError:
     # Fallback if API modules aren't properly set up yet
     pass

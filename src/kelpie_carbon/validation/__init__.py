@@ -11,6 +11,8 @@ This package contains:
 
 # Import validation functionality
 try:
+    # CLI interface
+    from .cli import app as cli_app
     from .core import (
         RealWorldValidator,
         ValidationSite,
@@ -24,9 +26,6 @@ try:
         ValidationMetrics,
         ValidationResult,
     )
-    
-    # CLI interface
-    from .cli import app as cli_app
 except ImportError:
     # Modules may not be fully organized yet
     pass

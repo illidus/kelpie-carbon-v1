@@ -12,7 +12,7 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from src.kelpie_carbon.api.main import app
+from src.kelpie_carbon.core.api.main import app
 
 
 class TestCompleteWorkflow:

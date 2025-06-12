@@ -82,7 +82,7 @@ def serve(
 
     # Override with CLI arguments if provided
     server_config = {
-        "app": "kelpie_carbon.api.main:app",
+        "app": "kelpie_carbon.core.api.main:app",
         "host": host or settings.server.host,
         "port": target_port,
         "reload": reload if reload is not None else settings.server.reload,
@@ -318,12 +318,30 @@ def test(
         raise typer.Exit(e.returncode)
 
 
-# Add validation sub-application
+# Import validation CLI for proxy command
 try:
-    from ..validation.cli import app as validation_app
-    app.add_typer(validation_app, name="validation", help="Validation framework commands")
+    from kelpie_carbon.validation.cli import app as _val_app
+
+    validation_available = True
 except ImportError:
     logger.warning("Validation CLI not available")
+    validation_available = False
+
+
+@app.command()
+def validation(
+    args: list[str] = typer.Argument(..., help="Arguments for validation CLI"),
+):
+    """
+    Proxy to kelpie_carbon.validation.cli so users can run:
+      kelpie validation satellite …
+      kelpie validation run …
+    """
+    if not validation_available:
+        logger.error("Validation CLI is not available")
+        raise typer.Exit(1)
+
+    _val_app(standalone_mode=False, args=args)
 
 
 @app.command()

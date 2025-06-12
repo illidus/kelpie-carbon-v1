@@ -16,6 +16,7 @@ dvc-s3 = "^3.2.0"
 uvicorn = {extras = ["standard"], version = "^0.34.3"}
 rasterio = "^1.4.3"
 pystac-client = "^0.8.5"
+requests = "^2.32.0"
 planetary-computer = "^1.0.0"
 rioxarray = "^0.18.0"
 earthaccess = "^0.14.0"

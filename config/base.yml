@@ -23,7 +23,7 @@ ml_models:
   kelp_detection:
     model_type: "random_forest"
     min_area_threshold: 100  # square meters
-  
+
   biomass_estimation:
     model_type: "regression"
     units: "tons_per_hectare"
@@ -33,11 +33,11 @@ ml_models:
 image_generation:
   rgb_composite:
     enhancement: true
-    
+
   spectral_indices:
     colormap: "viridis"
     transparency: true
-    
+
   overlays:
     default_alpha: 0.6
 
@@ -74,4 +74,4 @@ monitoring:
   enabled: true
   metrics_endpoint: "/metrics"
   health_check_endpoint: "/health"
-  readiness_check_endpoint: "/ready" 
+  readiness_check_endpoint: "/ready"

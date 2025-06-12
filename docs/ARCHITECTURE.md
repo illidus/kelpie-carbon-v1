@@ -14,13 +14,13 @@ graph TB
         B --> D[Interactive Controls]
         B --> E[Performance Monitor]
     end
-    
+
     subgraph "API Layer"
         F[FastAPI Server] --> G[Analysis Endpoints]
         F --> H[Imagery Endpoints]
         F --> I[Static File Server]
     end
-    
+
     subgraph "Core Processing"
         J[Satellite Data Fetcher] --> K[Microsoft Planetary Computer]
         L[Image Processors] --> M[Spectral Analysis]
@@ -28,12 +28,12 @@ graph TB
         O[ML Models] --> P[Kelp Detection]
         O --> Q[Carbon Estimation]
     end
-    
+
     subgraph "Data Storage"
         R[In-Memory Cache] --> S[Analysis Results]
         R --> T[Generated Images]
     end
-    
+
     A --> F
     G --> J
     G --> O
@@ -63,7 +63,7 @@ sequenceDiagram
     participant LayerManager
     participant LoadingManager
     participant API
-    
+
     User->>App: Select AOI & Date Range
     App->>API: POST /api/run
     API-->>App: Analysis ID
@@ -182,7 +182,7 @@ graph TD
     D --> E[Spectral Indices]
     E --> F[Water/Cloud Masks]
     F --> G[All Layers Loaded]
-    
+
     subgraph "Loading States"
         H[Loading Spinner]
         I[Progress Messages]
@@ -311,4 +311,4 @@ CMD ["uvicorn", "src.kelpie_carbon_v1.api.main:app", "--host", "0.0.0.0"]
 
 ---
 
-This architecture provides a solid foundation for a production-ready kelp forest carbon assessment application while maintaining flexibility for future enhancements and scaling requirements. 
+This architecture provides a solid foundation for a production-ready kelp forest carbon assessment application while maintaining flexibility for future enhancements and scaling requirements.

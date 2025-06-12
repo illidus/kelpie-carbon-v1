@@ -27,9 +27,9 @@
 2025-06-10 09:24:34,504 | INFO | kelpie_carbon_v1.validation.real_world_validation | Total sites tested: 3
 2025-06-10 09:24:34,504 | INFO | kelpie_carbon_v1.validation.real_world_validation | Successful validations: 3
 2025-06-10 09:24:34,504 | INFO | kelpie_carbon_v1.validation.real_world_validation | Success rate: 100.0%
-2025-06-10 09:24:34,505 | INFO | kelpie_carbon_v1.validation.real_world_validation | 
+2025-06-10 09:24:34,505 | INFO | kelpie_carbon_v1.validation.real_world_validation |
 2025-06-10 09:24:34,505 | INFO | kelpie_carbon_v1.validation.real_world_validation | KELP FARM VALIDATION RESULTS:
-2025-06-10 09:24:34,522 | INFO | kelpie_carbon_v1.validation.real_world_validation | 
+2025-06-10 09:24:34,522 | INFO | kelpie_carbon_v1.validation.real_world_validation |
 2025-06-10 09:24:34,522 | INFO | kelpie_carbon_v1.validation.real_world_validation | Average processing time: 1.1 seconds
 2025-06-10 09:24:34,523 | INFO | kelpie_carbon_v1.validation.real_world_validation | ============================================================
 2025-06-10 09:24:34,524 | INFO | kelpie_carbon_v1.validation.real_world_validation | Validation report saved to: results\primary_validation_20250610_092434.json

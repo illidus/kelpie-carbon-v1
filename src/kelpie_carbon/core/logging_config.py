@@ -5,7 +5,7 @@ import logging
 
 def setup_logging(level: int = logging.INFO) -> None:
     """Set up basic logging configuration.
-    
+
     Args:
         level: Logging level (default: INFO)
     """

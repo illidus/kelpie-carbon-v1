@@ -101,4 +101,4 @@ docs:
 # Quick development setup
 setup: install-dev
 	@echo "Development environment setup complete!"
-	@echo "Run 'make serve' to start the development server" 
+	@echo "Run 'make serve' to start the development server"

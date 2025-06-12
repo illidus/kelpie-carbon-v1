@@ -123,14 +123,21 @@ reports = reporter.generate_all_reports(results, region="Broughton_Archipelago")
 ### **CLI Usage**
 
 ```bash
-# Run validation analysis
-kelpie validate --dataset sample_data
+# Start the web server
+kelpie-carbon serve --host 0.0.0.0 --port 8000
 
-# Display validation configuration
-kelpie validation config
+# Run kelp analysis
+kelpie-carbon analyze 50.0833 -126.1667 "2023-06-01" "2023-08-31" --output results.json
 
-# Run comprehensive analysis
-kelpie analyze --region "Broughton_Archipelago" --start-date "2023-06-01" --end-date "2023-08-31"
+# Validation framework commands
+kelpie-carbon validation validate --dataset sample_data.json --out validation/results
+kelpie-carbon validation config
+
+# Check system configuration
+kelpie-carbon config
+
+# Run test suite
+kelpie-carbon test --verbose
 ```
 
 ### **Demo & Validation**

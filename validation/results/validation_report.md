@@ -14,4 +14,3 @@
 | R2 | 0.9834 |
 
 ## Validation Status
-

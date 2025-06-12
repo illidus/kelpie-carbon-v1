@@ -4,14 +4,15 @@ Unit tests for real data acquisition functionality.
 Tests the real SKEMA CSV data loader and validation without external downloads.
 """
 
+import datetime
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pandas as pd
 
-from kelpie_carbon.data.real_data_acquisition import RealDataAcquisition
+from kelpie_carbon.data.real_data_acquisition import RealDataAcquisition, SatelliteScene
 
 
 class TestRealDataAcquisition(unittest.TestCase):
@@ -159,8 +160,6 @@ class TestRealDataAcquisition(unittest.TestCase):
         # Create mock satellite scenes
         import datetime
 
-        from kelpie_carbon.data.real_data_acquisition import SatelliteScene
-
         scenes = [
             SatelliteScene(
                 scene_id="test_scene_001",
@@ -207,8 +206,6 @@ class TestRealDataAcquisition(unittest.TestCase):
 
         # Create mock satellite scenes
         import datetime
-
-        from kelpie_carbon.data.real_data_acquisition import SatelliteScene
 
         scenes = [
             SatelliteScene(
@@ -307,6 +304,116 @@ class TestRealDataAcquisition(unittest.TestCase):
                 )
 
                 self.assertEqual(ground_truth[0].kelp_density, expected_density)
+
+    @patch("kelpie_carbon.data.real_data_acquisition.pystac_client.Client.open")
+    @patch("kelpie_carbon.data.real_data_acquisition.requests.get")
+    def test_download_scenes(self, mock_requests_get, mock_client_open):
+        """Test downloading Sentinel-2 scenes with monkeypatched STAC client."""
+        # Create mock STAC item
+        mock_item = MagicMock()
+        mock_item.id = "S2A_31UDS_20240615_0_L2A"
+        mock_item.collection_id = "sentinel-2-l2a"
+        mock_item.properties = {
+            "datetime": "2024-06-15T10:30:00Z",
+            "eo:cloud_cover": 5.0,
+            "platform": "sentinel-2a",
+            "instruments": ["msi"],
+            "sun_elevation": 45.0,
+            "sun_azimuth": 180.0,
+        }
+
+        # Mock assets
+        mock_b04_asset = MagicMock()
+        mock_b04_asset.href = "s3://sentinel-placeholder/B04.tif"
+        mock_b08_asset = MagicMock()
+        mock_b08_asset.href = "s3://sentinel-placeholder/B08.tif"
+
+        mock_item.assets = {
+            "B04": mock_b04_asset,
+            "B08": mock_b08_asset,
+        }
+
+        # Mock search results
+        mock_search = MagicMock()
+        mock_search.items.return_value = [mock_item]
+
+        # Mock catalog and client
+        mock_catalog = MagicMock()
+        mock_catalog.search.return_value = mock_search
+        mock_client_open.return_value = mock_catalog
+
+        # Mock HTTP requests
+        mock_response = MagicMock()
+        mock_response.iter_content.return_value = [b"dummy_geotiff_data"]
+        mock_response.raise_for_status.return_value = None
+        mock_requests_get.return_value = mock_response
+
+        # Test download_scenes method
+        scenes = self.data_acquisition.download_scenes(
+            site_id="broughton_archipelago",
+            start="2024-06-01",
+            end="2024-06-30",
+            max_cloud_pct=10.0,
+        )
+
+        # Verify the results
+        self.assertEqual(len(scenes), 1)
+        scene = scenes[0]
+
+        # Check scene properties
+        self.assertEqual(scene.scene_id, "S2A_31UDS_20240615_0_L2A")
+        self.assertEqual(scene.site_id, "broughton_archipelago")
+        self.assertEqual(scene.cloud_coverage, 5.0)
+        self.assertEqual(scene.data_quality, "excellent")
+
+        # Check acquisition date
+        expected_date = datetime.datetime(2024, 6, 15, 10, 30, tzinfo=datetime.UTC)
+        self.assertEqual(scene.acquisition_date, expected_date)
+
+        # Check file path exists
+        self.assertIsNotNone(scene.file_path)
+        self.assertTrue(Path(scene.file_path).exists())
+
+        # Check metadata
+        self.assertEqual(scene.metadata["platform"], "sentinel-2a")
+        self.assertEqual(scene.metadata["collection"], "sentinel-2-l2a")
+        self.assertIn("B04", scene.metadata["bands_downloaded"])
+        self.assertIn("B08", scene.metadata["bands_downloaded"])
+
+        # Verify mock calls
+        mock_client_open.assert_called_once_with(
+            "https://earth-search.aws.element84.com/v1"
+        )
+
+        # Check that search was called with correct parameters
+        mock_catalog.search.assert_called_once()
+        call_args = mock_catalog.search.call_args
+        self.assertEqual(call_args[1]["collections"], ["sentinel-2-l2a"])
+        self.assertEqual(call_args[1]["datetime"], "2024-06-01/2024-06-30")
+        self.assertEqual(call_args[1]["query"]["eo:cloud_cover"]["lt"], 10.0)
+
+        # Check bbox is correct (Broughton Archipelago coordinates: 50.0833, -126.1667)
+        expected_bbox = [-126.2167, 50.0333, -126.1167, 50.1333]  # 0.05° buffer
+        actual_bbox = call_args[1]["bbox"]
+
+        # Compare with tolerance for floating point precision
+        self.assertEqual(len(actual_bbox), 4)
+        self.assertAlmostEqual(actual_bbox[0], expected_bbox[0], places=4)
+        self.assertAlmostEqual(actual_bbox[1], expected_bbox[1], places=4)
+        self.assertAlmostEqual(actual_bbox[2], expected_bbox[2], places=4)
+        self.assertAlmostEqual(actual_bbox[3], expected_bbox[3], places=4)
+
+        # Verify file downloads were attempted
+        self.assertEqual(mock_requests_get.call_count, 2)  # B04 and B08
+
+    def test_download_scenes_invalid_site(self):
+        """Test download_scenes with invalid site_id."""
+        with self.assertRaises(ValueError) as context:
+            self.data_acquisition.download_scenes(
+                site_id="nonexistent_site", start="2024-06-01", end="2024-06-30"
+            )
+
+        self.assertIn("Unknown site_id", str(context.exception))
 
 
 if __name__ == "__main__":

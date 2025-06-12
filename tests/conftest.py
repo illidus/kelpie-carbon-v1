@@ -38,7 +38,7 @@ def mock_fastapi_client():
     """Session-scoped FastAPI test client to avoid repeated startup."""
     from fastapi.testclient import TestClient
 
-    from src.kelpie_carbon.api.main import app
+    from src.kelpie_carbon.core.api.main import app
 
     # Configure for test mode
     app.state.testing = True

@@ -30,6 +30,8 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+import pystac_client
+import requests
 
 from kelpie_carbon.core.logging_config import setup_logging
 
@@ -373,6 +375,135 @@ class RealDataAcquisition:
             f"Created {len(ground_truth_data)} real ground truth records from SKEMA data"
         )
         return ground_truth_data
+
+    def download_scenes(
+        self, site_id: str, start: str, end: str, max_cloud_pct: float = 10.0
+    ) -> list[SatelliteScene]:
+        """
+        Query Earth-Search STAC and fetch Sentinel-2 L2A COGs
+        that intersect the site's bbox and cloud < threshold.
+        Save to self.data_directory/'satellite'.
+        Return list of SatelliteScene objects with file_path populated.
+
+        Args:
+            site_id: Validation site identifier
+            start: Start date in YYYY-MM-DD format
+            end: End date in YYYY-MM-DD format
+            max_cloud_pct: Maximum cloud coverage percentage (default: 10.0)
+
+        Returns:
+            List of SatelliteScene objects with downloaded data
+        """
+        if site_id not in self.validation_sites:
+            raise ValueError(f"Unknown site_id: {site_id}")
+
+        site = self.validation_sites[site_id]
+        lat, lon = site.coordinates
+
+        # Build bbox with 0.05° buffer
+        buffer = 0.05
+        bbox = [lon - buffer, lat - buffer, lon + buffer, lat + buffer]
+
+        logger.info(
+            f"Downloading Sentinel-2 scenes for {site.name} "
+            f"from {start} to {end} with max cloud coverage {max_cloud_pct}%"
+        )
+
+        # Open Earth Search STAC catalog
+        catalog = pystac_client.Client.open("https://earth-search.aws.element84.com/v1")
+
+        # Search for Sentinel-2 L2A scenes
+        search = catalog.search(
+            collections=["sentinel-2-l2a"],
+            bbox=bbox,
+            datetime=f"{start}/{end}",
+            query={"eo:cloud_cover": {"lt": max_cloud_pct}},
+            max_items=50,
+        )
+
+        items = list(search.items())
+        logger.info(f"Found {len(items)} scenes matching criteria")
+
+        satellite_dir = self.data_directory / "satellite"
+        satellite_dir.mkdir(exist_ok=True)
+
+        scenes = []
+        for item in items:
+            try:
+                # Parse acquisition date
+                acquisition_date = datetime.datetime.fromisoformat(
+                    item.properties["datetime"].replace("Z", "+00:00")
+                )
+
+                # Get cloud coverage
+                cloud_coverage = item.properties.get("eo:cloud_cover", 0.0)
+
+                # Determine data quality based on cloud coverage
+                if cloud_coverage <= 5:
+                    data_quality = "excellent"
+                elif cloud_coverage <= 20:
+                    data_quality = "good"
+                elif cloud_coverage <= 40:
+                    data_quality = "fair"
+                else:
+                    data_quality = "poor"
+
+                # Download key bands (B04 - Red, B08 - NIR for kelp detection)
+                scene_dir = satellite_dir / f"{site_id}_{item.id}"
+                scene_dir.mkdir(exist_ok=True)
+
+                band_files = {}
+                for band_name in ["B04", "B08"]:  # Red and NIR bands
+                    if band_name in item.assets:
+                        asset = item.assets[band_name]
+                        band_url = asset.href
+
+                        # Download band data
+                        band_filename = f"{item.id}_{band_name}.tif"
+                        band_path = scene_dir / band_filename
+
+                        logger.info(f"Downloading {band_name} for scene {item.id}")
+                        response = requests.get(band_url, stream=True)
+                        response.raise_for_status()
+
+                        with open(band_path, "wb") as f:
+                            for chunk in response.iter_content(chunk_size=8192):
+                                f.write(chunk)
+
+                        band_files[band_name] = str(band_path)
+
+                # Create SatelliteScene object
+                scene = SatelliteScene(
+                    scene_id=item.id,
+                    acquisition_date=acquisition_date,
+                    site_id=site_id,
+                    cloud_coverage=cloud_coverage,
+                    data_quality=data_quality,
+                    file_path=str(scene_dir),
+                    preprocessing_applied=[],
+                    metadata={
+                        "platform": item.properties.get("platform", "unknown"),
+                        "instrument": item.properties.get("instruments", ["unknown"])[
+                            0
+                        ],
+                        "sun_elevation": item.properties.get("sun_elevation"),
+                        "sun_azimuth": item.properties.get("sun_azimuth"),
+                        "bands_downloaded": list(band_files.keys()),
+                        "band_files": band_files,
+                        "stac_item_id": item.id,
+                        "collection": item.collection_id,
+                    },
+                )
+
+                scenes.append(scene)
+                logger.info(f"Successfully downloaded scene {item.id}")
+
+            except Exception as e:
+                logger.error(f"Failed to download scene {item.id}: {e}")
+                continue
+
+        logger.info(f"Successfully downloaded {len(scenes)} scenes for site {site_id}")
+        return scenes
 
     def get_validation_sites(
         self, region: str | None = None, species: str | None = None

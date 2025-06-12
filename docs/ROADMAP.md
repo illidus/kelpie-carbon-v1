@@ -1,5 +1,5 @@
 # Kelpie‑Carbon Roadmap
-_Last updated: 2025‑01‑18_
+_Last updated: 2025‑01‑20_
 
 ---
 
@@ -69,6 +69,12 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   * JSON and Markdown report generation
   * Sub‑command integration with core CLI
 
+- [x] **T2‑006** Validation sub‑command proxy in main CLI
+  * Added validation sub‑command proxy to core CLI
+  * Users can now run: `kelpie validation validate --dataset ...`
+  * Proper error handling for unavailable validation CLI
+  * Updated CLI examples in README.md
+
 ---
 
 ## Track 3 · Tests & CI
@@ -131,6 +137,18 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 - [ ] **T0‑001** Archive helper scripts & logs in `tools/maintenance/` or delete
 
 - [x] **T0‑002** Move real-data acquisition to data layer & fix pathlib typo
+
+- [x] **T0‑003** Remove duplicate API package
+  * Removed legacy `src/kelpie_carbon/api` package using `git rm`
+  * Updated all import paths from `kelpie_carbon.api` to `kelpie_carbon.core.api`
+  * Fixed 6 files with updated import references
+  * Cleaned repository structure
+
+- [x] **T0‑004** Clean compiled Python artifacts
+  * Removed 67 cached files (.pyc files and __pycache__ directories)
+  * Enhanced .gitignore with *.py[cod] pattern
+  * Repository now clean of compiled artifacts
+  * Prevention system in place for future accumulation
 
 ---
 
