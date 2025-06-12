@@ -7,5 +7,12 @@ nav:
   - Architecture: ARCHITECTURE.md
   - API: API_REFERENCE.md
 
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
 exclude_docs: |
   ARCHIVE/

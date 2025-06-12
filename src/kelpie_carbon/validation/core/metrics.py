@@ -228,10 +228,11 @@ class ValidationMetrics:
         self.metric_helpers = MetricHelpers()
 
     def create_validation_result(
-        self, campaign_id: str, test_site: str, model_name: str, **kwargs
+        self, campaign_id: str, test_site: str, model_name: str, **kwargs: Any
     ) -> ValidationResult:
         """
-        Create a standardized ValidationResult instance.
+        Create ValidationResult instance with standardized metrics.
+        Enhanced for T2-001: Core framework for validation result creation.
 
         Args:
             campaign_id: Unique identifier for validation campaign
