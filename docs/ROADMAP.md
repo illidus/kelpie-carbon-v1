@@ -1,5 +1,5 @@
 # Kelpie‑Carbon Roadmap
-_Last updated: 2025‑06‑11_
+_Last updated: 2025‑01‑17_
 
 ---
 
@@ -26,7 +26,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   5. Update pyproject.toml to point to new namespace.
   ```
 
-- [x] **T1‑002** Unify configuration into **`config/kelpie.yml`** **(partial)**
+- [x] **T1‑002** Unify configuration into **`config/kelpie.yml`**
   ```text
   # Cursor prompt – Single YAML config
   CREATE config/kelpie.yml merging:
@@ -119,6 +119,16 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   * Automatic API documentation generation with mkdocstrings[python]
   * Archive legacy documentation files
   * CI integration with `mkdocs build --strict`
+
+- [ ] **T4‑005** Update README with new docs URL (`/docs/`)
+
+- [ ] **T4‑006** Create root redirect page to web-app if needed
+
+---
+
+## Track 0 · Maintenance
+
+- [ ] **T0‑001** Archive helper scripts & logs in `tools/maintenance/` or delete
 
 ---
 

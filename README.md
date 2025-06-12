@@ -9,6 +9,7 @@
 [![Tests](https://img.shields.io/badge/tests-614_passing-green.svg)](#testing-status)
 [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing-status)
 [![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://illidus.github.io/kelpie-carbon-v1/)
+[![Docs Status](https://github.com/illidus/kelpie-carbon-v1/actions/workflows/ci.yml/badge.svg?branch=main)](https://illidus.github.io/kelpie-carbon-v1/docs/)
 [![Development](https://img.shields.io/badge/status-active_development-orange.svg)](#current-status)
 
 ## 🌊 Overview
@@ -123,7 +124,7 @@ reports = reporter.generate_all_reports(results, region="Broughton_Archipelago")
 
 ```bash
 # Run validation analysis
-kelpie validate --dataset sample_data.json --out validation/results/
+kelpie validate --dataset sample_data
 
 # Display validation configuration
 kelpie validation config
@@ -169,7 +170,9 @@ kelpie-carbon-v1/
 └── config/                         # Configuration files
 ```
 
-## 📋 Documentation
+## 📖 Documentation
+
+**Latest docs:** https://illidus.github.io/kelpie-carbon-v1/docs/
 
 ### **User Documentation**
 - **[User Guide](docs/USER_GUIDE.md)** - Complete user manual

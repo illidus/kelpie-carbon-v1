@@ -41,8 +41,7 @@ class TestImportIntegrationStability:
     def test_processing_module_imports(self):
         """Test that all processing modules can be imported successfully."""
         processing_modules = [
-            "kelpie_carbon.processing.water_anomaly_filter",
-            "kelpie_carbon.processing.derivative_features",
+            "kelpie_carbon.processing.species_classifier",
         ]
 
         for module_name in processing_modules:
@@ -50,24 +49,18 @@ class TestImportIntegrationStability:
                 module = importlib.import_module(module_name)
                 assert module is not None
                 # Test that main classes exist
-                if "water_anomaly_filter" in module_name:
-                    assert hasattr(module, "WaterAnomalyFilter")
-                elif "derivative_features" in module_name:
-                    assert hasattr(module, "DerivativeFeatures")
+                if "species_classifier" in module_name:
+                    assert hasattr(module, "SpeciesClassifier")
             except ImportError as e:
                 pytest.fail(f"Failed to import {module_name}: {e}")
 
     def test_skema_integration_imports(self):
         """Test that SKEMA integration components can be imported."""
-        from kelpie_carbon.processing.derivative_features import DerivativeFeatures
-        from kelpie_carbon.processing.water_anomaly_filter import WaterAnomalyFilter
+        from kelpie_carbon.processing.species_classifier import SpeciesClassifier
 
         # Test instantiation
-        waf = WaterAnomalyFilter()
-        assert waf is not None
-
-        df = DerivativeFeatures()
-        assert df is not None
+        sc = SpeciesClassifier()
+        assert sc is not None
 
 
 class TestSatelliteDataSourceReliability:
@@ -198,7 +191,7 @@ class TestCachePerformanceOptimizations:
             analysis_id = response1.json()["analysis_id"]
 
             # Multiple subsequent requests should use cache (reduced for CI)
-            for i in range(2):
+            for _ in range(2):
                 start_time = time.time()
                 response = self.client.get(f"/api/imagery/{analysis_id}/rgb")
                 end_time = time.time()
