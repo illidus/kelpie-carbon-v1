@@ -1,5 +1,5 @@
 # Kelpie‑Carbon Roadmap
-_Last updated: 2025‑01‑17_
+_Last updated: 2025‑01‑18_
 
 ---
 
@@ -129,6 +129,8 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 ## Track 0 · Maintenance
 
 - [ ] **T0‑001** Archive helper scripts & logs in `tools/maintenance/` or delete
+
+- [x] **T0‑002** Move real-data acquisition to data layer & fix pathlib typo
 
 ---
 
