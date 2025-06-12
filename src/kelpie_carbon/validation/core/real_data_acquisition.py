@@ -29,8 +29,9 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import pandas as pd
 
-from kelpie_carbon.logging_config import setup_logging
+from kelpie_carbon.core.logging_config import setup_logging
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -118,7 +119,8 @@ class RealDataAcquisition:
         (self.data_directory / "benchmarks").mkdir(exist_ok=True)
 
         logger.info(
-            f"Initialized RealDataAcquisition with data directory: {self.data_directory}"
+            f"Initialized RealDataAcquisition with data directory: "
+            f"{self.data_directory}"
         )
 
     def _initialize_validation_sites(self) -> dict[str, ValidationSite]:
@@ -215,6 +217,162 @@ class RealDataAcquisition:
 
         logger.info(f"Initialized {len(sites)} validation sites")
         return sites
+
+    def load_skema_csv_data(self, site_id: str) -> pd.DataFrame:
+        """
+        Load real SKEMA CSV data for a validation site.
+
+        Args:
+            site_id: Validation site identifier
+
+        Returns:
+            Pandas DataFrame with columns ["lat", "lon", "dry_weight_kg_m2"]
+
+        Raises:
+            FileNotFoundError: If SKEMA CSV file is not found
+            ValueError: If CSV schema validation fails
+        """
+        # Construct path to SKEMA CSV file
+        csv_path = Path("validation/sample_data") / f"{site_id}_skema.csv"
+
+        if not csv_path.exists():
+            raise FileNotFoundError(f"SKEMA CSV file not found: {csv_path}")
+
+        logger.info(f"Loading SKEMA data from {csv_path}")
+
+        # Load CSV data
+        try:
+            df = pd.read_csv(csv_path)
+        except Exception as e:
+            raise ValueError(f"Failed to load CSV file {csv_path}: {e}") from e
+
+        # Validate schema - must have required columns
+        required_columns = ["lat", "lon", "dry_weight_kg_m2"]
+        missing_columns = [col for col in required_columns if col not in df.columns]
+
+        if missing_columns:
+            raise ValueError(
+                f"Missing required columns in {csv_path}: {missing_columns}. "
+                f"Required columns: {required_columns}, "
+                f"Found columns: {list(df.columns)}"
+            )
+
+        # Validate data types and ranges
+        if not pd.api.types.is_numeric_dtype(df["lat"]):
+            raise ValueError("Column 'lat' must be numeric")
+        if not pd.api.types.is_numeric_dtype(df["lon"]):
+            raise ValueError("Column 'lon' must be numeric")
+        if not pd.api.types.is_numeric_dtype(df["dry_weight_kg_m2"]):
+            raise ValueError("Column 'dry_weight_kg_m2' must be numeric")
+
+        # Validate coordinate ranges
+        if not (df["lat"].min() >= -90 and df["lat"].max() <= 90):
+            raise ValueError("Latitude values must be between -90 and 90 degrees")
+        if not (df["lon"].min() >= -180 and df["lon"].max() <= 180):
+            raise ValueError("Longitude values must be between -180 and 180 degrees")
+
+        # Validate dry weight values (should be non-negative)
+        if (df["dry_weight_kg_m2"] < 0).any():
+            raise ValueError("dry_weight_kg_m2 values must be non-negative")
+
+        logger.info(f"Successfully loaded and validated {len(df)} SKEMA data records")
+        return df[required_columns]  # Return only required columns in correct order
+
+    def create_real_ground_truth_from_skema(
+        self, site_id: str, scenes: list[SatelliteScene]
+    ) -> list[GroundTruthData]:
+        """
+        Create real ground truth data from SKEMA CSV files.
+
+        Args:
+            site_id: Validation site identifier
+            scenes: Satellite scenes to create ground truth for
+
+        Returns:
+            List of real ground truth data based on SKEMA measurements
+        """
+        # Load SKEMA CSV data
+        try:
+            skema_df = self.load_skema_csv_data(site_id)
+        except (FileNotFoundError, ValueError) as e:
+            logger.warning(f"Failed to load SKEMA data for {site_id}: {e}")
+            # Fallback to synthetic if SKEMA data unavailable
+            return self.create_synthetic_ground_truth(site_id, scenes)
+
+        # Check if site exists in validation sites, otherwise create a default
+        if site_id in self.validation_sites:
+            site = self.validation_sites[site_id]
+            site_name = site.name
+        else:
+            site_name = f"Test Site ({site_id})"
+
+        ground_truth_data = []
+
+        logger.info(f"Creating real ground truth from SKEMA data for {site_name}")
+
+        # Convert SKEMA measurements to ground truth format
+        for _, scene in enumerate(scenes):
+            # Use SKEMA data to estimate kelp coverage for this scene
+            # Average dry weight across all measurements as a proxy for coverage
+            avg_dry_weight = skema_df["dry_weight_kg_m2"].mean()
+            std_dry_weight = skema_df["dry_weight_kg_m2"].std()
+
+            # Convert dry weight to coverage percentage (simplified mapping)
+            # This is a simplified conversion - in practice would use proper biomass models
+            max_theoretical_biomass = 15.0  # kg/m2 for dense kelp
+            kelp_coverage_percent = min(
+                100.0, (avg_dry_weight / max_theoretical_biomass) * 100
+            )
+
+            # Determine density category based on dry weight
+            if avg_dry_weight < 1.0:
+                kelp_density = "sparse"
+            elif avg_dry_weight < 3.0:
+                kelp_density = "moderate"
+            elif avg_dry_weight < 6.0:
+                kelp_density = "dense"
+            else:
+                kelp_density = "very_dense"
+
+            # Confidence based on measurement consistency
+            if std_dry_weight < 0.5:
+                confidence = 0.95
+            elif std_dry_weight < 1.0:
+                confidence = 0.85
+            elif std_dry_weight < 2.0:
+                confidence = 0.75
+            else:
+                confidence = 0.65
+
+            ground_truth = GroundTruthData(
+                site_id=site_id,
+                data_type="skema_field_measurement",
+                collection_date=scene.acquisition_date,
+                kelp_coverage_percent=kelp_coverage_percent,
+                kelp_density=kelp_density,
+                confidence=confidence,
+                source="SKEMA CSV data",
+                metadata={
+                    "skema_measurements": len(skema_df),
+                    "avg_dry_weight_kg_m2": float(avg_dry_weight),
+                    "std_dry_weight_kg_m2": float(std_dry_weight),
+                    "lat_range": [
+                        float(skema_df["lat"].min()),
+                        float(skema_df["lat"].max()),
+                    ],
+                    "lon_range": [
+                        float(skema_df["lon"].min()),
+                        float(skema_df["lon"].max()),
+                    ],
+                },
+            )
+
+            ground_truth_data.append(ground_truth)
+
+        logger.info(
+            f"Created {len(ground_truth_data)} real ground truth records from SKEMA data"
+        )
+        return ground_truth_data
 
     def get_validation_sites(
         self, region: str | None = None, species: str | None = None
@@ -450,12 +608,11 @@ class RealDataAcquisition:
             scenes = self.create_synthetic_satellite_data(site_id, num_scenes)
             ground_truth = self.create_synthetic_ground_truth(site_id, scenes)
         else:
-            # TODO: Implement real data acquisition
-            logger.warning(
-                "Real data acquisition not yet implemented, falling back to synthetic"
-            )
+            # Use real data acquisition with SKEMA CSV data
+            logger.info("Using real data acquisition with SKEMA CSV data")
+            # Still create synthetic satellite scenes for now, but use real ground truth
             scenes = self.create_synthetic_satellite_data(site_id, num_scenes)
-            ground_truth = self.create_synthetic_ground_truth(site_id, scenes)
+            ground_truth = self.create_real_ground_truth_from_skema(site_id, scenes)
 
         # Calculate quality metrics
         quality_metrics = self._calculate_dataset_quality_metrics(scenes, ground_truth)
@@ -726,7 +883,7 @@ def create_real_data_acquisition(
     data_directory: str | None = None,
 ) -> RealDataAcquisition:
     """
-    Factory function to create a RealDataAcquisition instance.
+    Create a RealDataAcquisition instance.
 
     Args:
         data_directory: Optional data directory path
