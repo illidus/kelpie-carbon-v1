@@ -8,26 +8,27 @@ templates, and multi-format report generation.
 """
 
 import sys
-import numpy as np
-import xarray as xr
 from datetime import datetime, timedelta
 from pathlib import Path
+
+import numpy as np
+import xarray as xr
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from kelpie_carbon_v1.analytics.enhanced_satellite_integration import (
-    EnhancedSatelliteAnalyzer, create_enhanced_satellite_analyzer
+from kelpie_carbon.analytics.enhanced_satellite_integration import (
+    create_enhanced_satellite_analyzer,
 )
-from kelpie_carbon_v1.analytics.mathematical_transparency import (
-    MathematicalTransparencyEngine, create_mathematical_transparency_engine
+from kelpie_carbon.analytics.jupyter_templates import create_jupyter_template_manager
+from kelpie_carbon.analytics.mathematical_transparency import (
+    create_mathematical_transparency_engine,
 )
-from kelpie_carbon_v1.analytics.jupyter_templates import (
-    JupyterTemplateManager, create_jupyter_template_manager
+from kelpie_carbon.analytics.professional_report_templates import (
+    ReportConfiguration,
+    create_professional_report_generator,
 )
-from kelpie_carbon_v1.analytics.professional_report_templates import (
-    ProfessionalReportGenerator, ReportConfiguration, create_professional_report_generator
-)
+
 
 def create_sample_dataset():
     """Create sample satellite dataset for demonstration."""
@@ -174,7 +175,7 @@ def demonstrate_mathematical_transparency():
     initial_carbon = 0.5  # kg C/m² (for sequestration rate)
     time_span_years = 2.0  # 2 years
     
-    print(f"📝 Input parameters:")
+    print("📝 Input parameters:")
     print(f"   Dry biomass: {dry_biomass} kg/m²")
     print(f"   Dry weight fraction: {dry_weight_fraction}")
     print(f"   Carbon fraction: {carbon_fraction}")
@@ -190,7 +191,7 @@ def demonstrate_mathematical_transparency():
         time_span_years=time_span_years
     )
     
-    print(f"\n✅ Calculation complete")
+    print("\n✅ Calculation complete")
     print(f"🆔 Calculation ID: {calculation_breakdown.calculation_id}")
     print(f"🌿 Total carbon: {calculation_breakdown.total_carbon:.4f} ± {calculation_breakdown.total_uncertainty:.4f} kg C/m²")
     print(f"📊 Relative uncertainty: {(calculation_breakdown.total_uncertainty/calculation_breakdown.total_carbon)*100:.1f}%")
@@ -438,8 +439,8 @@ def main():
         print("   • Regulatory compliance formatting")
         print("   • Professional styling and layout")
         
-        print(f"\n📁 All outputs saved to: demo_outputs/")
-        print(f"📊 Generated files:")
+        print("\n📁 All outputs saved to: demo_outputs/")
+        print("📊 Generated files:")
         
         output_dir = Path("demo_outputs")
         if output_dir.exists():
@@ -447,11 +448,11 @@ def main():
                 if file_path.is_file():
                     print(f"   {file_path.relative_to(output_dir)}")
         
-        print(f"\n🏆 PROFESSIONAL REPORTING SYSTEM READY FOR DEPLOYMENT")
-        print(f"   • VERA compliance: ✅ Verified")
-        print(f"   • Mathematical transparency: ✅ Complete")
-        print(f"   • Peer review readiness: ✅ Confirmed")
-        print(f"   • Regulatory submission: ✅ Ready")
+        print("\n🏆 PROFESSIONAL REPORTING SYSTEM READY FOR DEPLOYMENT")
+        print("   • VERA compliance: ✅ Verified")
+        print("   • Mathematical transparency: ✅ Complete")
+        print("   • Peer review readiness: ✅ Confirmed")
+        print("   • Regulatory submission: ✅ Ready")
         
     except Exception as e:
         print(f"\n❌ Demonstration failed: {e}")

@@ -4,22 +4,21 @@ Demonstration of Enhanced Accuracy Metrics - Task ML1
 Shows RMSE, MAE, R² functionality for biomass and carbon validation.
 """
 
-import numpy as np
-import pandas as pd
-from datetime import datetime, timedelta
-import sys
 import os
+import sys
+from datetime import datetime, timedelta
+
+import numpy as np
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from kelpie_carbon_v1.validation.enhanced_metrics import (
-    EnhancedValidationMetrics,
-    ValidationCoordinate,
+from kelpie_carbon.validation.enhanced_metrics import (
     BiomassValidationData,
+    ValidationCoordinate,
+    calculate_validation_summary,
     create_enhanced_validation_metrics,
     validate_four_coordinate_sites,
-    calculate_validation_summary
 )
 
 
@@ -181,14 +180,14 @@ def demonstrate_validation_summary():
         overall_biomass = vs['overall_performance']['biomass_metrics']
         overall_carbon = vs['overall_performance']['carbon_metrics']
         
-        print(f"\n   📊 Overall Performance Summary:")
+        print("\n   📊 Overall Performance Summary:")
         print(f"      🌍 Total sites validated: {vs['total_sites_validated']}")
         print(f"      📈 Mean biomass R²: {overall_biomass['mean_r2']:.3f} (±{overall_biomass['std_r2']:.3f})")
         print(f"      📈 Mean biomass RMSE: {overall_biomass['mean_rmse_kg_m2']:.3f} kg/m²")
         print(f"      🌱 Mean carbon R²: {overall_carbon['mean_r2']:.3f} (±{overall_carbon['std_r2']:.3f})")
         print(f"      🌱 Mean carbon RMSE: {overall_carbon['mean_rmse_tc_hectare']:.3f} tC/hectare")
         
-        print(f"\n   🧬 Species Performance:")
+        print("\n   🧬 Species Performance:")
         for species, perf in vs['species_performance'].items():
             print(f"      • {species}: {perf['n_sites']} sites, "
                   f"Biomass R²={perf['mean_biomass_r2']:.3f}, "

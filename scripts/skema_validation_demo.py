@@ -16,11 +16,11 @@ Usage:
 """
 
 import sys
-import os
-import numpy as np
-import matplotlib.pyplot as plt
 from datetime import datetime
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
@@ -303,7 +303,7 @@ def demonstrate_skema_validation():
             print(f"   💾 Saved visualization: {output_path}")
             
             # Show performance results
-            print(f"   📊 Performance Results:")
+            print("   📊 Performance Results:")
             print(f"      SKEMA:      Accuracy={skema_acc:.1%}, F1={skema_f1:.1%}")
             print(f"      Our Pipeline: Accuracy={our_acc:.1%}, F1={our_f1:.1%}")
             print(f"      Correlation:  r={correlation:.3f}")
@@ -367,7 +367,7 @@ def demonstrate_skema_validation():
             sites_better = sum(1 for r in results if r['our_accuracy'] > r['skema_accuracy'])
             significant_sites = sum(1 for r in results if r['significant'])
             
-            print(f"\n   📊 Summary Statistics:")
+            print("\n   📊 Summary Statistics:")
             print(f"      Average SKEMA Accuracy: {avg_skema:.1%}")
             print(f"      Average Our Accuracy: {avg_ours:.1%}")
             print(f"      Average Correlation: {avg_corr:.3f}")
@@ -422,7 +422,7 @@ This report presents a comprehensive validation of our kelp detection pipeline a
             for name, formula in self.formula_comparisons.items():
                 report += f"| {name} | `{formula['skema_formula'][:30]}...` | `{formula['our_formula'][:30]}...` | {formula['equivalence']:.1%} |\n"
             
-            report += f"""
+            report += """
 
 ## Statistical Benchmarking Results
 
@@ -499,9 +499,9 @@ The high correlation ({avg_corr:.3f}) between methods indicates consistent detec
     print("📋 Summary:")
     print(f"   • {len(validation_sites)} validation sites analyzed")
     print(f"   • {len(formula_comparisons)} mathematical formulas compared")
-    print(f"   • Statistical benchmarking with correlation analysis")
-    print(f"   • Visual processing demonstration created")
-    print(f"   • Comprehensive validation report generated")
+    print("   • Statistical benchmarking with correlation analysis")
+    print("   • Visual processing demonstration created")
+    print("   • Comprehensive validation report generated")
     print()
     print("🎯 This framework provides:")
     print("   • Mathematical transparency for regulatory approval")

@@ -11,22 +11,22 @@ Usage:
     python scripts/run_real_world_validation.py --mode controls --days 7
 """
 
-import asyncio
 import argparse
-import sys
+import asyncio
 import logging
-from pathlib import Path
+import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from kelpie_carbon_v1.validation.real_world_validation import (
+from kelpie_carbon.logging_config import get_logger
+from kelpie_carbon.validation.real_world_validation import (
     RealWorldValidator,
     validate_primary_sites,
-    validate_with_controls
+    validate_with_controls,
 )
-from kelpie_carbon_v1.logging_config import get_logger
 
 logger = get_logger(__name__)
 

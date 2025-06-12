@@ -13,11 +13,11 @@ Total Cost: $0 (after one-time SAM model download)
 
 import subprocess
 import sys
-import os
 import urllib.request
 from pathlib import Path
-import tempfile
+
 import numpy as np
+
 
 def print_section(title: str):
     """Print a formatted section header."""
@@ -126,7 +126,7 @@ def test_sam_import():
     print_section("Testing SAM Import")
     
     try:
-        from segment_anything import sam_model_registry, SamPredictor
+        from segment_anything import SamPredictor, sam_model_registry
         print("✅ SAM import successful")
         return True
     except ImportError as e:
@@ -142,8 +142,7 @@ def test_budget_detector():
         # Add current directory to path for imports
         sys.path.insert(0, str(Path(__file__).parent.parent))
         
-        from src.kelpie_carbon_v1.deep_learning.budget_sam_detector import BudgetSAMKelpDetector
-        from src.kelpie_carbon_v1.spectral.skema_processor import SKEMAProcessor
+        from src.kelpie_carbon.spectral.skema_processor import SKEMAProcessor
         
         print("✅ Budget SAM Detector import successful")
         
@@ -189,7 +188,7 @@ This script demonstrates how to use the zero-cost SAM-based kelp detector.
 """
 
 from pathlib import Path
-from src.kelpie_carbon_v1.deep_learning.budget_sam_detector import (
+from src.kelpie_carbon.deep_learning.budget_sam_detector import (
     BudgetSAMKelpDetector, download_sam_model
 )
 
@@ -238,7 +237,7 @@ def print_next_steps():
     print("   3. Compare results with existing SKEMA spectral analysis")
     print()
     print("💡 Quick start:")
-    print("   from src.kelpie_carbon_v1.deep_learning.budget_sam_detector import BudgetSAMKelpDetector")
+    print("   from src.kelpie_carbon.deep_learning.budget_sam_detector import BudgetSAMKelpDetector")
     print("   detector = BudgetSAMKelpDetector('models/sam_vit_h_4b8939.pth')")
     print("   kelp_mask, metadata = detector.detect_kelp_from_file('your_image.tif')")
     print()

@@ -5,9 +5,9 @@ Simple Validation Setup for Task C1.5
 Sets up the basic structure for real-world validation of our budget deep learning implementations.
 """
 
-import sys
-from pathlib import Path
 import json
+from pathlib import Path
+
 
 def create_validation_structure():
     """Create basic validation structure."""

@@ -12,17 +12,15 @@ This module consolidates validation parameter testing from multiple test files:
 Reduces 20+ individual validation tests to 4 parameterized tests.
 """
 
+
 import pytest
-import numpy as np
-from typing import Dict, Any, Type, Union
+from kelpie_carbon.core.api.models import CoordinateModel
 from pydantic import ValidationError
 
+from src.kelpie_carbon.validation.historical_baseline_analysis import HistoricalSite
+
 # Import all validation classes that need parameter testing
-from src.kelpie_carbon_v1.validation.real_world_validation import ValidationSite
-from src.kelpie_carbon_v1.validation.historical_baseline_analysis import HistoricalSite
-from src.kelpie_carbon_v1.analytics.analytics_framework import AnalysisRequest
-from kelpie_carbon_v1.api.models import CoordinateModel
-from kelpie_carbon_v1.core.fetch import fetch_sentinel_tiles
+from src.kelpie_carbon.validation.real_world_validation import ValidationSite
 
 
 class TestCoordinateValidation:

@@ -1,0 +1,806 @@
+........................................................................ [ 37%]
+............s..F.FF.FF.FF......sss.........FFFF......................... [ 75%]
+................................................                         [100%]
+================================== FAILURES ===================================
+_____ test_metrics_validation[detection_accuracy-input_data0-ValueError] ______
+
+metric_type = 'detection_accuracy', input_data = []
+expected_error = <class 'ValueError'>
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+                with pytest.raises(expected_error):
+                    if metric_type == "detection_accuracy":
+>                       calculator.calculate_detection_metrics(
+                            predicted=input_data,
+                            ground_truth=[0.7, 0.8, 0.9] if input_data else []
+E                           TypeError: MetricCalculator.calculate_detection_metrics() got an unexpected keyword argument 'predicted'
+
+tests\param\test_comprehensive_metrics.py:45: TypeError
+________ test_metrics_validation[detection_accuracy-input_data2-None] _________
+
+metric_type = 'detection_accuracy', input_data = [0.5, 0.8, 0.9]
+expected_error = None
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+                with pytest.raises(expected_error):
+                    if metric_type == "detection_accuracy":
+                        calculator.calculate_detection_metrics(
+                            predicted=input_data,
+                            ground_truth=[0.7, 0.8, 0.9] if input_data else []
+                        )
+                    elif metric_type == "composite_score":
+                        calculator.calculate_composite_score({"metrics": input_data})
+            else:
+                # Should not raise error
+                if metric_type == "detection_accuracy" and input_data:
+>                   result = calculator.calculate_detection_metrics(
+                        predicted=input_data,
+                        ground_truth=[0.6, 0.7, 0.8]
+                    )
+E                   TypeError: MetricCalculator.calculate_detection_metrics() got an unexpected keyword argument 'predicted'
+
+tests\param\test_comprehensive_metrics.py:54: TypeError
+_______ test_metrics_validation[temporal_trend-input_data3-ValueError] ________
+
+metric_type = 'temporal_trend', input_data = {}
+expected_error = <class 'ValueError'>
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+>               with pytest.raises(expected_error):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\param\test_comprehensive_metrics.py:43: Failed
+_______ test_metrics_validation[composite_score-input_data5-ValueError] _______
+
+metric_type = 'composite_score', input_data = [-1.0]
+expected_error = <class 'ValueError'>
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+                with pytest.raises(expected_error):
+                    if metric_type == "detection_accuracy":
+                        calculator.calculate_detection_metrics(
+                            predicted=input_data,
+                            ground_truth=[0.7, 0.8, 0.9] if input_data else []
+                        )
+                    elif metric_type == "composite_score":
+>                       calculator.calculate_composite_score({"metrics": input_data})
+E                       TypeError: MetricCalculator.calculate_composite_score() missing 4 required positional arguments: 'precision', 'recall', 'confidence', and 'data_quality'
+
+tests\param\test_comprehensive_metrics.py:50: TypeError
+_______ test_metrics_validation[composite_score-input_data6-ValueError] _______
+
+metric_type = 'composite_score', input_data = [1.5]
+expected_error = <class 'ValueError'>
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+                with pytest.raises(expected_error):
+                    if metric_type == "detection_accuracy":
+                        calculator.calculate_detection_metrics(
+                            predicted=input_data,
+                            ground_truth=[0.7, 0.8, 0.9] if input_data else []
+                        )
+                    elif metric_type == "composite_score":
+>                       calculator.calculate_composite_score({"metrics": input_data})
+E                       TypeError: MetricCalculator.calculate_composite_score() missing 4 required positional arguments: 'precision', 'recall', 'confidence', and 'data_quality'
+
+tests\param\test_comprehensive_metrics.py:50: TypeError
+_________ test_metrics_validation[performance-input_data8-ValueError] _________
+
+metric_type = 'performance', input_data = {'accuracy': -0.1}
+expected_error = <class 'ValueError'>
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+>               with pytest.raises(expected_error):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\param\test_comprehensive_metrics.py:43: Failed
+_________ test_metrics_validation[performance-input_data9-ValueError] _________
+
+metric_type = 'performance', input_data = {'accuracy': 1.1}
+expected_error = <class 'ValueError'>
+
+    @pytest.mark.parametrize(
+        "metric_type, input_data, expected_error",
+        [
+            # Detection metrics
+            ("detection_accuracy", [], ValueError),
+            ("detection_accuracy", None, (ValueError, TypeError)),
+            ("detection_accuracy", [0.5, 0.8, 0.9], None),
+    
+            # Temporal metrics
+            ("temporal_trend", {}, ValueError),
+            ("temporal_trend", {"2020": 100, "2021": 110}, None),
+    
+            # Composite metrics
+            ("composite_score", [-1.0], ValueError),
+            ("composite_score", [1.5], ValueError),
+            ("composite_score", [0.0, 0.5, 1.0], None),
+    
+            # Performance metrics
+            ("performance", {"accuracy": -0.1}, ValueError),
+            ("performance", {"accuracy": 1.1}, ValueError),
+            ("performance", {"accuracy": 0.85}, None),
+        ],
+    )
+    def test_metrics_validation(metric_type, input_data, expected_error):
+        """Test various metrics validation scenarios."""
+        try:
+            from src.kelpie_carbon_v1.analytics.analytics_framework import MetricCalculator
+    
+            calculator = MetricCalculator()
+    
+            if expected_error:
+>               with pytest.raises(expected_error):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\param\test_comprehensive_metrics.py:43: Failed
+_ test_processing_pipeline_stages[data_fetch-input_data0-expected_output_keys0] _
+
+processing_stage = 'data_fetch', input_data = {'coordinates': (48.5, -123.5)}
+expected_output_keys = ['raw_data', 'metadata']
+
+    @pytest.mark.parametrize(
+        "processing_stage, input_data, expected_output_keys",
+        [
+            # Full pipeline stages
+            ("data_fetch", {"coordinates": (48.5, -123.5)}, ["raw_data", "metadata"]),
+            ("preprocessing", {"raw_data": np.random.rand(10, 10)}, ["processed_data", "quality_metrics"]),
+            ("analysis", {"processed_data": np.random.rand(10, 10)}, ["results", "confidence"]),
+            ("postprocessing", {"results": {"kelp_extent": 100}}, ["final_results", "recommendations"]),
+        ],
+    )
+    def test_processing_pipeline_stages(processing_stage, input_data, expected_output_keys):
+        """Test different stages of the processing pipeline."""
+        # Mock the pipeline stages
+>       with patch('src.kelpie_carbon_v1.core.pipeline.process_stage') as mock_process:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\param\test_comprehensive_processing.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'src.kelpie_carbon_v1.core.pipeline'
+
+    def resolve_name(name):
+        """
+        Resolve a name to an object.
+    
+        It is expected that `name` will be a string in one of the following
+        formats, where W is shorthand for a valid Python identifier and dot stands
+        for a literal period in these pseudo-regexes:
+    
+        W(.W)*
+        W(.W)*:(W(.W)*)?
+    
+        The first form is intended for backward compatibility only. It assumes that
+        some part of the dotted name is a package, and the rest is an object
+        somewhere within that package, possibly nested inside other objects.
+        Because the place where the package stops and the object hierarchy starts
+        can't be inferred by inspection, repeated attempts to import must be done
+        with this form.
+    
+        In the second form, the caller makes the division point clear through the
+        provision of a single colon: the dotted name to the left of the colon is a
+        package to be imported, and the dotted name to the right is the object
+        hierarchy within that package. Only one import is needed in this form. If
+        it ends with the colon, then a module object is returned.
+    
+        The function will return an object (which might be a module), or raise one
+        of the following exceptions:
+    
+        ValueError - if `name` isn't in a recognised format
+        ImportError - if an import failed when it shouldn't have
+        AttributeError - if a failure occurred when traversing the object hierarchy
+                         within the imported package to get to the desired object.
+        """
+        global _NAME_PATTERN
+        if _NAME_PATTERN is None:
+            # Lazy import to speedup Python startup time
+            import re
+            dotted_words = r'(?!\d)(\w+)(\.(?!\d)(\w+))*'
+            _NAME_PATTERN = re.compile(f'^(?P<pkg>{dotted_words})'
+                                       f'(?P<cln>:(?P<obj>{dotted_words})?)?$',
+                                       re.UNICODE)
+    
+        m = _NAME_PATTERN.match(name)
+        if not m:
+            raise ValueError(f'invalid format: {name!r}')
+        gd = m.groupdict()
+        if gd.get('cln'):
+            # there is a colon - a one-step import is all that's needed
+            mod = importlib.import_module(gd['pkg'])
+            parts = gd.get('obj')
+            parts = parts.split('.') if parts else []
+        else:
+            # no colon - have to iterate to find the package boundary
+            parts = name.split('.')
+            modname = parts.pop(0)
+            # first part *must* be a module/package.
+            mod = importlib.import_module(modname)
+            while parts:
+                p = parts[0]
+                s = f'{modname}.{p}'
+                try:
+                    mod = importlib.import_module(s)
+                    parts.pop(0)
+                    modname = s
+                except ImportError:
+                    break
+        # if we reach this point, mod is the module, already imported, and
+        # parts is the list of parts in the object hierarchy to be traversed, or
+        # an empty list if just the module is wanted.
+        result = mod
+        for p in parts:
+>           result = getattr(result, p)
+                     ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'src.kelpie_carbon_v1.core' has no attribute 'pipeline'
+
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:528: AttributeError
+_ test_processing_pipeline_stages[preprocessing-input_data1-expected_output_keys1] _
+
+processing_stage = 'preprocessing'
+input_data = {'raw_data': array([[0.33706214, 0.94366174, 0.80803485, 0.18823072, 0.68336382,
+        0.42134603, 0.70436089, 0.849... 0.59739173, 0.7543584 , 0.38353525, 0.84836554,
+        0.16262292, 0.11899003, 0.73661131, 0.29284835, 0.07793122]])}
+expected_output_keys = ['processed_data', 'quality_metrics']
+
+    @pytest.mark.parametrize(
+        "processing_stage, input_data, expected_output_keys",
+        [
+            # Full pipeline stages
+            ("data_fetch", {"coordinates": (48.5, -123.5)}, ["raw_data", "metadata"]),
+            ("preprocessing", {"raw_data": np.random.rand(10, 10)}, ["processed_data", "quality_metrics"]),
+            ("analysis", {"processed_data": np.random.rand(10, 10)}, ["results", "confidence"]),
+            ("postprocessing", {"results": {"kelp_extent": 100}}, ["final_results", "recommendations"]),
+        ],
+    )
+    def test_processing_pipeline_stages(processing_stage, input_data, expected_output_keys):
+        """Test different stages of the processing pipeline."""
+        # Mock the pipeline stages
+>       with patch('src.kelpie_carbon_v1.core.pipeline.process_stage') as mock_process:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\param\test_comprehensive_processing.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'src.kelpie_carbon_v1.core.pipeline'
+
+    def resolve_name(name):
+        """
+        Resolve a name to an object.
+    
+        It is expected that `name` will be a string in one of the following
+        formats, where W is shorthand for a valid Python identifier and dot stands
+        for a literal period in these pseudo-regexes:
+    
+        W(.W)*
+        W(.W)*:(W(.W)*)?
+    
+        The first form is intended for backward compatibility only. It assumes that
+        some part of the dotted name is a package, and the rest is an object
+        somewhere within that package, possibly nested inside other objects.
+        Because the place where the package stops and the object hierarchy starts
+        can't be inferred by inspection, repeated attempts to import must be done
+        with this form.
+    
+        In the second form, the caller makes the division point clear through the
+        provision of a single colon: the dotted name to the left of the colon is a
+        package to be imported, and the dotted name to the right is the object
+        hierarchy within that package. Only one import is needed in this form. If
+        it ends with the colon, then a module object is returned.
+    
+        The function will return an object (which might be a module), or raise one
+        of the following exceptions:
+    
+        ValueError - if `name` isn't in a recognised format
+        ImportError - if an import failed when it shouldn't have
+        AttributeError - if a failure occurred when traversing the object hierarchy
+                         within the imported package to get to the desired object.
+        """
+        global _NAME_PATTERN
+        if _NAME_PATTERN is None:
+            # Lazy import to speedup Python startup time
+            import re
+            dotted_words = r'(?!\d)(\w+)(\.(?!\d)(\w+))*'
+            _NAME_PATTERN = re.compile(f'^(?P<pkg>{dotted_words})'
+                                       f'(?P<cln>:(?P<obj>{dotted_words})?)?$',
+                                       re.UNICODE)
+    
+        m = _NAME_PATTERN.match(name)
+        if not m:
+            raise ValueError(f'invalid format: {name!r}')
+        gd = m.groupdict()
+        if gd.get('cln'):
+            # there is a colon - a one-step import is all that's needed
+            mod = importlib.import_module(gd['pkg'])
+            parts = gd.get('obj')
+            parts = parts.split('.') if parts else []
+        else:
+            # no colon - have to iterate to find the package boundary
+            parts = name.split('.')
+            modname = parts.pop(0)
+            # first part *must* be a module/package.
+            mod = importlib.import_module(modname)
+            while parts:
+                p = parts[0]
+                s = f'{modname}.{p}'
+                try:
+                    mod = importlib.import_module(s)
+                    parts.pop(0)
+                    modname = s
+                except ImportError:
+                    break
+        # if we reach this point, mod is the module, already imported, and
+        # parts is the list of parts in the object hierarchy to be traversed, or
+        # an empty list if just the module is wanted.
+        result = mod
+        for p in parts:
+>           result = getattr(result, p)
+                     ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'src.kelpie_carbon_v1.core' has no attribute 'pipeline'
+
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:528: AttributeError
+_ test_processing_pipeline_stages[analysis-input_data2-expected_output_keys2] _
+
+processing_stage = 'analysis'
+input_data = {'processed_data': array([[0.52247711, 0.84975445, 0.1922794 , 0.86787355, 0.89694825,
+        0.59016916, 0.70989039,... 0.79694169, 0.91915498, 0.04765292, 0.0018372 ,
+        0.17590576, 0.72796513, 0.41431885, 0.28043925, 0.35400001]])}
+expected_output_keys = ['results', 'confidence']
+
+    @pytest.mark.parametrize(
+        "processing_stage, input_data, expected_output_keys",
+        [
+            # Full pipeline stages
+            ("data_fetch", {"coordinates": (48.5, -123.5)}, ["raw_data", "metadata"]),
+            ("preprocessing", {"raw_data": np.random.rand(10, 10)}, ["processed_data", "quality_metrics"]),
+            ("analysis", {"processed_data": np.random.rand(10, 10)}, ["results", "confidence"]),
+            ("postprocessing", {"results": {"kelp_extent": 100}}, ["final_results", "recommendations"]),
+        ],
+    )
+    def test_processing_pipeline_stages(processing_stage, input_data, expected_output_keys):
+        """Test different stages of the processing pipeline."""
+        # Mock the pipeline stages
+>       with patch('src.kelpie_carbon_v1.core.pipeline.process_stage') as mock_process:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\param\test_comprehensive_processing.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'src.kelpie_carbon_v1.core.pipeline'
+
+    def resolve_name(name):
+        """
+        Resolve a name to an object.
+    
+        It is expected that `name` will be a string in one of the following
+        formats, where W is shorthand for a valid Python identifier and dot stands
+        for a literal period in these pseudo-regexes:
+    
+        W(.W)*
+        W(.W)*:(W(.W)*)?
+    
+        The first form is intended for backward compatibility only. It assumes that
+        some part of the dotted name is a package, and the rest is an object
+        somewhere within that package, possibly nested inside other objects.
+        Because the place where the package stops and the object hierarchy starts
+        can't be inferred by inspection, repeated attempts to import must be done
+        with this form.
+    
+        In the second form, the caller makes the division point clear through the
+        provision of a single colon: the dotted name to the left of the colon is a
+        package to be imported, and the dotted name to the right is the object
+        hierarchy within that package. Only one import is needed in this form. If
+        it ends with the colon, then a module object is returned.
+    
+        The function will return an object (which might be a module), or raise one
+        of the following exceptions:
+    
+        ValueError - if `name` isn't in a recognised format
+        ImportError - if an import failed when it shouldn't have
+        AttributeError - if a failure occurred when traversing the object hierarchy
+                         within the imported package to get to the desired object.
+        """
+        global _NAME_PATTERN
+        if _NAME_PATTERN is None:
+            # Lazy import to speedup Python startup time
+            import re
+            dotted_words = r'(?!\d)(\w+)(\.(?!\d)(\w+))*'
+            _NAME_PATTERN = re.compile(f'^(?P<pkg>{dotted_words})'
+                                       f'(?P<cln>:(?P<obj>{dotted_words})?)?$',
+                                       re.UNICODE)
+    
+        m = _NAME_PATTERN.match(name)
+        if not m:
+            raise ValueError(f'invalid format: {name!r}')
+        gd = m.groupdict()
+        if gd.get('cln'):
+            # there is a colon - a one-step import is all that's needed
+            mod = importlib.import_module(gd['pkg'])
+            parts = gd.get('obj')
+            parts = parts.split('.') if parts else []
+        else:
+            # no colon - have to iterate to find the package boundary
+            parts = name.split('.')
+            modname = parts.pop(0)
+            # first part *must* be a module/package.
+            mod = importlib.import_module(modname)
+            while parts:
+                p = parts[0]
+                s = f'{modname}.{p}'
+                try:
+                    mod = importlib.import_module(s)
+                    parts.pop(0)
+                    modname = s
+                except ImportError:
+                    break
+        # if we reach this point, mod is the module, already imported, and
+        # parts is the list of parts in the object hierarchy to be traversed, or
+        # an empty list if just the module is wanted.
+        result = mod
+        for p in parts:
+>           result = getattr(result, p)
+                     ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'src.kelpie_carbon_v1.core' has no attribute 'pipeline'
+
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:528: AttributeError
+_ test_processing_pipeline_stages[postprocessing-input_data3-expected_output_keys3] _
+
+processing_stage = 'postprocessing'
+input_data = {'results': {'kelp_extent': 100}}
+expected_output_keys = ['final_results', 'recommendations']
+
+    @pytest.mark.parametrize(
+        "processing_stage, input_data, expected_output_keys",
+        [
+            # Full pipeline stages
+            ("data_fetch", {"coordinates": (48.5, -123.5)}, ["raw_data", "metadata"]),
+            ("preprocessing", {"raw_data": np.random.rand(10, 10)}, ["processed_data", "quality_metrics"]),
+            ("analysis", {"processed_data": np.random.rand(10, 10)}, ["results", "confidence"]),
+            ("postprocessing", {"results": {"kelp_extent": 100}}, ["final_results", "recommendations"]),
+        ],
+    )
+    def test_processing_pipeline_stages(processing_stage, input_data, expected_output_keys):
+        """Test different stages of the processing pipeline."""
+        # Mock the pipeline stages
+>       with patch('src.kelpie_carbon_v1.core.pipeline.process_stage') as mock_process:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\param\test_comprehensive_processing.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'src.kelpie_carbon_v1.core.pipeline'
+
+    def resolve_name(name):
+        """
+        Resolve a name to an object.
+    
+        It is expected that `name` will be a string in one of the following
+        formats, where W is shorthand for a valid Python identifier and dot stands
+        for a literal period in these pseudo-regexes:
+    
+        W(.W)*
+        W(.W)*:(W(.W)*)?
+    
+        The first form is intended for backward compatibility only. It assumes that
+        some part of the dotted name is a package, and the rest is an object
+        somewhere within that package, possibly nested inside other objects.
+        Because the place where the package stops and the object hierarchy starts
+        can't be inferred by inspection, repeated attempts to import must be done
+        with this form.
+    
+        In the second form, the caller makes the division point clear through the
+        provision of a single colon: the dotted name to the left of the colon is a
+        package to be imported, and the dotted name to the right is the object
+        hierarchy within that package. Only one import is needed in this form. If
+        it ends with the colon, then a module object is returned.
+    
+        The function will return an object (which might be a module), or raise one
+        of the following exceptions:
+    
+        ValueError - if `name` isn't in a recognised format
+        ImportError - if an import failed when it shouldn't have
+        AttributeError - if a failure occurred when traversing the object hierarchy
+                         within the imported package to get to the desired object.
+        """
+        global _NAME_PATTERN
+        if _NAME_PATTERN is None:
+            # Lazy import to speedup Python startup time
+            import re
+            dotted_words = r'(?!\d)(\w+)(\.(?!\d)(\w+))*'
+            _NAME_PATTERN = re.compile(f'^(?P<pkg>{dotted_words})'
+                                       f'(?P<cln>:(?P<obj>{dotted_words})?)?$',
+                                       re.UNICODE)
+    
+        m = _NAME_PATTERN.match(name)
+        if not m:
+            raise ValueError(f'invalid format: {name!r}')
+        gd = m.groupdict()
+        if gd.get('cln'):
+            # there is a colon - a one-step import is all that's needed
+            mod = importlib.import_module(gd['pkg'])
+            parts = gd.get('obj')
+            parts = parts.split('.') if parts else []
+        else:
+            # no colon - have to iterate to find the package boundary
+            parts = name.split('.')
+            modname = parts.pop(0)
+            # first part *must* be a module/package.
+            mod = importlib.import_module(modname)
+            while parts:
+                p = parts[0]
+                s = f'{modname}.{p}'
+                try:
+                    mod = importlib.import_module(s)
+                    parts.pop(0)
+                    modname = s
+                except ImportError:
+                    break
+        # if we reach this point, mod is the module, already imported, and
+        # parts is the list of parts in the object hierarchy to be traversed, or
+        # an empty list if just the module is wanted.
+        result = mod
+        for p in parts:
+>           result = getattr(result, p)
+                     ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'src.kelpie_carbon_v1.core' has no attribute 'pipeline'
+
+C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:528: AttributeError
+============================== warnings summary ===============================
+..\..\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\site-packages\pydantic\_internal\_config.py:323
+  C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\site-packages\pydantic\_internal\_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+tests\e2e\test_integration_comprehensive.py:524
+  C:\dev\kelpie-carbon-v1\tests\e2e\test_integration_comprehensive.py:524: PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.performance
+
+tests/e2e/test_integration_comprehensive.py: 5 warnings
+tests/e2e/test_integration_stability.py: 4 warnings
+tests/e2e/test_production_readiness.py: 2 warnings
+  C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\encoders.py:324: FutureWarning: The return type of `Dataset.dims` will be changed to return a set of dimension names in future, in order to be more consistent with `DataArray.dims`. To access a mapping from dimension names to lengths, please use `Dataset.sizes`.
+    data = dict(obj)
+
+tests/integration/test_real_satellite_data.py::test_phase_9_real_satellite_integration
+tests/integration/test_real_satellite_data.py::test_phase_9_real_satellite_integration
+  C:\Users\ryan\AppData\Local\Programs\Python\Python312\Lib\site-packages\sklearn\metrics\_regression.py:1283: UndefinedMetricWarning: R^2 score is not well-defined with less than two samples.
+    warnings.warn(msg, UndefinedMetricWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================ slowest 25 durations =============================
+54.91s call     tests/e2e/test_integration_stability.py::TestCachePerformanceOptimizations::test_cache_size_management
+49.04s call     tests/e2e/test_production_readiness.py::TestErrorHandlingGracefulDegradation::test_memory_pressure_handling
+27.29s call     tests/e2e/test_production_readiness.py::TestSystemIntegration::test_full_workflow_integration
+19.78s call     tests/common/test_error_handling.py::TestAsyncErrorHandling::test_async_error_handling[test_case1]
+16.10s call     tests/e2e/test_integration_stability.py::TestSatelliteDataSourceReliability::test_coordinate_reference_system_handling
+15.86s call     tests/e2e/test_production_readiness.py::TestSatelliteDataFallback::test_high_cloud_cover_fallback
+13.07s call     tests/e2e/test_integration_stability.py::TestCachePerformanceOptimizations::test_cache_persistence_across_requests
+13.05s call     tests/e2e/test_production_readiness.py::TestSatelliteDataFallback::test_partial_band_data_fallback
+13.01s call     tests/e2e/test_production_readiness.py::TestPerformanceValidation::test_response_time_sla
+11.65s call     tests/e2e/test_integration_comprehensive.py::TestCompleteWorkflow::test_phase2_spectral_visualizations
+11.08s call     tests/e2e/test_production_readiness.py::TestPerformanceValidation::test_cache_efficiency_production
+9.27s call     tests/integration/test_real_satellite_data.py::TestRealSatelliteDataUsage::test_real_satellite_data_fetch_and_processing
+7.29s call     tests/e2e/test_integration_comprehensive.py::TestCompleteWorkflow::test_phase5_performance_polish
+5.79s call     tests/e2e/test_integration_comprehensive.py::TestDataProcessingIntegration::test_image_generation_pipeline
+5.75s call     tests/e2e/test_integration_comprehensive.py::TestCompleteWorkflow::test_phase4_interactive_controls
+5.07s call     tests/e2e/test_integration_comprehensive.py::TestDataProcessingIntegration::test_satellite_data_pipeline
+4.89s call     tests/e2e/test_integration_comprehensive.py::TestCompleteWorkflow::test_phase3_analysis_overlays
+2.02s call     tests/integration/test_real_satellite_data.py::TestRealSatelliteDataUsage::test_real_data_model_training
+1.97s call     tests/integration/test_real_satellite_data.py::test_phase_9_real_satellite_integration
+1.13s call     tests/e2e/test_production_readiness.py::TestSatelliteDataFallback::test_satellite_data_unavailable_fallback
+1.00s call     tests/unit/test_fetch.py::test_fetch_sentinel_tiles_with_mock_data
+0.11s call     tests/e2e/test_integration_comprehensive.py::TestCompleteWorkflow::test_phase1_core_image_generation
+0.09s call     tests/e2e/test_integration_comprehensive.py::TestBrowserCompatibilityIntegration::test_content_types
+0.07s call     tests/e2e/test_integration_comprehensive.py::TestAPIEndpointIntegration::test_cors_headers
+0.06s call     tests/e2e/test_integration_comprehensive.py::TestAPIEndpointIntegration::test_static_file_serving
+=========================== short test summary info ===========================
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[detection_accuracy-input_data0-ValueError]
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[detection_accuracy-input_data2-None]
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[temporal_trend-input_data3-ValueError]
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[composite_score-input_data5-ValueError]
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[composite_score-input_data6-ValueError]
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[performance-input_data8-ValueError]
+FAILED tests/param/test_comprehensive_metrics.py::test_metrics_validation[performance-input_data9-ValueError]
+FAILED tests/param/test_comprehensive_processing.py::test_processing_pipeline_stages[data_fetch-input_data0-expected_output_keys0]
+FAILED tests/param/test_comprehensive_processing.py::test_processing_pipeline_stages[preprocessing-input_data1-expected_output_keys1]
+FAILED tests/param/test_comprehensive_processing.py::test_processing_pipeline_stages[analysis-input_data2-expected_output_keys2]
+FAILED tests/param/test_comprehensive_processing.py::test_processing_pipeline_stages[postprocessing-input_data3-expected_output_keys3]
+11 failed, 177 passed, 4 skipped, 15 warnings in 291.12s (0:04:51)

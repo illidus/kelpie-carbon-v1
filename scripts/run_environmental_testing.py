@@ -12,18 +12,17 @@ Usage:
     python scripts/run_environmental_testing.py --help
 """
 
-import asyncio
 import argparse
+import asyncio
 import json
 import logging
-from datetime import datetime
 from pathlib import Path
 
-from kelpie_carbon_v1.validation.environmental_testing import (
+from kelpie_carbon.logging_config import setup_logging
+from kelpie_carbon.validation.environmental_testing import (
     EnvironmentalRobustnessValidator,
     validate_tidal_effects,
 )
-from kelpie_carbon_v1.logging_config import setup_logging
 
 # Define validation sites for environmental testing
 VALIDATION_SITES = {
@@ -202,7 +201,7 @@ def print_results_summary(results, site_name):
         print(f"📈 Success rate: {summary['success_rate']*100:.1f}%")
         
         if "detailed_results" in results:
-            print(f"\n📋 Detailed Results:")
+            print("\n📋 Detailed Results:")
             for result in results["detailed_results"]:
                 status = "✅ PASS" if result["success"] else "❌ FAIL"
                 print(f"  {status} {result['condition_name']}: {result['detection_rate']*100:.1f}% detection")
@@ -213,7 +212,7 @@ def print_results_summary(results, site_name):
 def print_overall_summary(all_results):
     """Print overall summary across all sites."""
     print(f"\n{'='*80}")
-    print(f"🌍 Overall Environmental Testing Summary")
+    print("🌍 Overall Environmental Testing Summary")
     print(f"{'='*80}")
     
     total_tests = 0

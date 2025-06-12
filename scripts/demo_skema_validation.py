@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import numpy as np
-import matplotlib.pyplot as plt
 from datetime import datetime
-import json
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 def demo_skema_validation():
     print("🔬 SKEMA Validation Benchmarking Framework")
@@ -83,7 +84,7 @@ def demo_skema_validation():
     avg_ours = np.mean([s['our_accuracy'] for s in validation_sites])
     sites_better = sum(1 for s in validation_sites if s['our_accuracy'] > s['skema_accuracy'])
     
-    print(f"\nSummary:")
+    print("\nSummary:")
     print(f"• Average SKEMA Accuracy: {avg_skema:.1%}")
     print(f"• Average Our Accuracy: {avg_ours:.1%}")
     print(f"• Sites Where We Outperform: {sites_better}/{len(validation_sites)}")
@@ -126,7 +127,7 @@ def demo_skema_validation():
     axes[1].grid(True, alpha=0.3)
     
     # Add value labels on bars
-    for bar, equiv in zip(bars, equivalences):
+    for bar, equiv in zip(bars, equivalences, strict=False):
         height = bar.get_height()
         axes[1].text(bar.get_x() + bar.get_width()/2., height + 0.01,
                     f'{equiv:.1%}', ha='center', va='bottom')

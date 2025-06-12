@@ -3,18 +3,16 @@ Comprehensive Integration Test Suite for Kelpie Carbon v1
 Tests complete system functionality across all 5 phases of development.
 """
 
-import asyncio
 import io
-import json
 import time
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from src.kelpie_carbon_v1.api.main import app
+from src.kelpie_carbon.api.main import app
 
 
 class TestCompleteWorkflow:
@@ -39,7 +37,8 @@ class TestCompleteWorkflow:
             response = self.client.get(f"/static/{file}")
             assert response.status_code == 200
 
-    @patch("src.kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles")
+    @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
+    @pytest.mark.slow
     def test_phase2_spectral_visualizations(self, mock_fetch):
         """Test Phase 2: Enhanced spectral index visualizations with real data integration."""
         # Mock satellite data fetch to return realistic data
@@ -76,7 +75,7 @@ class TestCompleteWorkflow:
             if response.status_code == 200:  # May not be available for all mock data
                 assert response.headers["content-type"] == "image/png"
 
-    @patch("src.kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles")
+    @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
     def test_phase3_analysis_overlays(self, mock_fetch):
         """Test Phase 3: Analysis Overlays functionality."""
         # Mock satellite data fetch to return realistic data
@@ -118,7 +117,7 @@ class TestCompleteWorkflow:
         if response.status_code == 200:
             assert response.headers["content-type"] == "image/png"
 
-    @patch("src.kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles")
+    @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
     def test_phase4_interactive_controls(self, mock_fetch):
         """Test Phase 4: Interactive Controls functionality."""
         # Mock satellite data fetch to return realistic data
@@ -168,7 +167,7 @@ class TestCompleteWorkflow:
         if response.status_code == 200:
             assert response.headers["content-type"] == "image/png"
 
-    @patch("src.kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles")
+    @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
     def test_phase5_performance_polish(self, mock_fetch):
         """Test Phase 5: Performance & Polish functionality."""
         # Mock satellite data fetch to return realistic data
@@ -334,7 +333,7 @@ class TestAPIEndpointIntegration:
 class TestDataProcessingIntegration:
     """Test data processing pipeline integration."""
 
-    @patch("src.kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles")
+    @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
     def test_satellite_data_pipeline(self, mock_fetch):
         """Test complete satellite data processing pipeline."""
         # Mock satellite data fetch to return realistic data
@@ -368,7 +367,7 @@ class TestDataProcessingIntegration:
         assert "processing_time" in result
         assert "biomass" in result or "carbon" in result
 
-    @patch("src.kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles")
+    @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
     def test_image_generation_pipeline(self, mock_fetch):
         """Test image generation pipeline integration."""
         # Mock satellite data fetch to return realistic data

@@ -1,24 +1,22 @@
 """Tests verifying Phase 9 uses real Sentinel-2 satellite data for model training and prediction."""
 
-from typing import List, Tuple
 
 import numpy as np
 import pytest
 import xarray as xr
-
-from kelpie_carbon_v1.core.fetch import fetch_sentinel_tiles
-from kelpie_carbon_v1.core.indices import calculate_indices_from_dataset
-from kelpie_carbon_v1.core.mask import apply_mask
-from kelpie_carbon_v1.core.model import (
+from kelpie_carbon.core.fetch import fetch_sentinel_tiles
+from kelpie_carbon.core.indices import calculate_indices_from_dataset
+from kelpie_carbon.core.mask import apply_mask
+from kelpie_carbon.core.model import (
     KelpBiomassModel,
     generate_training_data,
-    predict_biomass,
 )
 
 
 class TestRealSatelliteDataUsage:
     """Test suite verifying Phase 9 uses real satellite data."""
 
+    @pytest.mark.slow
     def test_real_satellite_data_fetch_and_processing(self):
         """Test that Phase 9 can fetch and process real Sentinel-2 data."""
         print("\n=== Testing Real Satellite Data Fetch and Processing ===")
@@ -140,7 +138,7 @@ class TestRealSatelliteDataUsage:
             # Test prediction with trained model
             prediction = model.predict(masked_data)
 
-            print(f"   ✅ Real-data-trained model prediction:")
+            print("   ✅ Real-data-trained model prediction:")
             print(f"   Biomass: {prediction['biomass_kg_per_hectare']:.1f} kg/ha")
             print(f"   Confidence: {prediction['prediction_confidence']:.3f}")
             print(f"   Model type: {prediction['model_type']}")
@@ -202,7 +200,7 @@ def test_phase_9_real_satellite_integration():
         synthetic_data = generate_training_data(n_samples=10)
         combined_training = training_data + synthetic_data
 
-        print(f"✅ Step 4: Created training data with real satellite observation")
+        print("✅ Step 4: Created training data with real satellite observation")
 
         # Step 5: Train model with real data
         metrics = model.train(combined_training)

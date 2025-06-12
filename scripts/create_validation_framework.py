@@ -6,10 +6,10 @@ Creates the framework for real-world validation and research benchmarking
 of budget deep learning implementations.
 """
 
-import sys
-import os
-from pathlib import Path
 import json
+import os
+import sys
+from pathlib import Path
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -248,7 +248,7 @@ def evaluate_implementations():
     
     # Import implementations
     try:
-        from src.kelpie_carbon_v1.deep_learning import (
+        from src.kelpie_carbon.deep_learning import (
             BudgetSAMKelpDetector, BudgetUNetKelpDetector, ClassicalMLEnhancer
         )
         print("✅ All implementations imported successfully")
@@ -622,7 +622,7 @@ def main():
     
     print("\n📋 Next Steps:")
     print("1. Acquire real satellite imagery for validation sites")
-    print("2. Download SAM model: poetry run python -c \"from src.kelpie_carbon_v1.deep_learning import download_sam_model; download_sam_model('models')\"")
+    print("2. Download SAM model: poetry run python -c \"from src.kelpie_carbon.deep_learning import download_sam_model; download_sam_model('models')\"")
     print("3. Run initial evaluation: poetry run python validation/tools/evaluation/evaluate_implementations.py")
     print("4. Compare results against research benchmarks")
     

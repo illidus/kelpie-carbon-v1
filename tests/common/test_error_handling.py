@@ -12,20 +12,34 @@ This module consolidates error handling testing from multiple test files:
 Reduces 45+ individual error handling tests to 6 parameterized tests.
 """
 
+from unittest.mock import patch
+
 import pytest
-import asyncio
-from unittest.mock import patch, AsyncMock, Mock
-from typing import Dict, Any, List, Union
 from fastapi import HTTPException
 
+from src.kelpie_carbon.api.errors import (
+    ErrorCode,
+    StandardizedError,
+    create_not_found_error,
+    create_validation_error,
+    handle_unexpected_error,
+)
+from src.kelpie_carbon.processing.species_classifier import (
+    KelpSpecies,
+    SpeciesClassifier,
+)
+from src.kelpie_carbon.validation.environmental_testing import (
+    EnvironmentalCondition,
+    EnvironmentalRobustnessValidator,
+)
+from src.kelpie_carbon.validation.historical_baseline_analysis import (
+    ChangeDetectionAnalyzer,
+)
+
 # Import error handling classes and functions
-from src.kelpie_carbon_v1.validation.real_world_validation import RealWorldValidator, ValidationSite
-from src.kelpie_carbon_v1.validation.environmental_testing import EnvironmentalRobustnessValidator, EnvironmentalCondition
-from src.kelpie_carbon_v1.processing.species_classifier import SpeciesClassifier, KelpSpecies
-from src.kelpie_carbon_v1.validation.historical_baseline_analysis import ChangeDetectionAnalyzer
-from src.kelpie_carbon_v1.api.errors import (
-    StandardizedError, ErrorCode, handle_unexpected_error, 
-    create_not_found_error, create_validation_error
+from src.kelpie_carbon.validation.real_world_validation import (
+    RealWorldValidator,
+    ValidationSite,
 )
 
 
@@ -37,7 +51,7 @@ class TestAsyncErrorHandling:
         # Real world validation error handling
         {
             "async_function": "validate_site",
-            "mock_target": "src.kelpie_carbon_v1.validation.real_world_validation.fetch_sentinel_tiles",
+            "mock_target": "src.kelpie_carbon.validation.real_world_validation.fetch_sentinel_tiles",
             "mock_exception": Exception("Satellite data fetch failed"),
             "instance_class": RealWorldValidator,
             "function_args": [
@@ -54,7 +68,7 @@ class TestAsyncErrorHandling:
         # Environmental testing error handling
         {
             "async_function": "test_environmental_condition",
-            "mock_target": "kelpie_carbon_v1.validation.environmental_testing.fetch_sentinel_tiles",
+            "mock_target": "kelpie_carbon.validation.environmental_testing.fetch_sentinel_tiles",
             "mock_exception": Exception("Test exception"),
             "instance_class": EnvironmentalRobustnessValidator,
             "function_args": [
@@ -68,6 +82,7 @@ class TestAsyncErrorHandling:
             "expected_error_message": "Test exception"
         },
     ])
+    @pytest.mark.slow
     async def test_async_error_handling(self, test_case):
         """Test async error handling across validation modules."""
         instance = test_case["instance_class"]()

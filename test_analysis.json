@@ -1,0 +1,41 @@
+{
+  "baseline": {
+    "total_test_files": 42,
+    "total_test_functions": 688,
+    "total_lines": 12874
+  },
+  "analysis": {
+    "function_groups": 32,
+    "signature_groups": 2,
+    "parameterization_candidates": 0
+  },
+  "consolidation_opportunities": [
+    {
+      "type": "duplicate_removal",
+      "signature": "7568d9f642cb",
+      "current_tests": 2,
+      "consolidated_tests": 1,
+      "reduction": 1,
+      "files_affected": [
+        "tests\\unit\\test_phase3_data_acquisition.py",
+        "tests\\unit\\test_real_data_acquisition.py"
+      ]
+    },
+    {
+      "type": "duplicate_removal",
+      "signature": "92979f11613d",
+      "current_tests": 2,
+      "consolidated_tests": 1,
+      "reduction": 1,
+      "files_affected": [
+        "tests\\unit\\test_phase3_data_acquisition.py",
+        "tests\\unit\\test_real_data_acquisition.py"
+      ]
+    }
+  ],
+  "estimated_savings": {
+    "tests_removed": 2,
+    "files_removed": 0,
+    "reduction_percentage": 0.29069767441860467
+  }
+}

@@ -14,14 +14,14 @@ repos:
 
   # Python code formatting with black
   - repo: https://github.com/psf/black
-    rev: 23.12.1
+    rev: 25.1.0
     hooks:
       - id: black
         language_version: python3.12
 
   # Import sorting with isort
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
         args: ["--profile", "black"]
@@ -36,19 +36,19 @@ repos:
 
   # Type checking with mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.16.0
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests]
+        additional_dependencies: [types-pyyaml, types-requests]
         args: [--ignore-missing-imports]
 
   # Security linting with bandit
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.5
+    rev: 1.8.0
     hooks:
       - id: bandit
-        args: ["-c", "pyproject.toml"]
-        additional_dependencies: ["bandit[toml]"]
+        args: ["-r", "src/", "-f", "json"]
+        exclude: ^tests/
 
   # Poetry dependency validation
   - repo: https://github.com/python-poetry/poetry
@@ -57,3 +57,11 @@ repos:
       - id: poetry-check
       - id: poetry-lock
         args: ["--no-update"]
+
+  # Ruff for fast Python linting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.13
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format

@@ -12,9 +12,10 @@ Usage: python scripts/simple_analytics_demo.py
 """
 
 import json
-from datetime import datetime, timedelta
-from typing import Dict, Any
 import os
+from datetime import datetime
+from typing import Any
+
 
 def create_sample_analysis_result():
     """Create a sample analysis result to demonstrate reporting."""
@@ -74,7 +75,7 @@ def create_sample_analysis_result():
         ]
     }
 
-def generate_first_nations_report(analysis_data: Dict[str, Any]) -> str:
+def generate_first_nations_report(analysis_data: dict[str, Any]) -> str:
     """Generate a First Nations community report."""
     
     site_name = analysis_data["request"]["site_name"]
@@ -169,7 +170,7 @@ This approach respects both traditional knowledge and scientific methods while b
     
     return report
 
-def generate_scientific_report(analysis_data: Dict[str, Any]) -> str:
+def generate_scientific_report(analysis_data: dict[str, Any]) -> str:
     """Generate a scientific research report."""
     
     site_coords = analysis_data["request"]["site_coordinates"]
@@ -324,7 +325,7 @@ This integrated analysis provides comprehensive assessment of kelp forest extent
     
     return report
 
-def generate_management_report(analysis_data: Dict[str, Any]) -> str:
+def generate_management_report(analysis_data: dict[str, Any]) -> str:
     """Generate a management decision-support report."""
     
     site_name = analysis_data["request"]["site_name"]
@@ -513,40 +514,40 @@ def display_interactive_menu():
     print(f"⚠️  Risk Level: {analysis_data['results']['historical']['risk_level']}")
     
     while True:
-        print(f"\n🔍 Available Report Types:")
-        print(f"   1. First Nations Community Report")
-        print(f"   2. Scientific Research Report")
-        print(f"   3. Management Decision Report")
-        print(f"   4. View Analysis Data (JSON)")
-        print(f"   5. Save All Reports to Files")
-        print(f"   q. Quit")
+        print("\n🔍 Available Report Types:")
+        print("   1. First Nations Community Report")
+        print("   2. Scientific Research Report")
+        print("   3. Management Decision Report")
+        print("   4. View Analysis Data (JSON)")
+        print("   5. Save All Reports to Files")
+        print("   q. Quit")
         
-        choice = input(f"\nSelect report type (1-5 or q): ").strip().lower()
+        choice = input("\nSelect report type (1-5 or q): ").strip().lower()
         
         if choice == 'q':
-            print(f"👋 Thank you for using Kelpie Carbon v1 Analytics!")
+            print("👋 Thank you for using Kelpie Carbon v1 Analytics!")
             break
         elif choice == '1':
-            print(f"\n📋 Generating First Nations Community Report...")
+            print("\n📋 Generating First Nations Community Report...")
             report = generate_first_nations_report(analysis_data)
             print(report)
             input("\nPress Enter to continue...")
         elif choice == '2':
-            print(f"\n📋 Generating Scientific Research Report...")
+            print("\n📋 Generating Scientific Research Report...")
             report = generate_scientific_report(analysis_data)
             print(report)
             input("\nPress Enter to continue...")
         elif choice == '3':
-            print(f"\n📋 Generating Management Decision Report...")
+            print("\n📋 Generating Management Decision Report...")
             report = generate_management_report(analysis_data)
             print(report)
             input("\nPress Enter to continue...")
         elif choice == '4':
-            print(f"\n📋 Analysis Data (JSON Format):")
+            print("\n📋 Analysis Data (JSON Format):")
             print(json.dumps(analysis_data, indent=2))
             input("\nPress Enter to continue...")
         elif choice == '5':
-            print(f"\n💾 Saving all reports to files...")
+            print("\n💾 Saving all reports to files...")
             
             # Generate and save all reports
             fn_report = generate_first_nations_report(analysis_data)
@@ -558,7 +559,7 @@ def display_interactive_menu():
             mgmt_file = save_report_to_file(mgmt_report, "management_report.md")
             json_file = save_report_to_file(json.dumps(analysis_data, indent=2), "analysis_data.json")
             
-            print(f"✅ Reports saved:")
+            print("✅ Reports saved:")
             print(f"   • First Nations Report: {fn_file}")
             print(f"   • Scientific Report: {sci_file}")
             print(f"   • Management Report: {mgmt_file}")
@@ -566,14 +567,14 @@ def display_interactive_menu():
             
             input("\nPress Enter to continue...")
         else:
-            print(f"❌ Invalid choice. Please try again.")
+            print("❌ Invalid choice. Please try again.")
 
 def main():
     """Main function to run the simple analytics demo."""
     try:
         display_interactive_menu()
     except KeyboardInterrupt:
-        print(f"\n\n⚠️  Demo interrupted by user")
+        print("\n\n⚠️  Demo interrupted by user")
     except Exception as e:
         print(f"\n❌ Demo failed: {e}")
 

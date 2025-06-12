@@ -1,0 +1,214 @@
+# Kelpie-Carbon Unified Configuration
+# Single source of truth for all configuration values
+
+# Application metadata
+app:
+  name: "kelpie-carbon"
+  version: "0.1.0"
+  description: "Kelp Forest Carbon Sequestration Assessment"
+
+# Server configuration
+server:
+  host: "localhost"
+  port: 8000
+  cors_enabled: true
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8080"
+
+# Processing configuration
+processing:
+  max_concurrent_downloads: 5
+  cache_size_mb: 512
+  timeout_seconds: 300
+
+# Satellite data configuration
+satellite:
+  default_provider: "sentinel-2"
+  cloud_cover_threshold: 0.2
+  tile_size: 1024
+  
+# Machine learning models
+ml_models:
+  sam:
+    model_type: "vit_b"
+    checkpoint_url: "https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth"
+    enabled: true
+  unet:
+    pretrained: true
+    fine_tune: false
+    enabled: true
+
+# Logging configuration  
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/kelpie-carbon.log"
+
+# Security settings
+security:
+  api_key_required: false
+  rate_limit_per_minute: 60
+
+# File paths
+paths:
+  data_dir: "data/"
+  models_dir: "models/"
+  results_dir: "results/"
+  cache_dir: ".cache/"
+  static_files: "src/kelpie_carbon/reporting/web/static"
+  templates: "src/kelpie_carbon/reporting/web/templates"
+  logs: "logs"
+  temp: "tmp"
+
+# Validation framework configuration
+validation:
+  # Test sites for validation
+  test_sites:
+    - name: "British Columbia - Nereocystis"
+      coordinates:
+        lat: 50.1163
+        lon: -125.2735
+      species: "Nereocystis luetkeana"
+      data_source: "Sentinel-2"
+      validation_type: "kelp_canopy_surface"
+    
+    - name: "California - Macrocystis"
+      coordinates:
+        lat: 36.6002
+        lon: -121.9015
+      species: "Macrocystis pyrifera"
+      data_source: "Sentinel-2"
+      validation_type: "kelp_canopy_surface"
+    
+    - name: "Tasmania - Giant Kelp"
+      coordinates:
+        lat: -43.1
+        lon: 147.3
+      species: "Macrocystis pyrifera"
+      data_source: "Sentinel-2"
+      validation_type: "kelp_canopy_surface"
+
+  # Performance metrics to track
+  performance_metrics:
+    - "accuracy"
+    - "precision" 
+    - "recall"
+    - "f1_score"
+    - "auc_pr"
+    - "auc_roc"
+    - "iou"
+    - "dice_coefficient"
+
+  # Processing metrics to track
+  processing_metrics:
+    - "inference_time"
+    - "memory_usage"
+    - "cpu_usage"
+    - "model_size"
+
+  # Validation thresholds
+  thresholds:
+    min_accuracy: 0.75
+    target_accuracy: 0.85
+    stretch_accuracy: 0.9
+
+# Research benchmarks for comparison
+research_benchmarks:
+  enhanced_unet:
+    auc_pr: 0.2739
+    improvement: "38% over ResNet"
+    estimated_accuracy: 0.82
+    
+  vision_transformers:
+    accuracy: 0.85
+    notes: "3rd place competition"
+    
+  traditional_cnn:
+    accuracy: 0.7
+    type: "baseline"
+    
+  skema_spectral:
+    accuracy: 0.7
+    type: "current baseline"
+
+  # Published research papers
+  published_papers:
+    - title: "Enhanced U-Net for Kelp Detection"
+      accuracy_metric: "AUC-PR"
+      reported_value: 0.2739
+      baseline_comparison: "ResNet (0.1980)"
+      improvement: "38% over baseline"
+      
+    - title: "Vision Transformers for Satellite Imagery"
+      accuracy_metric: "Accuracy"
+      reported_value: 0.85
+      notes: "3rd place in kelp detection competition"
+      
+    - title: "Traditional CNN Approaches"
+      accuracy_metric: "Accuracy"
+      reported_value: 0.7
+      baseline: "Typical satellite imagery classification"
+
+# Our implementation targets
+our_targets:
+  sam_spectral:
+    min: 0.75
+    target: 0.85
+    stretch: 0.9
+    
+  unet_transfer:
+    min: 0.7
+    target: 0.85
+    stretch: 0.95
+    
+  classical_ml:
+    improvement_min: 0.05
+    improvement_target: 0.12
+    
+  ensemble:
+    target: 0.9
+    stretch: 0.95
+
+# Cost analysis configuration
+cost_analysis:
+  traditional_training:
+    min: 750
+    max: 1200
+    average: 1000
+    
+  our_approach:
+    min: 0
+    max: 50
+    average: 25
+    
+  savings_target: 0.95
+  savings_percentage: 97.5
+
+# Hard-coded constants from research_benchmark_comparison.py
+benchmark_constants:
+  enhanced_unet_accuracy_estimate: 0.82  # Approximate from AUC-PR 0.2739
+  traditional_cost_per_percent: 12.20   # $1000 average for 82% accuracy
+  competitiveness_thresholds:
+    highly_competitive: 0.9  # 90% of research benchmark
+    competitive: 0.75        # 75% of research benchmark
+
+# Default result placeholders (for testing)
+default_results:
+  sam_spectral:
+    status: "not_tested"
+    reason: "SAM model not downloaded"
+    projected_accuracy: 0.85
+    cost: 0
+    
+  unet_transfer:
+    status: "partial"
+    accuracy: 0.4051
+    method: "classical_segmentation_fallback"
+    cost: 0
+    
+  classical_ml:
+    status: "tested"
+    accuracy: 0.4051
+    improvement: 0.40
+    cost: 0 

@@ -11,16 +11,18 @@ Usage:
 """
 
 import argparse
-import sys
 import logging
+import sys
 from pathlib import Path
-from datetime import datetime
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from kelpie_carbon_v1.optimization import optimize_detection_pipeline, ThresholdOptimizer
-from kelpie_carbon_v1.logging_config import get_logger
+from kelpie_carbon.logging_config import get_logger
+from kelpie_carbon.optimization import (
+    ThresholdOptimizer,
+    optimize_detection_pipeline,
+)
 
 logger = get_logger(__name__)
 
@@ -61,17 +63,17 @@ def run_optimization(validation_results_path: str, output_dir: str) -> None:
         logger.info("OPTIMIZATION ANALYSIS COMPLETE")
         logger.info("=" * 60)
         
-        logger.info(f"📈 Current Performance:")
+        logger.info("📈 Current Performance:")
         logger.info(f"   Mean detection rate: {analysis['mean_detection_rate']:.1%}")
         logger.info(f"   Expected detection rate: {analysis['mean_expected_rate']:.1%}")
         logger.info(f"   Over-detection ratio: {analysis['over_detection_ratio']:.1f}x")
         logger.info(f"   Accuracy score: {analysis['accuracy_score']:.3f}")
         
-        logger.info(f"\n🎯 Optimization Recommendations:")
+        logger.info("\n🎯 Optimization Recommendations:")
         for i, rec in enumerate(recommendations, 1):
             logger.info(f"   {i}. {rec}")
         
-        logger.info(f"\n⚙️ Optimized Scenarios Generated:")
+        logger.info("\n⚙️ Optimized Scenarios Generated:")
         scenarios = optimization_results['optimized_scenarios']
         for scenario_name, config in scenarios.items():
             logger.info(f"   📋 {scenario_name}:")
@@ -83,7 +85,7 @@ def run_optimization(validation_results_path: str, output_dir: str) -> None:
                 logger.info(f"      Min detection: {config['min_detection_threshold']:.3f}")
         
         # Generate example configurations for common scenarios
-        logger.info(f"\n🌊 Example Configurations:")
+        logger.info("\n🌊 Example Configurations:")
         
         optimizer = ThresholdOptimizer()
         
@@ -92,7 +94,7 @@ def run_optimization(validation_results_path: str, output_dir: str) -> None:
             'kelp_farm', 
             {'cloud_cover': 0.15, 'turbidity': 'medium'}
         )
-        logger.info(f"   🌿 Kelp Farm (moderate conditions):")
+        logger.info("   🌿 Kelp Farm (moderate conditions):")
         logger.info(f"      NDRE: {kelp_farm_config['ndre_threshold']:.3f}, "
                    f"FAI: {kelp_farm_config['kelp_fai_threshold']:.3f}")
         
@@ -101,13 +103,13 @@ def run_optimization(validation_results_path: str, output_dir: str) -> None:
             'open_ocean',
             {'cloud_cover': 0.10, 'turbidity': 'low'}
         )
-        logger.info(f"   🌊 Open Ocean (clear conditions):")
+        logger.info("   🌊 Open Ocean (clear conditions):")
         logger.info(f"      NDRE: {ocean_config['ndre_threshold']:.3f}, "
                    f"FAI: {ocean_config['kelp_fai_threshold']:.3f}")
         
         # Real-time optimization
         realtime_config = optimizer.optimize_for_real_time(15.0)
-        logger.info(f"   ⚡ Real-time optimized (15s target):")
+        logger.info("   ⚡ Real-time optimized (15s target):")
         logger.info(f"      NDRE: {realtime_config['ndre_threshold']:.3f}, "
                    f"FAI: {realtime_config['kelp_fai_threshold']:.3f}")
         

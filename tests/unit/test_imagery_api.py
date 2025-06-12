@@ -1,16 +1,9 @@
 """Tests for satellite imagery API endpoints."""
 
-import io
-from unittest.mock import Mock, patch
 
-import numpy as np
-import pytest
-import xarray as xr
 from fastapi.testclient import TestClient
-from PIL import Image
-
-from kelpie_carbon_v1.api.imagery import _analysis_cache
-from kelpie_carbon_v1.api.main import app
+from kelpie_carbon.core.api.imagery import _analysis_cache
+from kelpie_carbon.core.api.main import app
 
 
 class TestImageryAPI:

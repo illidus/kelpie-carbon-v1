@@ -8,8 +8,6 @@ and report generation features.
 """
 
 import sys
-import numpy as np
-from datetime import datetime, timedelta
 from pathlib import Path
 
 # Add src to path for imports
@@ -21,8 +19,8 @@ def demonstrate_mathematical_transparency():
     print("="*60)
     
     try:
-        from kelpie_carbon_v1.analytics.mathematical_transparency import (
-            create_mathematical_transparency_engine
+        from kelpie_carbon.analytics.mathematical_transparency import (
+            create_mathematical_transparency_engine,
         )
         
         # Create mathematical transparency engine
@@ -38,7 +36,7 @@ def demonstrate_mathematical_transparency():
         initial_carbon = 0.5  # kg C/m² (for sequestration rate)
         time_span_years = 2.0  # 2 years
         
-        print(f"📝 Input parameters:")
+        print("📝 Input parameters:")
         print(f"   Dry biomass: {dry_biomass} kg/m²")
         print(f"   Dry weight fraction: {dry_weight_fraction}")
         print(f"   Carbon fraction: {carbon_fraction}")
@@ -54,7 +52,7 @@ def demonstrate_mathematical_transparency():
             time_span_years=time_span_years
         )
         
-        print(f"\n✅ Calculation complete")
+        print("\n✅ Calculation complete")
         print(f"🆔 Calculation ID: {calculation_breakdown.calculation_id}")
         print(f"🌿 Total carbon: {calculation_breakdown.total_carbon:.4f} ± {calculation_breakdown.total_uncertainty:.4f} kg C/m²")
         print(f"📊 Relative uncertainty: {(calculation_breakdown.total_uncertainty/calculation_breakdown.total_carbon)*100:.1f}%")
@@ -111,8 +109,8 @@ def demonstrate_jupyter_templates():
     print("="*60)
     
     try:
-        from kelpie_carbon_v1.analytics.jupyter_templates import (
-            create_jupyter_template_manager
+        from kelpie_carbon.analytics.jupyter_templates import (
+            create_jupyter_template_manager,
         )
         
         # Create template manager
@@ -171,8 +169,9 @@ def demonstrate_professional_reports():
     print("="*60)
     
     try:
-        from kelpie_carbon_v1.analytics.professional_report_templates import (
-            create_professional_report_generator, ReportConfiguration
+        from kelpie_carbon.analytics.professional_report_templates import (
+            ReportConfiguration,
+            create_professional_report_generator,
         )
         
         # Create report generator

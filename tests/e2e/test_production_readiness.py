@@ -4,17 +4,15 @@ Tests satellite data fallback mechanisms, error handling, graceful degradation,
 and performance validation under production-like conditions.
 """
 
-import asyncio
 import time
-from unittest.mock import Mock, patch
-import pytest
+from unittest.mock import patch
+
 import numpy as np
+import pytest
 import xarray as xr
 from fastapi.testclient import TestClient
-
-from kelpie_carbon_v1.api.main import app
-from kelpie_carbon_v1.core.fetch import fetch_sentinel_tiles
-from kelpie_carbon_v1.api.imagery import _analysis_cache
+from kelpie_carbon.core.api.imagery import _analysis_cache
+from kelpie_carbon.core.api.main import app
 
 
 class TestSatelliteDataFallback:
@@ -27,7 +25,7 @@ class TestSatelliteDataFallback:
 
     def test_satellite_data_unavailable_fallback(self):
         """Test graceful handling when satellite data is unavailable."""
-        with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+        with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
             # Simulate no satellite data available
             mock_fetch.side_effect = Exception("No satellite data available for date range")
             
@@ -43,9 +41,10 @@ class TestSatelliteDataFallback:
             assert "analysis_id" in result
             # System should have fallen back to synthetic data for testing
 
+    @pytest.mark.slow
     def test_high_cloud_cover_fallback(self):
         """Test fallback when all available imagery has high cloud cover."""
-        with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+        with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
             # Create mock data with high cloud cover
             mock_dataset = xr.Dataset({
                 'red': (['y', 'x'], np.random.rand(50, 50)),
@@ -74,9 +73,10 @@ class TestSatelliteDataFallback:
             # Analysis should complete despite high cloud cover
             assert "analysis_id" in response.json()
 
+    @pytest.mark.slow
     def test_partial_band_data_fallback(self):
         """Test handling of imagery with missing spectral bands."""
-        with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+        with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
             # Create dataset with missing SWIR band
             mock_dataset = xr.Dataset({
                 'red': (['y', 'x'], np.random.rand(50, 50)),
@@ -113,12 +113,13 @@ class TestErrorHandlingGracefulDegradation:
         """Set up test client."""
         self.client = TestClient(app)
 
+    @pytest.mark.slow
     def test_memory_pressure_handling(self):
         """Test behavior under memory pressure conditions."""
         # Fill cache to near capacity
         large_datasets = []
         for i in range(3):  # Reduced for test performance
-            with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+            with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
                 mock_dataset = xr.Dataset({
                     'red': (['y', 'x'], np.random.rand(75, 75)),  # Larger dataset
                     'green': (['y', 'x'], np.random.rand(75, 75)),
@@ -173,9 +174,10 @@ class TestPerformanceValidation:
         """Set up test client."""
         self.client = TestClient(app)
 
+    @pytest.mark.slow
     def test_response_time_sla(self):
         """Test that response times meet SLA requirements."""
-        with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+        with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
             mock_dataset = xr.Dataset({
                 'red': (['y', 'x'], np.random.rand(50, 50)),
                 'green': (['y', 'x'], np.random.rand(50, 50)),
@@ -204,12 +206,13 @@ class TestPerformanceValidation:
             assert response.status_code == 200
             assert (end_time - start_time) < 30.0
 
+    @pytest.mark.slow
     def test_cache_efficiency_production(self):
         """Test cache efficiency under production-like access patterns."""
         # Clear cache first
         _analysis_cache.clear()
         
-        with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+        with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
             mock_dataset = xr.Dataset({
                 'red': (['y', 'x'], np.random.rand(50, 50)),
                 'green': (['y', 'x'], np.random.rand(50, 50)),
@@ -253,9 +256,10 @@ class TestSystemIntegration:
         """Set up test client."""
         self.client = TestClient(app)
 
+    @pytest.mark.slow
     def test_full_workflow_integration(self):
         """Test complete workflow from analysis to imagery generation."""
-        with patch('kelpie_carbon_v1.core.fetch.fetch_sentinel_tiles') as mock_fetch:
+        with patch('kelpie_carbon.core.fetch.fetch_sentinel_tiles') as mock_fetch:
             # Create realistic mock dataset
             mock_dataset = xr.Dataset({
                 'red': (['y', 'x'], np.random.rand(50, 50) * 0.3),

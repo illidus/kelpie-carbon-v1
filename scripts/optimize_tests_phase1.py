@@ -11,12 +11,10 @@ This script implements Phase 1 of the test optimization plan:
 Target: Reduce test count by ~200 tests while maintaining coverage
 """
 
-import os
-import sys
 import shutil
-from pathlib import Path
+import sys
 from datetime import datetime
-import re
+from pathlib import Path
 
 
 def create_backup():

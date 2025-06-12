@@ -10,15 +10,19 @@ This module consolidates data structure validation testing from multiple test fi
 Reduces 35+ individual structure tests to 8 parameterized tests.
 """
 
+
 import pytest
-import numpy as np
-from typing import Dict, Any, List, Union
-from dataclasses import dataclass
+
+from src.kelpie_carbon.validation.environmental_testing import EnvironmentalCondition
 
 # Import all data structure classes that need validation
-from src.kelpie_carbon_v1.validation.historical_baseline_analysis import HistoricalSite, HistoricalDataset
-from src.kelpie_carbon_v1.validation.environmental_testing import EnvironmentalCondition
-from src.kelpie_carbon_v1.validation.skema_biomass_integration import SKEMAIntegrationConfig
+from src.kelpie_carbon.validation.historical_baseline_analysis import (
+    HistoricalDataset,
+    HistoricalSite,
+)
+from src.kelpie_carbon.validation.skema_biomass_integration import (
+    SKEMAIntegrationConfig,
+)
 
 
 class TestDataStructureValidation:

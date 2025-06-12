@@ -145,8 +145,8 @@ monitoring:
   
 # File paths
 paths:
-  static_files: "src/kelpie_carbon_v1/web/static"
-  templates: "src/kelpie_carbon_v1/web/templates"
+  static_files: "src/kelpie_carbon/reporting/web/static"
+  templates: "src/kelpie_carbon/reporting/web/templates"
   logs: "logs"
   cache: "cache"
   temp: "tmp" 
