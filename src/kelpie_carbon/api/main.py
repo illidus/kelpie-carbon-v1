@@ -8,7 +8,7 @@ from ..core.api.main import *
 __all__ = [
     "app",
     "root",
-    "health", 
+    "health",
     "readiness",
     "run_analysis",
-] 
+]

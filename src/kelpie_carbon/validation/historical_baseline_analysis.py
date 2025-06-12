@@ -7,8 +7,8 @@ from .core.historical_baseline_analysis import *
 
 __all__ = [
     "HistoricalDataset",
-    "HistoricalSite", 
+    "HistoricalSite",
     "ChangeDetectionAnalyzer",
     "HistoricalDataValidationError",
     "HistoricalValidationConfig",
-] 
+]

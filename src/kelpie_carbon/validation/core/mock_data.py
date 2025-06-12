@@ -53,6 +53,7 @@ class MockValidationGenerator:
 
         # Create campaign
         from typing import cast
+
         campaign = ValidationCampaign(
             campaign_id=f"bc_{site_key}_20230815",
             site_name=str(site["name"]),

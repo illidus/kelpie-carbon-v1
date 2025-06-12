@@ -35,10 +35,10 @@
             const resultDiv = document.getElementById('result');
             const testImageBtn = document.getElementById('test-image-btn');
             resultDiv.innerHTML = 'Testing...';
-            
+
             try {
                 console.log('🚀 Testing imagery API...');
-                
+
                 const response = await fetch('/api/imagery/analyze-and-cache', {
                     method: 'POST',
                     headers: {
@@ -55,21 +55,21 @@
                         max_cloud_cover: 0.3
                     })
                 });
-                
+
                 console.log('📡 Response status:', response.status);
                 console.log('📡 Response ok:', response.ok);
-                
+
                 if (!response.ok) {
                     const errorText = await response.text();
                     console.error('❌ Error response:', errorText);
                     resultDiv.innerHTML = `<p style="color: red;">Error: ${response.status} - ${errorText}</p>`;
                     return;
                 }
-                
+
                 const result = await response.json();
                 console.log('✅ Success result:', result);
                 currentAnalysisId = result.analysis_id;
-                
+
                 resultDiv.innerHTML = `
                     <p style="color: green;">Success!</p>
                     <p>Analysis ID: ${result.analysis_id}</p>
@@ -77,9 +77,9 @@
                     <p>Bounds: ${JSON.stringify(result.bounds)}</p>
                     <p>Available Layers: ${JSON.stringify(result.available_layers)}</p>
                 `;
-                
+
                 testImageBtn.disabled = false;
-                
+
             } catch (error) {
                 console.error('❌ Fetch error:', error);
                 resultDiv.innerHTML = `<p style="color: red;">Fetch Error: ${error.message}</p>`;
@@ -93,36 +93,36 @@
             }
 
             console.log('🖼️ Testing image loading with ID:', currentAnalysisId);
-            
+
             try {
                 // Test RGB image endpoint
                 const rgbUrl = `/api/imagery/${currentAnalysisId}/rgb`;
                 console.log('🔍 Testing RGB URL:', rgbUrl);
-                
+
                 const imgResponse = await fetch(rgbUrl);
                 console.log('📸 Image response status:', imgResponse.status);
-                
+
                 if (!imgResponse.ok) {
                     throw new Error(`Image failed to load: ${imgResponse.status}`);
                 }
-                
+
                 // Create simple image overlay
                 const bounds = [
                     [49.235, -123.830], // Southwest
                     [49.253, -123.812]  // Northeast
                 ];
-                
+
                 const imageOverlay = L.imageOverlay(rgbUrl, bounds, {
                     opacity: 0.8,
                     alt: 'Satellite RGB Image'
                 }).addTo(map);
-                
+
                 // Fit map to bounds
                 map.fitBounds(bounds);
-                
+
                 console.log('✅ Image overlay added successfully');
                 document.getElementById('result').innerHTML += '<p style="color: blue;">Image loaded on map!</p>';
-                
+
             } catch (error) {
                 console.error('❌ Image loading failed:', error);
                 document.getElementById('result').innerHTML += `<p style="color: red;">Image Error: ${error.message}</p>`;
@@ -130,4 +130,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

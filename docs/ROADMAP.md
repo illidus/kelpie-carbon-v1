@@ -1,15 +1,15 @@
-# Kelpie‑Carbon Roadmap  
+# Kelpie‑Carbon Roadmap
 _Last updated: 2025‑06‑11_
 
 ---
 
-This **ROADMAP.md** is the **single source of truth** for outstanding technical work.  
+This **ROADMAP.md** is the **single source of truth** for outstanding technical work.
 *Rule of thumb*: every pull‑request must tick at least one box below (or add a new one).
 
-> **How to use with Cursor / Claude 4**  
-> 1. Copy the code‑block shown under the next unchecked item.  
-> 2. Paste it as a prompt in Cursor.  
-> 3. Accept the generated patch, run `pytest`, commit.  
+> **How to use with Cursor / Claude 4**
+> 1. Copy the code‑block shown under the next unchecked item.
+> 2. Paste it as a prompt in Cursor.
+> 3. Accept the generated patch, run `pytest`, commit.
 > 4. Tick the checkbox here in a follow‑up commit.
 
 ---
@@ -38,7 +38,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   ```
 
 - [ ] **T1‑003** Add type‑safety & lint
-  * Adopt **ruff**, **mypy**, **black**, **isort** via `pre‑commit`.  
+  * Adopt **ruff**, **mypy**, **black**, **isort** via `pre‑commit`.
   * Add `pyproject.toml [tool.ruff]` to mirror Black prefs.
 
 ---
@@ -60,7 +60,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   ```
 
 - [ ] **T2‑004** Replace narrative benchmark script
-  * Make `research_benchmark_comparison.py` read latest validation results  
+  * Make `research_benchmark_comparison.py` read latest validation results
     and benchmarks from YAML; **exit ≠ 0** if any metric fails.
 
 ---
@@ -105,7 +105,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 
 - [ ] **T4‑002** Validation CLI writes Markdown into `docs/reports/`; MkDocs picks it up.
 
-- [ ] **T4‑003** Keep this ROADMAP.md up to date  
+- [ ] **T4‑003** Keep this ROADMAP.md up to date
   *CI fails if a PR touches code but not this file.*
 
 ---

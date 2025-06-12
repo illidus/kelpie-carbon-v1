@@ -27,7 +27,7 @@ satellite:
   default_provider: "sentinel-2"
   cloud_cover_threshold: 0.2
   tile_size: 1024
-  
+
 # Machine learning models
 ml_models:
   sam:
@@ -39,7 +39,7 @@ ml_models:
     fine_tune: false
     enabled: true
 
-# Logging configuration  
+# Logging configuration
 logging:
   level: "INFO"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -72,7 +72,7 @@ validation:
       species: "Nereocystis luetkeana"
       data_source: "Sentinel-2"
       validation_type: "kelp_canopy_surface"
-    
+
     - name: "California - Macrocystis"
       coordinates:
         lat: 36.6002
@@ -80,7 +80,7 @@ validation:
       species: "Macrocystis pyrifera"
       data_source: "Sentinel-2"
       validation_type: "kelp_canopy_surface"
-    
+
     - name: "Tasmania - Giant Kelp"
       coordinates:
         lat: -43.1
@@ -92,7 +92,7 @@ validation:
   # Performance metrics to track
   performance_metrics:
     - "accuracy"
-    - "precision" 
+    - "precision"
     - "recall"
     - "f1_score"
     - "auc_pr"
@@ -119,15 +119,15 @@ research_benchmarks:
     auc_pr: 0.2739
     improvement: "38% over ResNet"
     estimated_accuracy: 0.82
-    
+
   vision_transformers:
     accuracy: 0.85
     notes: "3rd place competition"
-    
+
   traditional_cnn:
     accuracy: 0.7
     type: "baseline"
-    
+
   skema_spectral:
     accuracy: 0.7
     type: "current baseline"
@@ -139,12 +139,12 @@ research_benchmarks:
       reported_value: 0.2739
       baseline_comparison: "ResNet (0.1980)"
       improvement: "38% over baseline"
-      
+
     - title: "Vision Transformers for Satellite Imagery"
       accuracy_metric: "Accuracy"
       reported_value: 0.85
       notes: "3rd place in kelp detection competition"
-      
+
     - title: "Traditional CNN Approaches"
       accuracy_metric: "Accuracy"
       reported_value: 0.7
@@ -156,16 +156,16 @@ our_targets:
     min: 0.75
     target: 0.85
     stretch: 0.9
-    
+
   unet_transfer:
     min: 0.7
     target: 0.85
     stretch: 0.95
-    
+
   classical_ml:
     improvement_min: 0.05
     improvement_target: 0.12
-    
+
   ensemble:
     target: 0.9
     stretch: 0.95
@@ -176,12 +176,12 @@ cost_analysis:
     min: 750
     max: 1200
     average: 1000
-    
+
   our_approach:
     min: 0
     max: 50
     average: 25
-    
+
   savings_target: 0.95
   savings_percentage: 97.5
 
@@ -200,15 +200,15 @@ default_results:
     reason: "SAM model not downloaded"
     projected_accuracy: 0.85
     cost: 0
-    
+
   unet_transfer:
     status: "partial"
     accuracy: 0.4051
     method: "classical_segmentation_fallback"
     cost: 0
-    
+
   classical_ml:
     status: "tested"
     accuracy: 0.4051
     improvement: 0.40
-    cost: 0 
+    cost: 0

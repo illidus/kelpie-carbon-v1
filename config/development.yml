@@ -37,7 +37,7 @@ ml_models:
     model_type: "random_forest"
     confidence_threshold: 0.7
     min_area_threshold: 100  # square meters
-  
+
   biomass_estimation:
     model_type: "regression"
     units: "tons_per_hectare"
@@ -49,12 +49,12 @@ image_generation:
     format: "JPEG"
     quality: 85
     enhancement: true
-    
+
   spectral_indices:
     format: "PNG"
     colormap: "viridis"
     transparency: true
-    
+
   overlays:
     format: "PNG"
     default_alpha: 0.6
@@ -99,7 +99,7 @@ security:
   rate_limiting:
     enabled: false
     requests_per_minute: 100
-  
+
 # Database configuration (future enhancement)
 database:
   enabled: false
@@ -114,7 +114,7 @@ external_services:
     base_url: "https://planetarycomputer.microsoft.com"
     timeout: 30
     retry_attempts: 3
-    
+
   sentry:
     enabled: false
     dsn: ""
@@ -142,11 +142,11 @@ monitoring:
   metrics_endpoint: "/metrics"
   health_check_endpoint: "/health"
   readiness_check_endpoint: "/ready"
-  
+
 # File paths
 paths:
   static_files: "src/kelpie_carbon/reporting/web/static"
   templates: "src/kelpie_carbon/reporting/web/templates"
   logs: "logs"
   cache: "cache"
-  temp: "tmp" 
+  temp: "tmp"

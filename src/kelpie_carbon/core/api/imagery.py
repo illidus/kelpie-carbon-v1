@@ -10,13 +10,6 @@ import xarray as xr
 from fastapi import APIRouter, HTTPException, Response
 from PIL import Image
 
-from ..constants import Processing
-from .. import (
-    apply_mask,
-    calculate_indices_from_dataset,
-    fetch_sentinel_tiles,
-    predict_biomass,
-)
 from ...data.imagery import (
     generate_biomass_heatmap,
     generate_cloud_mask_overlay,
@@ -27,6 +20,13 @@ from ...data.imagery import (
     generate_water_mask_overlay,
     get_image_bounds,
 )
+from .. import (
+    apply_mask,
+    calculate_indices_from_dataset,
+    fetch_sentinel_tiles,
+    predict_biomass,
+)
+from ..constants import Processing
 from ..logging_config import get_logger
 from .errors import (
     create_imagery_error,
@@ -126,7 +126,7 @@ def _image_to_response(
 ) -> Response:
     """Convert PIL Image to FastAPI Response with optimization."""
     img_io = io.BytesIO()
-    
+
     # Apply optimization based on format
     if format.upper() == "JPEG":
         # JPEG optimization for photo-like content
@@ -139,7 +139,7 @@ def _image_to_response(
         elif image.mode not in ("RGB", "L"):
             # Convert other modes to RGB
             image = image.convert("RGB")
-            
+
         image.save(
             img_io,
             format=format,
@@ -157,9 +157,9 @@ def _image_to_response(
             compress_level=6 if optimize else 1,
         )
         content_type = "image/png"
-    
+
     img_io.seek(0)
-    
+
     return Response(
         content=img_io.getvalue(),
         media_type=content_type,
@@ -288,20 +288,18 @@ async def get_rgb_composite(analysis_id: str):
         # Data-related errors
         raise create_validation_error(
             f"Invalid data for RGB generation: {str(e)}",
-            details=f"Analysis {analysis_id} data incompatible with RGB generation"
+            details=f"Analysis {analysis_id} data incompatible with RGB generation",
         )
     except KeyError as e:
         # Missing required bands
         raise create_validation_error(
             f"Missing required band for RGB: {str(e)}",
-            details=f"Analysis {analysis_id} missing spectral bands for RGB composite"
+            details=f"Analysis {analysis_id} missing spectral bands for RGB composite",
         )
     except Exception as e:
         # Unexpected errors
         raise create_imagery_error(
-            "RGB composite generation",
-            analysis_id,
-            original_error=e
+            "RGB composite generation", analysis_id, original_error=e
         )
 
 
@@ -320,9 +318,7 @@ async def get_false_color_composite(analysis_id: str):
         raise
     except Exception as e:
         raise create_imagery_error(
-            "False-color composite generation",
-            analysis_id,
-            original_error=e
+            "False-color composite generation", analysis_id, original_error=e
         )
 
 
@@ -335,8 +331,7 @@ async def get_spectral_visualization(analysis_id: str, index_name: str):
 
         if index_name not in indices:
             raise create_not_found_error(
-                f"Spectral index '{index_name}'",
-                f"in analysis {analysis_id}"
+                f"Spectral index '{index_name}'", f"in analysis {analysis_id}"
             )
 
         # Choose appropriate colormap based on index
@@ -359,9 +354,7 @@ async def get_spectral_visualization(analysis_id: str, index_name: str):
         raise
     except Exception as e:
         raise create_imagery_error(
-            f"Spectral visualization for {index_name}",
-            analysis_id,
-            original_error=e
+            f"Spectral visualization for {index_name}", analysis_id, original_error=e
         )
 
 
@@ -373,7 +366,7 @@ async def get_mask_overlay(analysis_id: str, mask_name: str, alpha: float = 0.6)
         raise create_validation_error(
             "Alpha value must be between 0.0 and 1.0",
             field="alpha",
-            details=f"Provided value: {alpha}"
+            details=f"Provided value: {alpha}",
         )
 
     try:
@@ -387,33 +380,24 @@ async def get_mask_overlay(analysis_id: str, mask_name: str, alpha: float = 0.6)
 
         if mask_name == "kelp":
             if "kelp_mask" not in mask_dataset:
-                raise create_not_found_error(
-                    "Kelp mask",
-                    f"in analysis {analysis_id}"
-                )
+                raise create_not_found_error("Kelp mask", f"in analysis {analysis_id}")
             image = generate_kelp_mask_overlay(mask_dataset, alpha=alpha)
 
         elif mask_name == "water":
             if "water_mask" not in mask_dataset:
-                raise create_not_found_error(
-                    "Water mask",
-                    f"in analysis {analysis_id}"
-                )
+                raise create_not_found_error("Water mask", f"in analysis {analysis_id}")
             image = generate_water_mask_overlay(mask_dataset, alpha=alpha)
 
         elif mask_name == "cloud":
             if "cloud_mask" not in mask_dataset:
-                raise create_not_found_error(
-                    "Cloud mask",
-                    f"in analysis {analysis_id}"
-                )
+                raise create_not_found_error("Cloud mask", f"in analysis {analysis_id}")
             image = generate_cloud_mask_overlay(mask_dataset, alpha=alpha)
 
         else:
             raise create_validation_error(
                 f"Unknown mask type: {mask_name}",
                 field="mask_name",
-                details="Available masks: kelp, water, cloud"
+                details="Available masks: kelp, water, cloud",
             )
 
         return _image_to_response(image)
@@ -423,9 +407,7 @@ async def get_mask_overlay(analysis_id: str, mask_name: str, alpha: float = 0.6)
         raise
     except Exception as e:
         raise create_imagery_error(
-            f"Mask overlay generation for {mask_name}",
-            analysis_id,
-            original_error=e
+            f"Mask overlay generation for {mask_name}", analysis_id, original_error=e
         )
 
 
@@ -442,7 +424,7 @@ async def get_biomass_heatmap(
         if min_biomass >= max_biomass:
             raise create_validation_error(
                 "min_biomass must be less than max_biomass",
-                details=f"Provided: min={min_biomass}, max={max_biomass}"
+                details=f"Provided: min={min_biomass}, max={max_biomass}",
             )
 
     try:
@@ -450,10 +432,7 @@ async def get_biomass_heatmap(
         biomass_array = result["biomass"]
 
         if biomass_array is None:
-            raise create_not_found_error(
-                "Biomass data",
-                f"in analysis {analysis_id}"
-            )
+            raise create_not_found_error("Biomass data", f"in analysis {analysis_id}")
 
         image = generate_biomass_heatmap(
             biomass_array,
@@ -468,9 +447,7 @@ async def get_biomass_heatmap(
         raise
     except Exception as e:
         raise create_imagery_error(
-            "Biomass heatmap generation",
-            analysis_id,
-            original_error=e
+            "Biomass heatmap generation", analysis_id, original_error=e
         )
 
 

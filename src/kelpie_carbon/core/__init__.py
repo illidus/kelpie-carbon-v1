@@ -21,10 +21,10 @@ from .logging_config import get_logger, setup_logging
 # Core functionality (import what's available)
 try:
     # These imports may fail if the modules are still being organized
-    from .indices import calculate_indices_from_dataset
-    from .model import KelpBiomassModel, predict_biomass
-    from .mask import apply_mask, get_mask_statistics
     from .fetch import fetch_sentinel_tiles
+    from .indices import calculate_indices_from_dataset
+    from .mask import apply_mask, get_mask_statistics
+    from .model import KelpBiomassModel, predict_biomass
 except ImportError as e:
     # Modules may not be available yet during refactoring
     print(f"Note: Some core modules not yet available: {e}")
@@ -39,7 +39,7 @@ __all__ = [
     # Core functions (when available)
     "calculate_indices_from_dataset",
     "fetch_sentinel_tiles",
-    "apply_mask", 
+    "apply_mask",
     "get_mask_statistics",
     "KelpBiomassModel",
     "predict_biomass",

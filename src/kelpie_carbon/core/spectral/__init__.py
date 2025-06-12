@@ -7,4 +7,4 @@ including integration with deep learning models like SAM.
 
 from .skema_processor import SKEMAProcessor
 
-__all__ = ["SKEMAProcessor"] 
+__all__ = ["SKEMAProcessor"]

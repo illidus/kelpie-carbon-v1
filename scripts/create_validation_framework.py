@@ -14,13 +14,14 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+
 def create_validation_directories():
     """Create directory structure for validation framework."""
-    
+
     base_dir = Path("validation")
     directories = [
         "validation/datasets/satellite_imagery",
-        "validation/datasets/ground_truth", 
+        "validation/datasets/ground_truth",
         "validation/datasets/preprocessed",
         "validation/results/sam_detector",
         "validation/results/unet_detector",
@@ -33,18 +34,19 @@ def create_validation_directories():
         "validation/tools/evaluation",
         "validation/reports/accuracy_analysis",
         "validation/reports/cost_performance",
-        "validation/reports/research_comparison"
+        "validation/reports/research_comparison",
     ]
-    
+
     for directory in directories:
         Path(directory).mkdir(parents=True, exist_ok=True)
         print(f"✅ Created directory: {directory}")
-    
+
     return base_dir
+
 
 def create_validation_config():
     """Create validation configuration file."""
-    
+
     config = {
         "validation_settings": {
             "test_sites": [
@@ -53,30 +55,39 @@ def create_validation_config():
                     "coordinates": {"lat": 50.1163, "lon": -125.2735},
                     "species": "Nereocystis luetkeana",
                     "data_source": "Sentinel-2",
-                    "validation_type": "kelp_canopy_surface"
+                    "validation_type": "kelp_canopy_surface",
                 },
                 {
                     "name": "California - Macrocystis",
                     "coordinates": {"lat": 36.6002, "lon": -121.9015},
-                    "species": "Macrocystis pyrifera", 
+                    "species": "Macrocystis pyrifera",
                     "data_source": "Sentinel-2",
-                    "validation_type": "kelp_canopy_surface"
+                    "validation_type": "kelp_canopy_surface",
                 },
                 {
                     "name": "Tasmania - Giant Kelp",
                     "coordinates": {"lat": -43.1, "lon": 147.3},
                     "species": "Macrocystis pyrifera",
                     "data_source": "Sentinel-2",
-                    "validation_type": "kelp_canopy_surface"
-                }
+                    "validation_type": "kelp_canopy_surface",
+                },
             ],
             "performance_metrics": [
-                "accuracy", "precision", "recall", "f1_score", 
-                "auc_pr", "auc_roc", "iou", "dice_coefficient"
+                "accuracy",
+                "precision",
+                "recall",
+                "f1_score",
+                "auc_pr",
+                "auc_roc",
+                "iou",
+                "dice_coefficient",
             ],
             "processing_metrics": [
-                "inference_time", "memory_usage", "cpu_usage", "model_size"
-            ]
+                "inference_time",
+                "memory_usage",
+                "cpu_usage",
+                "model_size",
+            ],
         },
         "research_benchmarks": {
             "published_papers": [
@@ -85,45 +96,46 @@ def create_validation_config():
                     "accuracy_metric": "AUC-PR",
                     "reported_value": 0.2739,
                     "baseline_comparison": "ResNet (0.1980)",
-                    "improvement": "38% over baseline"
+                    "improvement": "38% over baseline",
                 },
                 {
                     "title": "Vision Transformers for Satellite Imagery",
                     "accuracy_metric": "Accuracy",
                     "reported_value": 0.85,
-                    "notes": "3rd place in kelp detection competition"
+                    "notes": "3rd place in kelp detection competition",
                 },
                 {
                     "title": "Traditional CNN Approaches",
-                    "accuracy_metric": "Accuracy", 
+                    "accuracy_metric": "Accuracy",
                     "reported_value": 0.70,
-                    "baseline": "Typical satellite imagery classification"
-                }
+                    "baseline": "Typical satellite imagery classification",
+                },
             ],
             "our_targets": {
                 "sam_spectral": {"min": 0.75, "target": 0.85, "stretch": 0.90},
                 "unet_transfer": {"min": 0.70, "target": 0.85, "stretch": 0.95},
                 "classical_ml": {"improvement_min": 0.05, "improvement_target": 0.12},
-                "ensemble": {"target": 0.90, "stretch": 0.95}
-            }
+                "ensemble": {"target": 0.90, "stretch": 0.95},
+            },
         },
         "cost_analysis": {
             "traditional_training": {"min": 750, "max": 1200},
             "our_approach": {"min": 0, "max": 50},
-            "savings_target": 0.95
-        }
+            "savings_target": 0.95,
+        },
     }
-    
+
     config_path = Path("validation/validation_config.json")
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         json.dump(config, f, indent=2)
-    
+
     print(f"✅ Created validation config: {config_path}")
     return config_path
 
+
 def create_data_acquisition_script():
     """Create script for acquiring satellite data."""
-    
+
     script_content = '''#!/usr/bin/env python3
 """
 Data Acquisition Script for Validation
@@ -143,24 +155,24 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 def download_sentinel2_sample_data():
     """Download sample Sentinel-2 data for testing."""
-    
+
     print("🛰️ Acquiring Sentinel-2 Sample Data...")
-    
+
     # Load validation config
     config_path = Path("validation/validation_config.json")
     with open(config_path) as f:
         config = json.load(f)
-    
+
     # Sample data acquisition (placeholder - real implementation would use Google Earth Engine or similar)
     for site in config["validation_settings"]["test_sites"]:
         print(f"📍 Processing site: {site['name']}")
         print(f"   Coordinates: {site['coordinates']}")
         print(f"   Species: {site['species']}")
-        
+
         # Create site directory
         site_dir = Path(f"validation/datasets/satellite_imagery/{site['name'].replace(' ', '_').lower()}")
         site_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Placeholder for actual data download
         readme_content = f"""# {site['name']} Validation Data
 
@@ -176,10 +188,10 @@ To acquire real Sentinel-2 data for this site:
    ```python
    import ee
    ee.Initialize()
-   
+
    # Define area of interest
    aoi = ee.Geometry.Point([{site['coordinates']['lon']}, {site['coordinates']['lat']}]).buffer(5000)
-   
+
    # Get Sentinel-2 imagery
    collection = ee.ImageCollection('COPERNICUS/S2_SR') \\
        .filterBounds(aoi) \\
@@ -195,12 +207,12 @@ To acquire real Sentinel-2 data for this site:
 - `*_ground_truth.tif` - Corresponding validation masks
 - `metadata.json` - Image metadata and acquisition details
 """
-        
+
         with open(site_dir / "README.md", 'w') as f:
             f.write(readme_content)
-        
+
         print(f"   ✅ Created directory and instructions: {site_dir}")
-    
+
     print("\\n📋 Next Steps:")
     print("1. Follow site-specific instructions to acquire real satellite data")
     print("2. Place acquired data in respective site directories")
@@ -209,18 +221,19 @@ To acquire real Sentinel-2 data for this site:
 if __name__ == "__main__":
     download_sentinel2_sample_data()
 '''
-    
+
     script_path = Path("validation/tools/data_acquisition/download_satellite_data.py")
-    with open(script_path, 'w') as f:
+    with open(script_path, "w") as f:
         f.write(script_content)
-    
+
     os.chmod(script_path, 0o755)
     print(f"✅ Created data acquisition script: {script_path}")
     return script_path
 
+
 def create_evaluation_script():
     """Create evaluation script for testing implementations."""
-    
+
     script_content = '''#!/usr/bin/env python3
 """
 Evaluation Script for Budget Deep Learning Validation
@@ -242,10 +255,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 def evaluate_implementations():
     """Evaluate all three deep learning implementations."""
-    
+
     print("🧪 Starting Budget Deep Learning Validation")
     print("=" * 50)
-    
+
     # Import implementations
     try:
         from src.kelpie_carbon.deep_learning import (
@@ -255,19 +268,19 @@ def evaluate_implementations():
     except ImportError as e:
         print(f"❌ Import error: {e}")
         return
-    
+
     # Load validation config
     config_path = Path("validation/validation_config.json")
     if not config_path.exists():
         print("❌ Validation config not found. Run create_validation_framework.py first.")
         return
-    
+
     with open(config_path) as f:
         config = json.load(f)
-    
+
     # Initialize implementations
     results = {}
-    
+
     # Test SAM implementation
     print("\\n🎭 Testing SAM + Spectral Implementation...")
     try:
@@ -278,7 +291,7 @@ def evaluate_implementations():
     except Exception as e:
         print(f"❌ SAM test failed: {e}")
         results["sam_spectral"] = {"error": str(e)}
-    
+
     # Test U-Net implementation
     print("\\n🏗️ Testing U-Net Transfer Learning Implementation...")
     try:
@@ -289,7 +302,7 @@ def evaluate_implementations():
     except Exception as e:
         print(f"❌ U-Net test failed: {e}")
         results["unet_transfer"] = {"error": str(e)}
-    
+
     # Test Classical ML implementation
     print("\\n🤖 Testing Classical ML Enhancement...")
     try:
@@ -298,31 +311,31 @@ def evaluate_implementations():
     except Exception as e:
         print(f"❌ Classical ML test failed: {e}")
         results["classical_ml"] = {"error": str(e)}
-    
+
     # Generate comparison report
     generate_comparison_report(results, config)
-    
+
     print("\\n🎉 Validation complete! Check validation/reports/ for detailed results.")
 
 def test_implementation(name: str, detector, config: Dict) -> Dict[str, Any]:
     """Test a single implementation."""
-    
+
     print(f"Testing {name}...")
-    
+
     # Generate synthetic test data for now
     test_results = []
     processing_times = []
-    
+
     for i in range(5):  # Test with 5 synthetic images
         # Create synthetic satellite data
         height, width = 512, 512
         rgb_image = np.random.rand(height, width, 3).astype(np.float32)
         nir_band = np.random.rand(height, width) * 0.8
         red_edge_band = np.random.rand(height, width) * 0.6
-        
+
         # Time the detection
         start_time = time.time()
-        
+
         try:
             if hasattr(detector, 'detect_kelp'):
                 kelp_mask, metadata = detector.detect_kelp(rgb_image, nir_band, red_edge_band)
@@ -330,33 +343,33 @@ def test_implementation(name: str, detector, config: Dict) -> Dict[str, Any]:
                 # Fallback for different interface
                 kelp_mask = np.random.random((height, width)) > 0.6
                 metadata = {"kelp_pixels": int(kelp_mask.sum())}
-            
+
             processing_time = time.time() - start_time
             processing_times.append(processing_time)
-            
+
             # Calculate basic metrics (with synthetic ground truth)
             ground_truth = np.random.random((height, width)) > 0.7
-            
+
             accuracy = np.mean(kelp_mask == ground_truth)
             test_results.append({
                 "accuracy": float(accuracy),
                 "kelp_pixels": metadata.get("kelp_pixels", 0),
                 "processing_time": processing_time
             })
-            
+
             print(f"  Test {i+1}: {accuracy:.3f} accuracy, {processing_time:.2f}s")
-            
+
         except Exception as e:
             print(f"  Test {i+1} failed: {e}")
             test_results.append({"error": str(e)})
-    
+
     # Calculate summary statistics
     valid_results = [r for r in test_results if "error" not in r]
-    
+
     if valid_results:
         avg_accuracy = np.mean([r["accuracy"] for r in valid_results])
         avg_processing_time = np.mean([r["processing_time"] for r in valid_results])
-        
+
         summary = {
             "average_accuracy": float(avg_accuracy),
             "average_processing_time": float(avg_processing_time),
@@ -365,7 +378,7 @@ def test_implementation(name: str, detector, config: Dict) -> Dict[str, Any]:
             "success_rate": len(valid_results) / len(test_results),
             "individual_results": test_results
         }
-        
+
         print(f"  Summary: {avg_accuracy:.3f} avg accuracy, {avg_processing_time:.2f}s avg time")
         return summary
     else:
@@ -373,46 +386,46 @@ def test_implementation(name: str, detector, config: Dict) -> Dict[str, Any]:
 
 def test_classical_ml(enhancer, config: Dict) -> Dict[str, Any]:
     """Test classical ML enhancement."""
-    
+
     print("Testing Classical ML Enhancement...")
-    
+
     # Test enhancement capability
     test_results = []
-    
+
     for i in range(3):
         # Create synthetic test data
         height, width = 256, 256
         rgb_image = np.random.rand(height, width, 3).astype(np.float32)
         nir_band = np.random.rand(height, width) * 0.8
         red_edge_band = np.random.rand(height, width) * 0.6
-        
+
         start_time = time.time()
-        
+
         try:
             enhanced_mask, metadata = enhancer.enhance_kelp_detection(rgb_image, nir_band, red_edge_band)
             processing_time = time.time() - start_time
-            
+
             improvement = metadata.get("improvement_percentage", 0)
-            
+
             test_results.append({
                 "improvement_percentage": improvement,
                 "processing_time": processing_time,
                 "enhanced_pixels": metadata.get("enhanced_pixels", 0)
             })
-            
+
             print(f"  Test {i+1}: {improvement:+.1f}% improvement, {processing_time:.2f}s")
-            
+
         except Exception as e:
             print(f"  Test {i+1} failed: {e}")
             test_results.append({"error": str(e)})
-    
+
     # Calculate summary
     valid_results = [r for r in test_results if "error" not in r]
-    
+
     if valid_results:
         avg_improvement = np.mean([r["improvement_percentage"] for r in valid_results])
         avg_processing_time = np.mean([r["processing_time"] for r in valid_results])
-        
+
         return {
             "average_improvement": float(avg_improvement),
             "average_processing_time": float(avg_processing_time),
@@ -424,9 +437,9 @@ def test_classical_ml(enhancer, config: Dict) -> Dict[str, Any]:
 
 def generate_comparison_report(results: Dict, config: Dict):
     """Generate comprehensive comparison report."""
-    
+
     report_dir = Path("validation/reports")
-    
+
     # Performance comparison report
     report_content = f"""# Budget Deep Learning Validation Report
 
@@ -436,7 +449,7 @@ Validation of three budget-friendly deep learning approaches for kelp detection.
 ## Test Results
 
 """
-    
+
     for approach, result in results.items():
         if "error" in result:
             report_content += f"### {approach.replace('_', ' ').title()}
@@ -451,23 +464,23 @@ Validation of three budget-friendly deep learning approaches for kelp detection.
 - Success Rate: {result.get('success_rate', 'N/A'):.1%}
 
 """
-    
+
     # Research comparison section
     report_content += f"""## Research Benchmark Comparison
 
 ### Published Benchmarks:
 """
-    
+
     for paper in config["research_benchmarks"]["published_papers"]:
         report_content += f"- **{paper['title']}**: {paper['accuracy_metric']} = {paper['reported_value']:.3f}\\n"
-    
+
     # Cost analysis
     traditional_min = config["cost_analysis"]["traditional_training"]["min"]
     traditional_max = config["cost_analysis"]["traditional_training"]["max"]
     our_max = config["cost_analysis"]["our_approach"]["max"]
-    
+
     savings = (1 - our_max / traditional_min) * 100
-    
+
     report_content += f"""
 ## Cost Analysis
 - **Traditional Training Cost**: ${traditional_min:,} - ${traditional_max:,}
@@ -483,12 +496,12 @@ Validation of three budget-friendly deep learning approaches for kelp detection.
 ---
 *Report generated on {time.strftime('%Y-%m-%d %H:%M:%S')}*
 """
-    
+
     # Save report
     report_path = report_dir / "validation_report.md"
     with open(report_path, 'w') as f:
         f.write(report_content)
-    
+
     # Save detailed results as JSON
     results_path = report_dir / "detailed_results.json"
     with open(results_path, 'w') as f:
@@ -497,7 +510,7 @@ Validation of three budget-friendly deep learning approaches for kelp detection.
             "results": results,
             "config": config
         }, f, indent=2)
-    
+
     print(f"✅ Reports saved:")
     print(f"   Summary: {report_path}")
     print(f"   Detailed: {results_path}")
@@ -505,19 +518,20 @@ Validation of three budget-friendly deep learning approaches for kelp detection.
 if __name__ == "__main__":
     evaluate_implementations()
 '''
-    
+
     script_path = Path("validation/tools/evaluation/evaluate_implementations.py")
-    with open(script_path, 'w') as f:
+    with open(script_path, "w") as f:
         f.write(script_content)
-    
+
     os.chmod(script_path, 0o755)
     print(f"✅ Created evaluation script: {script_path}")
     return script_path
 
+
 def create_readme():
     """Create main README for validation framework."""
-    
-    readme_content = '''# Task C1.5: Validation Framework
+
+    readme_content = """# Task C1.5: Validation Framework
 
 ## Overview
 This framework validates our budget deep learning implementations against real satellite imagery and research benchmarks.
@@ -557,7 +571,7 @@ validation/
 - **Target**: 80-90% accuracy
 - **Method**: Pre-trained SAM with SKEMA spectral guidance
 
-### 2. U-Net Transfer Learning (Secondary)  
+### 2. U-Net Transfer Learning (Secondary)
 - **Cost**: $0-20 (minimal fine-tuning)
 - **Target**: 85-95% accuracy
 - **Method**: Frozen encoder, decoder-only training
@@ -587,46 +601,52 @@ validation/
 
 ---
 *Framework created for Task C1.5: Real-World Validation & Research Benchmarking*
-'''
-    
+"""
+
     readme_path = Path("validation/README.md")
-    with open(readme_path, 'w') as f:
+    with open(readme_path, "w") as f:
         f.write(readme_content)
-    
+
     print(f"✅ Created validation README: {readme_path}")
     return readme_path
 
+
 def main():
     """Set up complete validation framework."""
-    
+
     print("🎯 Setting up Task C1.5 Validation Framework")
     print("=" * 50)
-    
+
     # Create directory structure
     base_dir = create_validation_directories()
-    
+
     # Create configuration
     config_path = create_validation_config()
-    
+
     # Create scripts
     data_script = create_data_acquisition_script()
     eval_script = create_evaluation_script()
-    
+
     # Create documentation
     readme_path = create_readme()
-    
+
     print("\n🎉 Validation Framework Setup Complete!")
     print(f"📁 Base directory: {base_dir}")
     print(f"⚙️  Configuration: {config_path}")
     print(f"📖 Documentation: {readme_path}")
-    
+
     print("\n📋 Next Steps:")
     print("1. Acquire real satellite imagery for validation sites")
-    print("2. Download SAM model: poetry run python -c \"from src.kelpie_carbon.deep_learning import download_sam_model; download_sam_model('models')\"")
-    print("3. Run initial evaluation: poetry run python validation/tools/evaluation/evaluate_implementations.py")
+    print(
+        "2. Download SAM model: poetry run python -c \"from src.kelpie_carbon.deep_learning import download_sam_model; download_sam_model('models')\""
+    )
+    print(
+        "3. Run initial evaluation: poetry run python validation/tools/evaluation/evaluate_implementations.py"
+    )
     print("4. Compare results against research benchmarks")
-    
+
     print(f"\n💡 Quick test: poetry run python {eval_script}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

@@ -34,7 +34,7 @@ __all__ = [
     "AnalyticsFramework",
     "create_analytics_framework",
     "FirstNationsReport",
-    "ScientificReport", 
+    "ScientificReport",
     "ManagementReport",
     # Additional exports will be added as modules are organized
-] 
+]

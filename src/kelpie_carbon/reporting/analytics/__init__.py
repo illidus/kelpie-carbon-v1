@@ -60,13 +60,12 @@ from .stakeholder_reports import (
 __all__ = [
     # Core Framework
     "AnalyticsFramework",
-    "AnalysisRequest", 
+    "AnalysisRequest",
     "AnalysisResult",
     "MetricCalculator",
     "TrendAnalyzer",
     "PerformanceMetrics",
     "create_analytics_framework",
-    
     # Stakeholder Reports
     "FirstNationsReport",
     "ScientificReport",
@@ -76,10 +75,9 @@ __all__ = [
     "ReportSection",
     "create_stakeholder_reporter",
     "create_stakeholder_report",
-
     # Professional Reporting System
     "EnhancedSatelliteAnalyzer",
-    "SatelliteAnalysisResult", 
+    "SatelliteAnalysisResult",
     "create_enhanced_satellite_analyzer",
     "MathematicalTransparencyEngine",
     "FormulaDocumentation",
@@ -88,16 +86,16 @@ __all__ = [
     "create_mathematical_transparency_engine",
     "JupyterTemplateManager",
     "ScientificAnalysisTemplate",
-    "TemporalAnalysisTemplate", 
+    "TemporalAnalysisTemplate",
     "create_jupyter_template_manager",
     "ProfessionalReportGenerator",
     "ReportConfiguration",
     "ProfessionalReportTemplate",
     "RegulatoryComplianceReport",
-    "create_professional_report_generator"
+    "create_professional_report_generator",
 ]
 
 # Version and metadata
 __version__ = "1.0.0"
 __author__ = "Kelpie Carbon v1 Development Team"
-__description__ = "Advanced Analytics & Reporting Framework for Kelp Detection" 
+__description__ = "Advanced Analytics & Reporting Framework for Kelp Detection"

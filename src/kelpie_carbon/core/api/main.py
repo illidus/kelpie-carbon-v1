@@ -150,8 +150,7 @@ def readiness():
     except Exception as e:
         logger.error(f"Readiness check failed: {e}")
         raise create_service_unavailable_error(
-            "Application readiness check",
-            details=str(e)[:100]
+            "Application readiness check", details=str(e)[:100]
         )
 
 
@@ -170,44 +169,41 @@ def run_analysis(request: AnalysisRequest):
     # Validate coordinates
     if not (-90 <= request.aoi.lat <= 90):
         raise create_coordinate_error(
-            "Invalid latitude value",
-            lat=request.aoi.lat,
-            lng=request.aoi.lng
+            "Invalid latitude value", lat=request.aoi.lat, lng=request.aoi.lng
         )
-    
+
     if not (-180 <= request.aoi.lng <= 180):
         raise create_coordinate_error(
-            "Invalid longitude value", 
-            lat=request.aoi.lat,
-            lng=request.aoi.lng
+            "Invalid longitude value", lat=request.aoi.lat, lng=request.aoi.lng
         )
 
     # Validate date range
     from datetime import datetime
+
     try:
         start_dt = datetime.fromisoformat(request.start_date)
         end_dt = datetime.fromisoformat(request.end_date)
-        
+
         if end_dt <= start_dt:
             raise create_date_range_error(
                 "End date must be after start date",
                 start_date=request.start_date,
-                end_date=request.end_date
+                end_date=request.end_date,
             )
-            
+
         # Check if date range is reasonable (not more than 1 year)
         if (end_dt - start_dt).days > 365:
             raise create_date_range_error(
                 "Date range cannot exceed 1 year",
                 start_date=request.start_date,
-                end_date=request.end_date
+                end_date=request.end_date,
             )
-            
+
     except ValueError:
         raise create_date_range_error(
             "Invalid date format",
             start_date=request.start_date,
-            end_date=request.end_date
+            end_date=request.end_date,
         )
 
     try:
@@ -228,9 +224,7 @@ def run_analysis(request: AnalysisRequest):
             )
         except Exception as e:
             raise create_processing_error(
-                "Satellite data retrieval",
-                e,
-                analysis_id=analysis_id
+                "Satellite data retrieval", e, analysis_id=analysis_id
             )
 
         # Step 2: Calculate spectral indices and merge with satellite data
@@ -243,9 +237,7 @@ def run_analysis(request: AnalysisRequest):
                 combined_data[var] = indices[var]
         except Exception as e:
             raise create_processing_error(
-                "Spectral index calculation",
-                e,
-                analysis_id=analysis_id
+                "Spectral index calculation", e, analysis_id=analysis_id
             )
 
         # Step 3: Apply advanced masking
@@ -255,20 +247,14 @@ def run_analysis(request: AnalysisRequest):
             masked_data = apply_mask(combined_data)
             mask_stats = get_mask_statistics(masked_data)
         except Exception as e:
-            raise create_processing_error(
-                "Data masking",
-                e,
-                analysis_id=analysis_id
-            )
+            raise create_processing_error("Data masking", e, analysis_id=analysis_id)
 
         # Step 4: Predict biomass using Random Forest model
         try:
             biomass_result = predict_biomass(masked_data)
         except Exception as e:
             raise create_processing_error(
-                "Biomass prediction",
-                e,
-                analysis_id=analysis_id
+                "Biomass prediction", e, analysis_id=analysis_id
             )
 
         # Extract biomass prediction
@@ -370,13 +356,9 @@ def run_analysis(request: AnalysisRequest):
         if isinstance(e, HTTPException):
             # Re-raise our standardized errors
             raise e
-        
+
         # Handle truly unexpected errors
         processing_time = f"{time.time() - start_time:.2f}s"
         logger.error(f"Analysis {analysis_id} failed after {processing_time}: {str(e)}")
-        
-        raise handle_unexpected_error(
-            "analysis processing",
-            e,
-            analysis_id=analysis_id
-        )
+
+        raise handle_unexpected_error("analysis processing", e, analysis_id=analysis_id)

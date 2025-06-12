@@ -1,6 +1,5 @@
 """Image generators for satellite data visualization."""
 
-
 import numpy as np
 import xarray as xr
 from PIL import Image
@@ -245,6 +244,7 @@ def generate_comparative_ndvi_ndre_visualization(dataset: xr.Dataset) -> Image.I
     fig.canvas.draw()
     # Use type casting to handle matplotlib canvas method compatibility
     from typing import Any, cast
+
     canvas_any = cast(Any, fig.canvas)
     buf = np.frombuffer(canvas_any.tostring_rgb(), dtype=np.uint8)
     buf = buf.reshape(fig.canvas.get_width_height()[::-1] + (3,))

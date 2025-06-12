@@ -16,7 +16,6 @@ import pytest
         ("unknown", ValueError, "Quality must be"),
         (None, ValueError, "Quality must be"),
         (123, ValueError, "Quality must be"),
-        
         # Valid quality values
         ("high", None, None),
         ("medium", None, None),
@@ -26,8 +25,10 @@ import pytest
 def test_digitization_quality_validation(quality_value, expected_error, error_message):
     """Test digitization quality validation."""
     try:
-        from src.kelpie_carbon.validation.historical_baseline_analysis import HistoricalSite
-        
+        from src.kelpie_carbon.validation.historical_baseline_analysis import (
+            HistoricalSite,
+        )
+
         if expected_error:
             with pytest.raises(expected_error, match=error_message):
                 HistoricalSite(
@@ -38,7 +39,7 @@ def test_digitization_quality_validation(quality_value, expected_error, error_me
                     historical_period=(1850, 1950),
                     data_sources=["Test Source"],
                     species=["Test Species"],
-                    digitization_quality=quality_value
+                    digitization_quality=quality_value,
                 )
         else:
             site = HistoricalSite(
@@ -49,9 +50,9 @@ def test_digitization_quality_validation(quality_value, expected_error, error_me
                 historical_period=(1850, 1950),
                 data_sources=["Test Source"],
                 species=["Test Species"],
-                digitization_quality=quality_value
+                digitization_quality=quality_value,
             )
             assert site.digitization_quality == quality_value
-            
+
     except ImportError:
         pytest.skip("Historical baseline analysis not available")

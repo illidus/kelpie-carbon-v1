@@ -7,4 +7,4 @@ from .core.field_survey_integration import *
 
 __all__ = [
     "FieldSurveyData",
-] 
+]

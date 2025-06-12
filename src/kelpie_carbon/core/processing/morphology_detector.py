@@ -222,10 +222,11 @@ class PneumatocystDetector:
                                 "centroid": prop.centroid,
                                 "area": prop.area,
                                 "circularity": circularity,
-                                "aspect_ratio": prop.major_axis_length
-                                / prop.minor_axis_length
-                                if prop.minor_axis_length > 0
-                                else 1.0,
+                                "aspect_ratio": (
+                                    prop.major_axis_length / prop.minor_axis_length
+                                    if prop.minor_axis_length > 0
+                                    else 1.0
+                                ),
                                 "solidity": prop.solidity,
                                 "eccentricity": prop.eccentricity,
                                 "bounding_box": prop.bbox,
@@ -473,7 +474,9 @@ class BladeFromdDetector:
             local_maxima = peak_local_max(distance, min_distance=20, threshold_abs=5)
 
             markers = np.zeros_like(distance, dtype=int)
-            for i, (y, x) in enumerate(zip(local_maxima[0], local_maxima[1], strict=False)):
+            for i, (y, x) in enumerate(
+                zip(local_maxima[0], local_maxima[1], strict=False)
+            ):
                 markers[y, x] = i + 1
 
             # Apply watershed

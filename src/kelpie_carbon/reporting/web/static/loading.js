@@ -10,7 +10,7 @@ class LoadingManager {
         this.retryAttempts = new Map();
         this.maxRetries = 3;
         this.loadingIndicators = new Map();
-        
+
         this.initializeLoadingStyles();
     }
 
@@ -31,7 +31,7 @@ class LoadingManager {
                 z-index: 2000;
                 border-radius: 8px;
             }
-            
+
             .loading-spinner {
                 width: 40px;
                 height: 40px;
@@ -40,23 +40,23 @@ class LoadingManager {
                 border-radius: 50%;
                 animation: spin 1s linear infinite;
             }
-            
+
             .loading-text {
                 margin-left: 12px;
                 color: #4a5568;
                 font-weight: 500;
             }
-            
+
             .layer-loading {
                 opacity: 0.5;
                 transition: opacity 0.3s ease;
             }
-            
+
             .layer-error {
                 opacity: 0.3;
                 filter: grayscale(100%);
             }
-            
+
             .retry-button {
                 background: #f56565;
                 color: white;
@@ -67,11 +67,11 @@ class LoadingManager {
                 font-size: 0.8rem;
                 margin-left: 8px;
             }
-            
+
             .retry-button:hover {
                 background: #e53e3e;
             }
-            
+
             @keyframes spin {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
@@ -114,14 +114,14 @@ class LoadingManager {
     // Show error state with retry option
     showError(containerId, errorMessage, retryCallback = null) {
         this.hideLoading(containerId);
-        
+
         const container = document.getElementById(containerId);
         if (!container) return;
 
         const errorOverlay = document.createElement('div');
         errorOverlay.className = 'loading-overlay';
         errorOverlay.style.background = 'rgba(254, 226, 226, 0.9)';
-        
+
         let retryButton = '';
         if (retryCallback) {
             retryButton = '<button class="retry-button">Retry</button>';
@@ -183,7 +183,7 @@ class LoadingManager {
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
                 console.log(`Loading ${layerId} (attempt ${attempt}/${maxRetries})`);
-                
+
                 const response = await fetch(url, {
                     cache: 'force-cache',
                     headers: {
@@ -197,17 +197,17 @@ class LoadingManager {
 
                 const blob = await response.blob();
                 const imageUrl = URL.createObjectURL(blob);
-                
+
                 // Pre-load the image to ensure it's valid
                 await this.preloadImage(imageUrl);
-                
+
                 console.log(`Successfully loaded ${layerId}`);
                 return imageUrl;
 
             } catch (error) {
                 lastError = error;
                 console.warn(`Failed to load ${layerId} (attempt ${attempt}):`, error);
-                
+
                 if (attempt < maxRetries) {
                     // Exponential backoff: 1s, 2s, 4s
                     const delay = Math.pow(2, attempt - 1) * 1000;
@@ -249,16 +249,16 @@ class LoadingManager {
         for (const layer of layerLoadOrder.sort((a, b) => a.priority - b.priority)) {
             try {
                 this.showLoading('map', `Loading ${layer.name}...`);
-                
+
                 if (layer.id === 'rgb') {
                     const rgbLayer = layerManager.addRGBLayer(analysisId);
                     if (rgbLayer) {
                         console.log('🖼️ RGB layer created, waiting for load...');
                         await this.waitForLayerLoad(rgbLayer);
-                        
+
                         // Update layer bounds before adding to map
                         await layerManager.updateLayerBounds(analysisId);
-                        
+
                         // Add layer to map
                         console.log('🗺️ Adding RGB layer to map...');
                         if (!layerManager.map.hasLayer(rgbLayer)) {
@@ -282,17 +282,17 @@ class LoadingManager {
                 }
 
                 console.log(`✅ Loaded ${layer.name}`);
-                
+
                 // Small delay between layers to prevent overwhelming the server
                 await this.sleep(200);
 
             } catch (error) {
                 console.error(`❌ Failed to load ${layer.name}:`, error);
-                
+
                 // Show error in controls but continue loading other layers
                 if (controlsManager) {
-                    this.showError('opacity-controls', 
-                        `Failed to load ${layer.name}`, 
+                    this.showError('opacity-controls',
+                        `Failed to load ${layer.name}`,
                         () => this.loadLayersProgressively(analysisId, layerManager, controlsManager)
                     );
                 }
@@ -326,7 +326,7 @@ class LoadingManager {
                 URL.revokeObjectURL(cachedUrl);
             }
         }
-        
+
         this.imageCache.clear();
         this.loadingStates.clear();
         this.retryAttempts.clear();
@@ -349,4 +349,4 @@ class LoadingManager {
 }
 
 // Export for use in other modules
-window.LoadingManager = LoadingManager; 
+window.LoadingManager = LoadingManager;

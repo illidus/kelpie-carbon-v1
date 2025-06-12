@@ -13,7 +13,7 @@ from .threshold_optimizer import (
 )
 
 __all__ = [
-    'ThresholdOptimizer',
-    'optimize_detection_pipeline', 
-    'get_optimized_config_for_site'
-] 
+    "ThresholdOptimizer",
+    "optimize_detection_pipeline",
+    "get_optimized_config_for_site",
+]

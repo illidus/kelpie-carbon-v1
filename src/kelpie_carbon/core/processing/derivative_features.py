@@ -10,7 +10,6 @@ The derivative-based approach identifies spectral features at specific wavelengt
 - Effective range: 500-600nm for turbid coastal waters
 """
 
-
 import numpy as np
 import xarray as xr
 from scipy import ndimage

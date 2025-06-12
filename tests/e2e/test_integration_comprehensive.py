@@ -281,7 +281,8 @@ class TestAPIEndpointIntegration:
 
         # Test missing parameters
         response = self.client.post(
-            "/api/run", json={"aoi": {"lat": 34.4140}}  # Missing longitude
+            "/api/run",
+            json={"aoi": {"lat": 34.4140}},  # Missing longitude
         )
         assert response.status_code == 422
 

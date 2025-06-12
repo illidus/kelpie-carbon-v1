@@ -397,27 +397,28 @@ def get_settings() -> Config:
 
 def load() -> DictConfig:
     """Load unified YAML configuration using OmegaConf.
-    
+
     Returns:
         DictConfig: The loaded configuration object
-        
+
     Raises:
         FileNotFoundError: If config/kelpie.yml is not found
         Exception: If there's an error parsing the YAML file
     """
     config_path = Path("config/kelpie.yml")
-    
+
     if not config_path.exists():
         raise FileNotFoundError(
             f"Configuration file not found: {config_path}\n"
             "Make sure config/kelpie.yml exists in the project root."
         )
-    
+
     try:
         config = OmegaConf.load(config_path)
         return config
     except Exception as e:
         raise Exception(f"Error loading configuration from {config_path}: {e}")
+
 
 def load_yaml_config() -> DictConfig:
     """Alias for load() function for backward compatibility."""

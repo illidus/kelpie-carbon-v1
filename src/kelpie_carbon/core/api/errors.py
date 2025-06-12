@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 
 class ErrorCode(str, Enum):
     """Standardized error codes for the API."""
-    
+
     # Client errors (4xx)
     INVALID_REQUEST = "INVALID_REQUEST"
     INVALID_COORDINATES = "INVALID_COORDINATES"
@@ -22,7 +22,7 @@ class ErrorCode(str, Enum):
     RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND"
     MISSING_REQUIRED_FIELD = "MISSING_REQUIRED_FIELD"
     INVALID_PARAMETER = "INVALID_PARAMETER"
-    
+
     # Server errors (5xx)
     INTERNAL_ERROR = "INTERNAL_ERROR"
     DATA_PROCESSING_ERROR = "DATA_PROCESSING_ERROR"
@@ -35,7 +35,7 @@ class ErrorCode(str, Enum):
 
 class ErrorDetail(BaseModel):
     """Detailed error information."""
-    
+
     code: ErrorCode
     message: str
     details: str | None = None
@@ -45,7 +45,7 @@ class ErrorDetail(BaseModel):
 
 class StandardizedError(HTTPException):
     """Standardized error class with consistent format."""
-    
+
     def __init__(
         self,
         status_code: int,
@@ -63,7 +63,7 @@ class StandardizedError(HTTPException):
             field=field,
             suggestions=suggestions,
         )
-        
+
         # Create FastAPI-compatible detail
         detail = {
             "error": {
@@ -74,22 +74,24 @@ class StandardizedError(HTTPException):
                 "suggestions": suggestions,
             }
         }
-        
+
         super().__init__(status_code=status_code, detail=detail)
-        
+
         if log_error:
             if status_code >= 500:
-                logger.error(f"Server error {status_code}: {error_code.value} - {message}")
+                logger.error(
+                    f"Server error {status_code}: {error_code.value} - {message}"
+                )
                 if details:
                     logger.error(f"Error details: {details}")
             else:
-                logger.warning(f"Client error {status_code}: {error_code.value} - {message}")
+                logger.warning(
+                    f"Client error {status_code}: {error_code.value} - {message}"
+                )
 
 
 def create_validation_error(
-    message: str, 
-    field: str | None = None, 
-    details: str | None = None
+    message: str, field: str | None = None, details: str | None = None
 ) -> StandardizedError:
     """Create a standardized validation error (400)."""
     return StandardizedError(
@@ -103,14 +105,13 @@ def create_validation_error(
 
 
 def create_not_found_error(
-    resource: str, 
-    identifier: str | None = None
+    resource: str, identifier: str | None = None
 ) -> StandardizedError:
     """Create a standardized not found error (404)."""
     message = f"{resource} not found"
     if identifier:
         message += f": {identifier}"
-    
+
     return StandardizedError(
         status_code=404,
         error_code=ErrorCode.RESOURCE_NOT_FOUND,
@@ -120,15 +121,13 @@ def create_not_found_error(
 
 
 def create_coordinate_error(
-    message: str, 
-    lat: float | None = None, 
-    lng: float | None = None
+    message: str, lat: float | None = None, lng: float | None = None
 ) -> StandardizedError:
     """Create a standardized coordinate validation error (400)."""
     details = None
     if lat is not None and lng is not None:
         details = f"Provided coordinates: lat={lat}, lng={lng}"
-    
+
     return StandardizedError(
         status_code=400,
         error_code=ErrorCode.INVALID_COORDINATES,
@@ -143,15 +142,13 @@ def create_coordinate_error(
 
 
 def create_date_range_error(
-    message: str, 
-    start_date: str | None = None, 
-    end_date: str | None = None
+    message: str, start_date: str | None = None, end_date: str | None = None
 ) -> StandardizedError:
     """Create a standardized date range validation error (400)."""
     details = None
     if start_date and end_date:
         details = f"Provided range: {start_date} to {end_date}"
-    
+
     return StandardizedError(
         status_code=400,
         error_code=ErrorCode.INVALID_DATE_RANGE,
@@ -174,14 +171,14 @@ def create_processing_error(
     message = f"{operation} failed"
     if analysis_id:
         message += f" for analysis {analysis_id}"
-    
+
     # Get error details from original exception
     error_details = str(original_error)
-    
+
     # Log the full traceback for debugging
     logger.error(f"Processing error in {operation}: {error_details}")
     logger.error(traceback.format_exc())
-    
+
     return StandardizedError(
         status_code=500,
         error_code=ErrorCode.DATA_PROCESSING_ERROR,
@@ -202,8 +199,10 @@ def create_satellite_data_error(
     """Create a standardized satellite data error (422)."""
     details = None
     if coordinates:
-        details = f"Location: lat={coordinates.get('lat')}, lng={coordinates.get('lng')}"
-    
+        details = (
+            f"Location: lat={coordinates.get('lat')}, lng={coordinates.get('lng')}"
+        )
+
     return StandardizedError(
         status_code=422,
         error_code=ErrorCode.SATELLITE_DATA_ERROR,
@@ -224,12 +223,12 @@ def create_imagery_error(
 ) -> StandardizedError:
     """Create a standardized imagery generation error (500)."""
     message = f"{operation} failed for analysis {analysis_id}"
-    
+
     details = None
     if original_error:
         details = str(original_error)[:200]
         logger.error(f"Imagery error: {details}")
-    
+
     return StandardizedError(
         status_code=500,
         error_code=ErrorCode.IMAGERY_GENERATION_ERROR,
@@ -268,15 +267,15 @@ def handle_unexpected_error(
 ) -> StandardizedError:
     """Handle unexpected errors with proper logging and standardized response."""
     error_details = str(error)
-    
+
     # Log full traceback for debugging
     logger.error(f"Unexpected error in {operation}: {error_details}")
     logger.error(traceback.format_exc())
-    
+
     message = f"Unexpected error during {operation}"
     if analysis_id:
         message += f" (analysis {analysis_id})"
-    
+
     return StandardizedError(
         status_code=500,
         error_code=ErrorCode.INTERNAL_ERROR,
@@ -286,4 +285,4 @@ def handle_unexpected_error(
             "Try again in a few moments",
             "Contact support with the analysis ID if the problem persists",
         ],
-    ) 
+    )

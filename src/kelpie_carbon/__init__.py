@@ -63,6 +63,7 @@ except ImportError:
 # Import API framework
 try:
     from .core import api
+
     # Make API available at package level for backwards compatibility
     # This allows imports like: from kelpie_carbon.api.models import CoordinateModel
 except ImportError:
@@ -75,14 +76,14 @@ __all__ = [
     "__email__",
     "__description__",
     "get_settings",
-    "Config", 
+    "Config",
     "load",
     "setup_logging",
     "get_logger",
     "cli_app",
     # Core functionality (when available)
     "fetch_sentinel_tiles",
-    "calculate_indices_from_dataset", 
+    "calculate_indices_from_dataset",
     "apply_mask",
     "get_mask_statistics",
     "KelpBiomassModel",
@@ -99,5 +100,4 @@ __all__ = [
     "ValidationResult",
     "validate_primary_sites",
     "validate_with_controls",
-] 
- 
+]

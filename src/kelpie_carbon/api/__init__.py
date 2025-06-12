@@ -12,7 +12,7 @@ from ..core.api.models import *
 __all__ = [
     # From errors
     "ErrorCode",
-    "StandardizedError", 
+    "StandardizedError",
     "create_not_found_error",
     "create_validation_error",
     "handle_unexpected_error",
@@ -22,4 +22,4 @@ __all__ = [
     "app",
     # From models
     "CoordinateModel",
-] 
+]

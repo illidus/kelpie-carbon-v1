@@ -1,0 +1,27 @@
+{
+  "campaign_id": "validation_20250612_011744",
+  "timestamp": "2025-06-12 05:17:44.259379",
+  "test_site": "Test Site",
+  "model_name": "Test Model",
+  "dataset_info": {
+    "dataset_path": "test_dataset.json",
+    "sample_count": 10,
+    "data_type": "regression"
+  },
+  "accuracy": null,
+  "precision": null,
+  "recall": null,
+  "f1_score": null,
+  "mae": 0.15000000000000008,
+  "rmse": 0.15811388300841908,
+  "r2": 0.9833732375631816,
+  "iou": null,
+  "dice_coefficient": null,
+  "auc_pr": null,
+  "auc_roc": null,
+  "inference_time_ms": null,
+  "memory_usage_mb": null,
+  "passed_validation": true,
+  "validation_errors": [],
+  "raw_metrics": {}
+}

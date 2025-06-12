@@ -12,7 +12,7 @@ class SatelliteLayerManager {
         this.baseLayers = {};
         this.overlayLayers = {};
         this.controlsManager = controlsManager;
-        
+
         this.initializeLayerControl();
     }
 
@@ -28,7 +28,7 @@ class SatelliteLayerManager {
     setAnalysisId(analysisId) {
         this.currentAnalysisId = analysisId;
         this.clearAllLayers();
-        
+
         // Update controls manager metadata
         if (this.controlsManager) {
             this.controlsManager.updateMetadata(analysisId);
@@ -46,7 +46,7 @@ class SatelliteLayerManager {
         this.layers.clear();
         this.baseLayers = {};
         this.overlayLayers = {};
-        
+
         // Clear controls manager
         if (this.controlsManager) {
             this.controlsManager.clearOpacityControls();
@@ -61,7 +61,7 @@ class SatelliteLayerManager {
 
         const layerId = 'rgb_composite';
         const imageUrl = `/api/imagery/${id}/rgb`;
-        
+
         // Get proper bounds before creating layer
         let bounds = [[0, 0], [1, 1]]; // fallback
         try {
@@ -74,7 +74,7 @@ class SatelliteLayerManager {
         } catch (error) {
             console.warn('Failed to load bounds for RGB layer, using fallback:', error);
         }
-        
+
         // Create image overlay with proper bounds
         const layer = L.imageOverlay(imageUrl, bounds, {
             opacity: 1.0,
@@ -84,12 +84,12 @@ class SatelliteLayerManager {
         this.layers.set(layerId, layer);
         this.baseLayers['True Color (RGB)'] = layer;
         this.layerControl.addBaseLayer(layer, 'True Color (RGB)');
-        
+
         // Add to controls manager
         if (this.controlsManager) {
             this.controlsManager.addLayerOpacityControl(layerId, 'True Color (RGB)', 1.0, layer);
         }
-        
+
         return layer;
     }
 
@@ -99,7 +99,7 @@ class SatelliteLayerManager {
 
         const layerId = 'false_color';
         const imageUrl = `/api/imagery/${id}/false-color`;
-        
+
         // Get proper bounds before creating layer
         let bounds = [[0, 0], [1, 1]]; // fallback
         try {
@@ -112,7 +112,7 @@ class SatelliteLayerManager {
         } catch (error) {
             console.warn('Failed to load bounds for false color layer, using fallback:', error);
         }
-        
+
         const layer = L.imageOverlay(imageUrl, bounds, {
             opacity: 1.0,
             attribution: 'Sentinel-2 False Color Composite'
@@ -121,12 +121,12 @@ class SatelliteLayerManager {
         this.layers.set(layerId, layer);
         this.baseLayers['False Color (NIR-R-G)'] = layer;
         this.layerControl.addBaseLayer(layer, 'False Color (NIR-R-G)');
-        
+
         // Add to controls manager
         if (this.controlsManager) {
             this.controlsManager.addLayerOpacityControl(layerId, 'False Color (NIR-R-G)', 1.0, layer);
         }
-        
+
         return layer;
     }
 
@@ -136,7 +136,7 @@ class SatelliteLayerManager {
 
         const layerId = `spectral_${indexName}`;
         const imageUrl = `/api/imagery/${id}/spectral/${indexName}`;
-        
+
         const displayNames = {
             'ndvi': 'NDVI',
             'fai': 'FAI (Floating Algae Index)',
@@ -168,12 +168,12 @@ class SatelliteLayerManager {
         this.layers.set(layerId, layer);
         this.overlayLayers[displayNames[indexName] || indexName.toUpperCase()] = layer;
         this.layerControl.addOverlay(layer, displayNames[indexName] || indexName.toUpperCase());
-        
+
         // Add to controls manager
         if (this.controlsManager) {
             this.controlsManager.addLayerOpacityControl(layerId, displayNames[indexName] || indexName.toUpperCase(), 0.7, layer);
         }
-        
+
         return layer;
     }
 
@@ -183,7 +183,7 @@ class SatelliteLayerManager {
 
         const layerId = `mask_${maskType}`;
         const imageUrl = `/api/imagery/${id}/mask/${maskType}?alpha=${alpha}`;
-        
+
         const displayNames = {
             'kelp': 'Kelp Detection',
             'water': 'Water Areas',
@@ -211,12 +211,12 @@ class SatelliteLayerManager {
         this.layers.set(layerId, layer);
         this.overlayLayers[displayNames[maskType] || maskType] = layer;
         this.layerControl.addOverlay(layer, displayNames[maskType] || maskType);
-        
+
         // Add to controls manager
         if (this.controlsManager) {
             this.controlsManager.addLayerOpacityControl(layerId, displayNames[maskType] || maskType, 1.0, layer);
         }
-        
+
         return layer;
     }
 
@@ -226,7 +226,7 @@ class SatelliteLayerManager {
 
         const layerId = 'biomass_heatmap';
         const imageUrl = `/api/imagery/${id}/biomass?colormap=${colormap}`;
-        
+
         const layer = L.imageOverlay(imageUrl, [[0, 0], [1, 1]], {
             opacity: 0.8,
             attribution: 'Kelp Biomass Density'
@@ -235,12 +235,12 @@ class SatelliteLayerManager {
         this.layers.set(layerId, layer);
         this.overlayLayers['Biomass Heatmap'] = layer;
         this.layerControl.addOverlay(layer, 'Biomass Heatmap');
-        
+
         // Add to controls manager
         if (this.controlsManager) {
             this.controlsManager.addLayerOpacityControl(layerId, 'Biomass Heatmap', 0.8, layer);
         }
-        
+
         return layer;
     }
 
@@ -251,13 +251,13 @@ class SatelliteLayerManager {
         try {
             const response = await fetch(`/api/imagery/${id}/metadata`);
             const metadata = await response.json();
-            
+
             if (metadata.bounds && metadata.bounds.length === 4) {
                 const [minLon, minLat, maxLon, maxLat] = metadata.bounds;
                 const bounds = [[minLat, minLon], [maxLat, maxLon]];
-                
+
                 console.log('🌍 Setting layer bounds:', bounds);
-                
+
                 // Update bounds for all layers
                 this.layers.forEach((layer, layerId) => {
                     if (layer.setBounds) {
@@ -303,23 +303,23 @@ class SatelliteLayerManager {
 
     async loadAllLayers(analysisId) {
         this.setAnalysisId(analysisId);
-        
+
         try {
             // Get metadata to determine available layers
             const response = await fetch(`/api/imagery/${analysisId}/metadata`);
             const metadata = await response.json();
-            
+
             // Add base layers (now async)
             await this.addRGBLayer(analysisId);
             await this.addFalseColorLayer(analysisId);
-            
+
             // Add spectral index layers (now async)
             if (metadata.available_layers.spectral_indices) {
                 for (const indexName of Object.keys(metadata.available_layers.spectral_indices)) {
                     await this.addSpectralLayer(indexName, analysisId);
                 }
             }
-            
+
             // Add mask overlays (now async) - map API names to endpoint names
             if (metadata.available_layers.masks) {
                 for (const maskType of Object.keys(metadata.available_layers.masks)) {
@@ -328,28 +328,28 @@ class SatelliteLayerManager {
                     await this.addMaskOverlay(endpointName, analysisId);
                 }
             }
-            
+
             // Add biomass heatmap if available
             if (metadata.available_layers.biomass) {
                 this.addBiomassHeatmap(analysisId);
             }
-            
+
             // Show RGB layer by default (it should already have correct bounds)
             const rgbLayer = this.getLayer('rgb_composite');
             if (rgbLayer && !this.map.hasLayer(rgbLayer)) {
                 console.log('🖼️ Adding RGB layer to map...');
                 this.map.addLayer(rgbLayer);
                 console.log('✅ RGB layer added to map');
-                
+
                 // Fit map to the RGB layer bounds
                 if (rgbLayer.getBounds && rgbLayer.getBounds() && rgbLayer.getBounds().isValid()) {
                     this.map.fitBounds(rgbLayer.getBounds(), { padding: [20, 20] });
                     console.log('🗺️ Map fitted to RGB layer bounds');
                 }
             }
-            
+
             return metadata;
-            
+
         } catch (error) {
             console.error('Failed to load imagery layers:', error);
             throw error;
@@ -368,4 +368,4 @@ class SatelliteLayerManager {
 }
 
 // Export for use in other modules
-window.SatelliteLayerManager = SatelliteLayerManager; 
+window.SatelliteLayerManager = SatelliteLayerManager;

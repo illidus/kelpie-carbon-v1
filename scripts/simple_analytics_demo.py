@@ -24,45 +24,45 @@ def create_sample_analysis_result():
             "analysis_types": ["validation", "temporal", "species", "historical"],
             "site_coordinates": (50.0833, -126.1667),  # Broughton Archipelago
             "time_range": ["2023-01-01T00:00:00", "2023-12-31T23:59:59"],
-            "site_name": "Broughton Archipelago (UVic Research Site)"
+            "site_name": "Broughton Archipelago (UVic Research Site)",
         },
         "results": {
             "validation": {
                 "kelp_extent": 125.5,
                 "detection_accuracy": 0.87,
                 "validation_sites": 3,
-                "data_points": 24
+                "data_points": 24,
             },
             "temporal": {
-                "trend_direction": "decreasing", 
+                "trend_direction": "decreasing",
                 "annual_change_rate": -2.3,
                 "seasonal_patterns": True,
-                "trend_significance": 0.02
+                "trend_significance": 0.02,
             },
             "species": {
                 "primary_species": "Nereocystis luetkeana",
                 "species_confidence": 0.91,
                 "biomass_estimate": 850.2,
-                "species_diversity": 2
+                "species_diversity": 2,
             },
             "historical": {
                 "historical_baseline": 180.5,
                 "current_vs_historical": -55.0,
                 "change_significance": 0.001,
-                "risk_level": "MEDIUM"
-            }
+                "risk_level": "MEDIUM",
+            },
         },
         "confidence_scores": {
             "validation": 0.87,
             "temporal": 0.82,
             "species": 0.91,
-            "historical": 0.78
+            "historical": 0.78,
         },
         "uncertainty_estimates": {
             "validation": [115.0, 136.0],
             "temporal": [-3.1, -1.5],
             "species": [750.0, 950.0],
-            "historical": [-65.0, -45.0]
+            "historical": [-65.0, -45.0],
         },
         "execution_time": 1.8,
         "overall_confidence": 0.845,
@@ -71,20 +71,21 @@ def create_sample_analysis_result():
             "Investigate causes of declining trend",
             "Increase monitoring frequency to quarterly",
             "Compare with historical baselines regularly",
-            "Validate deep learning predictions with ground truth"
-        ]
+            "Validate deep learning predictions with ground truth",
+        ],
     }
+
 
 def generate_first_nations_report(analysis_data: dict[str, Any]) -> str:
     """Generate a First Nations community report."""
-    
+
     site_name = analysis_data["request"]["site_name"]
     kelp_extent = analysis_data["results"]["validation"]["kelp_extent"]
     historical_change = analysis_data["results"]["historical"]["current_vs_historical"]
     primary_species = analysis_data["results"]["species"]["primary_species"]
     trend_direction = analysis_data["results"]["temporal"]["trend_direction"]
     confidence = analysis_data["overall_confidence"]
-    
+
     report = f"""
 # Kelp Forest Health Assessment - First Nations Community Report
 
@@ -164,15 +165,16 @@ This approach respects both traditional knowledge and scientific methods while b
 • Storm impact monitoring
 
 ---
-*Report generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+*Report generated on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 *This information supports community-based stewardship decisions and complements traditional knowledge*
 """
-    
+
     return report
+
 
 def generate_scientific_report(analysis_data: dict[str, Any]) -> str:
     """Generate a scientific research report."""
-    
+
     site_coords = analysis_data["request"]["site_coordinates"]
     time_range = analysis_data["request"]["time_range"]
     kelp_extent = analysis_data["results"]["validation"]["kelp_extent"]
@@ -180,7 +182,7 @@ def generate_scientific_report(analysis_data: dict[str, Any]) -> str:
     trend_sig = analysis_data["results"]["temporal"]["trend_significance"]
     confidence = analysis_data["overall_confidence"]
     execution_time = analysis_data["execution_time"]
-    
+
     report = f"""
 # Kelp Forest Extent Analysis - Scientific Report
 
@@ -190,7 +192,7 @@ def generate_scientific_report(analysis_data: dict[str, Any]) -> str:
 
 **Methods**: Applied 4 analysis approaches including validation, temporal, species, and historical analysis.
 
-**Results**: Kelp extent: {kelp_extent:.1f} ± {kelp_extent*0.1:.1f} ha (detection accuracy: {accuracy:.1%}). Temporal trend significance: p = {trend_sig:.3f}. Overall analysis confidence: {confidence:.1%}.
+**Results**: Kelp extent: {kelp_extent:.1f} ± {kelp_extent * 0.1:.1f} ha (detection accuracy: {accuracy:.1%}). Temporal trend significance: p = {trend_sig:.3f}. Overall analysis confidence: {confidence:.1%}.
 
 **Conclusions**: {"High-confidence assessment provides reliable baseline for kelp forest monitoring." if confidence > 0.8 else "Moderate-confidence assessment indicates need for enhanced monitoring approaches."}
 
@@ -319,34 +321,35 @@ This integrated analysis provides comprehensive assessment of kelp forest extent
 • Confidence assessments: {len(analysis_data["confidence_scores"])}
 
 ---
-*Report generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+*Report generated on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 *Kelpie Carbon v1 Advanced Analytics Framework*
 """
-    
+
     return report
+
 
 def generate_management_report(analysis_data: dict[str, Any]) -> str:
     """Generate a management decision-support report."""
-    
+
     site_name = analysis_data["request"]["site_name"]
     kelp_extent = analysis_data["results"]["validation"]["kelp_extent"]
     risk_level = analysis_data["results"]["historical"]["risk_level"]
     trend_direction = analysis_data["results"]["temporal"]["trend_direction"]
     confidence = analysis_data["overall_confidence"]
     historical_change = analysis_data["results"]["historical"]["current_vs_historical"]
-    
+
     report = f"""
 # EXECUTIVE DASHBOARD - Kelp Forest Management Report
 
-{'='*70}
+{"=" * 70}
 
 **CURRENT EXTENT**: {kelp_extent:.0f} hectares
 **DATA QUALITY**: {analysis_data["results"]["validation"]["detection_accuracy"]:.0%}
 **RISK LEVEL**: {risk_level}
 **ANALYSIS CONFIDENCE**: {"HIGH" if confidence > 0.8 else "MODERATE" if confidence > 0.6 else "LOW"}
-**LAST UPDATED**: {datetime.now().strftime('%Y-%m-%d')}
+**LAST UPDATED**: {datetime.now().strftime("%Y-%m-%d")}
 
-{'='*70}
+{"=" * 70}
 
 ## Current Status Assessment
 
@@ -375,12 +378,12 @@ Overall Risk Level: {risk_level}
 
 **Priority Actions**:
 
-{chr(10).join([f"{i+1}. {rec}" for i, rec in enumerate(analysis_data["recommendations"])])}
+{chr(10).join([f"{i + 1}. {rec}" for i, rec in enumerate(analysis_data["recommendations"])])}
 
 **Risk Level: {risk_level} - Specific Actions**:
 
 """
-    
+
     if risk_level == "HIGH":
         report += """
 • Implement immediate conservation measures
@@ -404,7 +407,7 @@ Overall Risk Level: {risk_level}
 • Monitor for emerging threats
 • Evaluate long-term trends annually
 """
-    
+
     report += f"""
 ## Monitoring Strategy
 
@@ -430,7 +433,7 @@ Overall Risk Level: {risk_level}
 **Estimated Resource Needs**:
 
 """
-    
+
     if risk_level == "HIGH":
         report += """
 **Enhanced Monitoring Program**:
@@ -450,8 +453,9 @@ Overall Risk Level: {risk_level}
 
 **Total Annual Cost**: ~$27,000
 """
-    
-    report += """
+
+    report += (
+        """
 **Additional Considerations**:
 • Equipment maintenance and updates
 • Training and capacity building
@@ -481,38 +485,45 @@ Overall Risk Level: {risk_level}
 • Adapt strategy based on outcomes
 
 ---
-*Report generated on """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """*
+*Report generated on """
+        + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        + """*
 *Kelpie Carbon v1 Management Decision Support System*
 """
-    
+    )
+
     return report
+
 
 def save_report_to_file(report_content: str, filename: str):
     """Save report to a file."""
     reports_dir = "reports"
     if not os.path.exists(reports_dir):
         os.makedirs(reports_dir)
-    
+
     filepath = os.path.join(reports_dir, filename)
-    with open(filepath, 'w', encoding='utf-8') as f:
+    with open(filepath, "w", encoding="utf-8") as f:
         f.write(report_content)
-    
+
     return filepath
+
 
 def display_interactive_menu():
     """Display interactive menu for viewing reports."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🌊 KELPIE CARBON v1 - ANALYTICS REPORTS VIEWER")
-    print("="*60)
-    
+    print("=" * 60)
+
     # Generate sample analysis data
     analysis_data = create_sample_analysis_result()
-    
+
     print(f"\n📍 Analysis Site: {analysis_data['request']['site_name']}")
-    print(f"📊 Current Kelp Extent: {analysis_data['results']['validation']['kelp_extent']:.1f} hectares")
+    print(
+        f"📊 Current Kelp Extent: {analysis_data['results']['validation']['kelp_extent']:.1f} hectares"
+    )
     print(f"🎯 Overall Confidence: {analysis_data['overall_confidence']:.1%}")
     print(f"⚠️  Risk Level: {analysis_data['results']['historical']['risk_level']}")
-    
+
     while True:
         print("\n🔍 Available Report Types:")
         print("   1. First Nations Community Report")
@@ -521,53 +532,56 @@ def display_interactive_menu():
         print("   4. View Analysis Data (JSON)")
         print("   5. Save All Reports to Files")
         print("   q. Quit")
-        
+
         choice = input("\nSelect report type (1-5 or q): ").strip().lower()
-        
-        if choice == 'q':
+
+        if choice == "q":
             print("👋 Thank you for using Kelpie Carbon v1 Analytics!")
             break
-        elif choice == '1':
+        elif choice == "1":
             print("\n📋 Generating First Nations Community Report...")
             report = generate_first_nations_report(analysis_data)
             print(report)
             input("\nPress Enter to continue...")
-        elif choice == '2':
+        elif choice == "2":
             print("\n📋 Generating Scientific Research Report...")
             report = generate_scientific_report(analysis_data)
             print(report)
             input("\nPress Enter to continue...")
-        elif choice == '3':
+        elif choice == "3":
             print("\n📋 Generating Management Decision Report...")
             report = generate_management_report(analysis_data)
             print(report)
             input("\nPress Enter to continue...")
-        elif choice == '4':
+        elif choice == "4":
             print("\n📋 Analysis Data (JSON Format):")
             print(json.dumps(analysis_data, indent=2))
             input("\nPress Enter to continue...")
-        elif choice == '5':
+        elif choice == "5":
             print("\n💾 Saving all reports to files...")
-            
+
             # Generate and save all reports
             fn_report = generate_first_nations_report(analysis_data)
             sci_report = generate_scientific_report(analysis_data)
             mgmt_report = generate_management_report(analysis_data)
-            
+
             fn_file = save_report_to_file(fn_report, "first_nations_report.md")
             sci_file = save_report_to_file(sci_report, "scientific_report.md")
             mgmt_file = save_report_to_file(mgmt_report, "management_report.md")
-            json_file = save_report_to_file(json.dumps(analysis_data, indent=2), "analysis_data.json")
-            
+            json_file = save_report_to_file(
+                json.dumps(analysis_data, indent=2), "analysis_data.json"
+            )
+
             print("✅ Reports saved:")
             print(f"   • First Nations Report: {fn_file}")
             print(f"   • Scientific Report: {sci_file}")
             print(f"   • Management Report: {mgmt_file}")
             print(f"   • Analysis Data: {json_file}")
-            
+
             input("\nPress Enter to continue...")
         else:
             print("❌ Invalid choice. Please try again.")
+
 
 def main():
     """Main function to run the simple analytics demo."""
@@ -578,5 +592,6 @@ def main():
     except Exception as e:
         print(f"\n❌ Demo failed: {e}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

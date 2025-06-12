@@ -97,7 +97,9 @@ def setup_logging() -> None:
     # File handler
     if file_output:
         file_handler = logging.handlers.RotatingFileHandler(
-            log_file, maxBytes=10 * 1024 * 1024, backupCount=5  # 10MB
+            log_file,
+            maxBytes=10 * 1024 * 1024,
+            backupCount=5,  # 10MB
         )
         file_handler.setLevel(getattr(logging, log_level))
 

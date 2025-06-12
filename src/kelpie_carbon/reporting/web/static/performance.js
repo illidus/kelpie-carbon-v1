@@ -9,7 +9,7 @@ class PerformanceMonitor {
         this.startTimes = new Map();
         this.performanceLog = [];
         this.maxLogEntries = 100;
-        
+
         this.initializeMonitoring();
     }
 
@@ -96,7 +96,7 @@ class PerformanceMonitor {
             };
 
             this.metrics.set('memory_usage', memoryMetric);
-            
+
             // Only log if memory usage is high
             if (memoryMetric.used_heap > 50) {
                 console.log('🧠 Memory Usage:', memoryMetric);
@@ -116,7 +116,7 @@ class PerformanceMonitor {
         };
 
         this.addToLog(metric);
-        
+
         if (success) {
             console.log(`🌐 API Request: ${url} (${metric.duration}ms)`);
         } else {
@@ -145,7 +145,7 @@ class PerformanceMonitor {
     // Add metric to log with rotation
     addToLog(metric) {
         this.performanceLog.push(metric);
-        
+
         // Rotate log to prevent memory bloat
         if (this.performanceLog.length > this.maxLogEntries) {
             this.performanceLog = this.performanceLog.slice(-this.maxLogEntries);
@@ -190,14 +190,14 @@ class PerformanceMonitor {
         try {
             const response = await fetch(url, fetchOptions);
             success = response.ok;
-            
+
             if (!response.ok) {
                 error = `HTTP ${response.status}: ${response.statusText}`;
             }
-            
+
             const duration = performance.now() - startTime;
             this.recordApiRequest(url, duration, success, error);
-            
+
             return response;
         } catch (err) {
             success = false;
@@ -226,12 +226,12 @@ class PerformanceMonitor {
         const dataStr = JSON.stringify(exportData, null, 2);
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(dataBlob);
-        
+
         const link = document.createElement('a');
         link.href = url;
         link.download = `kelpie-performance-${Date.now()}.json`;
         link.click();
-        
+
         URL.revokeObjectURL(url);
         console.log('📊 Performance data exported');
     }
@@ -240,21 +240,21 @@ class PerformanceMonitor {
     showDashboard() {
         const summary = this.getPerformanceSummary();
         const dashboardHtml = `
-            <div style="position: fixed; top: 10px; right: 10px; background: white; border: 1px solid #ccc; 
-                        padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            <div style="position: fixed; top: 10px; right: 10px; background: white; border: 1px solid #ccc;
+                        padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                         z-index: 3000; max-width: 300px; font-family: monospace; font-size: 12px;">
                 <h4 style="margin: 0 0 10px 0; color: #333;">🔍 Performance Dashboard</h4>
                 <div><strong>Page Load:</strong> ${summary.page_load?.duration || 'N/A'}ms</div>
                 <div><strong>Memory:</strong> ${summary.memory_usage?.used_heap || 'N/A'}MB</div>
                 <div><strong>Operations:</strong> ${summary.total_operations}</div>
                 <div><strong>Cache Hit Rate:</strong> ${summary.cache_stats?.cache_hit_rate || 'N/A'}</div>
-                <button onclick="performanceMonitor.exportPerformanceData()" 
-                        style="margin-top: 10px; padding: 5px 10px; border: none; background: #667eea; 
+                <button onclick="performanceMonitor.exportPerformanceData()"
+                        style="margin-top: 10px; padding: 5px 10px; border: none; background: #667eea;
                                color: white; border-radius: 4px; cursor: pointer;">
                     Export Data
                 </button>
-                <button onclick="this.parentElement.remove()" 
-                        style="margin-top: 5px; margin-left: 5px; padding: 5px 10px; border: none; 
+                <button onclick="this.parentElement.remove()"
+                        style="margin-top: 5px; margin-left: 5px; padding: 5px 10px; border: none;
                                background: #e53e3e; color: white; border-radius: 4px; cursor: pointer;">
                     Close
                 </button>
@@ -292,4 +292,4 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Export for use in other modules
-window.PerformanceMonitor = PerformanceMonitor; 
+window.PerformanceMonitor = PerformanceMonitor;

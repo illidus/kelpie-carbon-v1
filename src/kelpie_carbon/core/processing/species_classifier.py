@@ -123,7 +123,7 @@ class SpeciesClassifier:
             # Determine primary species and confidence
             primary_species = max(species_probabilities, key=species_probabilities.get)
             confidence = species_probabilities[primary_species]
-            
+
             # Special case: empty mask should have 0 confidence even if classified as UNKNOWN
             if kelp_mask.sum() == 0:
                 confidence = 0.0
@@ -382,7 +382,7 @@ class SpeciesClassifier:
         """Classify species based on extracted features."""
         # Initialize probabilities
         probabilities = dict.fromkeys(KelpSpecies, 0.0)
-        
+
         # Handle empty mask case - no kelp area to classify
         if morphological_features.get("total_area", 0) == 0:
             probabilities[KelpSpecies.UNKNOWN] = 1.0
@@ -883,17 +883,17 @@ def run_species_classification(
     spectral_indices: dict[str, np.ndarray],
     kelp_mask: np.ndarray,
     metadata: dict[str, Any] | None = None,
-    enable_morphology: bool = True
+    enable_morphology: bool = True,
 ) -> SpeciesClassificationResult:
     """Run species classification on kelp areas.
-    
+
     Args:
         rgb_image: RGB satellite image array
         spectral_indices: Dictionary of spectral indices
         kelp_mask: Binary mask of kelp areas
         metadata: Optional metadata dictionary
         enable_morphology: Whether to enable morphological analysis
-        
+
     Returns:
         SpeciesClassificationResult with species identification and biomass estimates
     """

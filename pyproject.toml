@@ -47,6 +47,7 @@ jinja2 = "^3.1.4"
 weasyprint = "^62.3"
 sympy = "^1.12"
 omegaconf = "^2.3.0"
+rich = "^14.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.0"

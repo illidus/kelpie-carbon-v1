@@ -8,7 +8,6 @@ The WAF algorithm identifies and filters out water surface anomalies that can in
 kelp detection algorithms, particularly important for submerged kelp analysis.
 """
 
-
 import numpy as np
 import xarray as xr
 from scipy import ndimage
@@ -161,9 +160,7 @@ def _detect_surface_anomalies(dataset: xr.Dataset, kernel_size: int) -> np.ndarr
     # Calculate local variance to detect unusual patterns
     kernel = np.ones((kernel_size, kernel_size))
     local_mean = ndimage.uniform_filter(nir, size=kernel_size)
-    local_variance = (
-        ndimage.uniform_filter(nir**2, size=kernel_size) - local_mean**2
-    )
+    local_variance = ndimage.uniform_filter(nir**2, size=kernel_size) - local_mean**2
 
     # High variance indicates surface disruption
     variance_threshold = np.percentile(local_variance[local_variance > 0], 95)

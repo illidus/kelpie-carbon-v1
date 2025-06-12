@@ -1,6 +1,5 @@
 """Advanced masking functions for satellite imagery."""
 
-
 import numpy as np
 import xarray as xr
 from scipy import ndimage
@@ -10,7 +9,7 @@ from .processing.derivative_features import (
     calculate_spectral_derivatives,
 )
 
-# Import SKEMA processing modules  
+# Import SKEMA processing modules
 from .processing.water_anomaly_filter import apply_water_anomaly_filter
 
 
@@ -304,9 +303,7 @@ def create_enhanced_kelp_detection_mask(
     return kelp_mask
 
 
-def create_skema_kelp_detection_mask(
-    dataset: xr.Dataset, config: dict
-) -> np.ndarray:
+def create_skema_kelp_detection_mask(dataset: xr.Dataset, config: dict) -> np.ndarray:
     """Create SKEMA-based kelp detection mask using research-validated algorithms.
 
     Implements the state-of-the-art SKEMA framework from UVic research:
@@ -344,7 +341,7 @@ def create_skema_kelp_detection_mask(
     if config.get("combine_with_ndre", True):
         # Calculate NDRE for submerged kelp detection
         ndre_mask = _apply_ndre_detection(filtered_dataset, config)
-        
+
         # Combine derivative and NDRE approaches
         # Research shows NDRE detects 18% more kelp than traditional NDVI
         if config.get("detection_combination", "union") == "union":
@@ -355,9 +352,9 @@ def create_skema_kelp_detection_mask(
             weight_derivative = config.get("derivative_weight", 0.6)
             weight_ndre = config.get("ndre_weight", 0.4)
             combined_mask = (
-                (derivative_mask.astype(float) * weight_derivative + 
-                 ndre_mask.astype(float) * weight_ndre) > 0.5
-            )
+                derivative_mask.astype(float) * weight_derivative
+                + ndre_mask.astype(float) * weight_ndre
+            ) > 0.5
     else:
         combined_mask = derivative_mask
 
@@ -375,33 +372,35 @@ def create_skema_kelp_detection_mask(
 
 def _apply_ndre_detection(dataset: xr.Dataset, config: dict) -> np.ndarray:
     """Apply NDRE-based kelp detection for submerged kelp.
-    
+
     Uses research-validated NDRE thresholds for optimal submerged kelp detection.
     NDRE outperforms NDVI by detecting kelp at twice the depth (90-100cm vs 30-50cm).
-    
+
     Args:
         dataset: Satellite imagery dataset
         config: Configuration parameters
-        
+
     Returns:
         Boolean mask where True indicates kelp (NDRE method)
     """
     # Calculate NDRE (already implemented in the module)
     ndre = calculate_ndre(dataset)
-    
+
     # Research-based threshold for submerged kelp detection
-    ndre_threshold = config.get("ndre_threshold", 0.0)  # Conservative threshold from research
-    
+    ndre_threshold = config.get(
+        "ndre_threshold", 0.0
+    )  # Conservative threshold from research
+
     # Additional criteria for kelp vs other vegetation
     kelp_ndre = ndre > ndre_threshold
-    
+
     # Optional: Add water context requirement
     if config.get("require_water_context", True):
         water_mask = create_water_mask(dataset, config.get("water_threshold", 0.1))
         # Kelp should be in or near water areas
         water_expanded = ndimage.binary_dilation(water_mask, iterations=3)
         kelp_ndre = kelp_ndre & water_expanded
-    
+
     return kelp_ndre
 
 
@@ -416,6 +415,7 @@ def remove_small_objects(binary_mask: np.ndarray, min_size: int) -> np.ndarray:
         Cleaned binary mask
     """
     from typing import cast
+
     labeled_result = ndimage.label(binary_mask)
     labeled_array, num_features = cast(tuple[np.ndarray, int], labeled_result)
 

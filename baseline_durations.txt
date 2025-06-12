@@ -11,7 +11,7 @@ collecting ... collected 1383 items / 5 errors
   <Dir scripts>
     <Module test_budget_deep_learning_suite.py>
       Budget Deep Learning Suite Test
-      
+
       Comprehensive test for all budget-friendly deep learning approaches:
       1. SAM-based kelp detection (zero cost)
       2. U-Net transfer learning (minimal cost)
@@ -41,7 +41,7 @@ collecting ... collected 1383 items / 5 errors
         Test graceful error handling.
     <Module test_budget_sam_integration.py>
       Budget SAM Integration Test
-      
+
       Test script to validate the zero-cost SAM-based kelp detection pipeline
       works correctly with the existing SKEMA infrastructure.
       <Function test_skema_processor>
@@ -54,7 +54,7 @@ collecting ... collected 1383 items / 5 errors
         Test all required dependencies.
     <Module test_enhanced_biomass_estimation.py>
       Test script for enhanced species-specific biomass estimation with confidence intervals.
-      
+
       This script demonstrates the Task C2.3 implementation:
       - Enhanced biomass prediction models per species
       - Species-specific conversion factors based on literature
@@ -63,7 +63,7 @@ collecting ... collected 1383 items / 5 errors
         Test biomass estimation for all scenarios.
     <Module test_morphology_detection.py>
       Test script for morphological detection functionality.
-      
+
       This script demonstrates the advanced morphological detection system
       that completes Task C2.2 - Morphology-based detection algorithms.
       <Function test_pneumatocyst_detection>
@@ -78,7 +78,7 @@ collecting ... collected 1383 items / 5 errors
         Test performance comparison between basic and advanced morphology.
     <Module test_species_classifier.py>
       Test script for species classification functionality.
-      
+
       This script demonstrates the species classifier with realistic data
       and shows it addresses the SKEMA Phase 4 gap.
       <Function test_nereocystis_classification>
@@ -107,13 +107,13 @@ collecting ... collected 1383 items / 5 errors
     <Package common>
       <Module test_data_structures.py>
         Consolidated data structure validation tests.
-        
+
         This module consolidates data structure validation testing from multiple test files:
         - test_historical_baseline_analysis.py (HistoricalDataset, temporal_data validation)
         - test_environmental_testing.py (EnvironmentalCondition structure validation)
         - test_skema_biomass_integration.py (dataset structure validation)
         - test_phase3_data_acquisition.py (quality report structure validation)
-        
+
         Reduces 35+ individual structure tests to 8 parameterized tests.
         <Class TestDataStructureValidation>
           Consolidated data structure validation tests.
@@ -163,7 +163,7 @@ collecting ... collected 1383 items / 5 errors
             Test error handling for problematic data structures.
       <Module test_error_handling.py>
         Consolidated error handling tests.
-        
+
         This module consolidates error handling testing from multiple test files:
         - test_real_world_validation.py (site validation error handling)
         - test_environmental_testing.py (environmental testing error handling)
@@ -171,7 +171,7 @@ collecting ... collected 1383 items / 5 errors
         - test_historical_baseline_analysis.py (analysis error handling)
         - test_submerged_kelp_detection.py (detection error handling)
         - test_standardized_errors.py (standardized error handling)
-        
+
         Reduces 45+ individual error handling tests to 6 parameterized tests.
         <Class TestAsyncErrorHandling>
           Consolidated async error handling tests.
@@ -213,15 +213,15 @@ collecting ... collected 1383 items / 5 errors
             Test edge case validation patterns.
       <Module test_validation_parameters.py>
         Consolidated validation parameter tests.
-        
+
         This module consolidates validation parameter testing from multiple test files:
         - test_real_world_validation.py
-        - test_models.py  
+        - test_models.py
         - test_historical_baseline_analysis.py
         - test_analytics_framework.py
         - test_field_survey_integration.py
         - test_fetch.py
-        
+
         Reduces 20+ individual validation tests to 4 parameterized tests.
         <Class TestCoordinateValidation>
           Consolidated coordinate validation tests across all classes.
@@ -313,7 +313,7 @@ collecting ... collected 1383 items / 5 errors
             Test ReDoc UI availability.
       <Module test_integration_stability.py>
         Integration stability tests for Kelpie Carbon v1.
-        
+
         Tests import/integration issues, satellite data sources reliability,
         and caching/performance optimizations validation for Task B1.3.
         <Class TestImportIntegrationStability>
@@ -338,7 +338,7 @@ collecting ... collected 1383 items / 5 errors
             Test cache size management and cleanup.
       <Module test_production_readiness.py>
         Production readiness tests for Kelpie Carbon v1.
-        
+
         Tests satellite data fallback mechanisms, error handling, graceful degradation,
         and performance validation under production-like conditions.
         <Class TestSatelliteDataFallback>
@@ -546,7 +546,7 @@ collecting ... collected 1383 items / 5 errors
             Test fallback behavior when primary systems fail.
     <Module test_optimization.py>
       Tests for optimization module - Task A2.8: Comprehensive testing.
-      
+
       This module tests the threshold optimization functionality including
       adaptive thresholding, environmental condition handling, and real-time optimization.
       <Class TestThresholdOptimizer>
@@ -608,7 +608,7 @@ collecting ... collected 1383 items / 5 errors
     <Package unit>
       <Module test_analytics_framework.py>
         Unit tests for Analytics Framework
-        
+
         Tests for:
         - AnalyticsFramework core functionality
         - AnalysisRequest and AnalysisResult classes
@@ -797,7 +797,7 @@ collecting ... collected 1383 items / 5 errors
           Test fetch_sentinel_tiles with invalid date formats.
       <Module test_field_survey_integration.py>
         Unit tests for Field Survey Data Integration - Task C2.4
-        
+
         Tests field data ingestion, species validation analysis, and reporting functionality.
         <Class TestFieldSurveyRecord>
           Test FieldSurveyRecord dataclass.
@@ -887,7 +887,7 @@ collecting ... collected 1383 items / 5 errors
             Test scenario with performance degradation patterns.
       <Module test_historical_baseline_analysis.py>
         Unit tests for Historical Baseline Analysis module.
-        
+
         This module tests the comprehensive historical baseline analysis capabilities,
         including historical data digitization, change detection algorithms, and temporal
         trend analysis following UVic methodology.
@@ -1261,7 +1261,7 @@ collecting ... collected 1383 items / 5 errors
             Test that morphological features are properly extracted for classification.
       <Module test_phase3_data_acquisition.py>
         Tests for Phase 3 Real Data Acquisition System.
-        
+
         This module tests the Phase 3 data acquisition framework for Task C1.5
         real-world validation capabilities.
         <Class TestValidationSite>
@@ -1344,7 +1344,7 @@ collecting ... collected 1383 items / 5 errors
             Test benchmark suite creation with some invalid sites.
       <Module test_real_data_acquisition.py>
         Tests for Real Satellite Data Acquisition System.
-        
+
         This module tests the real data acquisition framework for validating kelp detection
         algorithms against actual satellite imagery and ground truth data.
         <Class TestValidationSite>
@@ -1697,7 +1697,7 @@ collecting ... collected 1383 items / 5 errors
             Test that we have error codes for different HTTP status ranges.
       <Module test_submerged_kelp_detection.py>
         Tests for Submerged Kelp Detection Enhancement.
-        
+
         This module tests the submerged kelp detection framework including depth-sensitive
         detection, water column modeling, and integrated surface/submerged detection pipelines.
         <Class TestWaterColumnModel>
@@ -1778,7 +1778,7 @@ collecting ... collected 1383 items / 5 errors
             Test detection without water context requirement.
       <Module test_temporal_validation.py>
         Tests for Temporal Validation & Environmental Drivers.
-        
+
         This module tests the temporal validation framework for SKEMA kelp detection,
         including time-series persistence, seasonal patterns, and environmental correlations.
         <Class TestTemporalDataPoint>
@@ -1892,7 +1892,7 @@ collecting ... collected 1383 items / 5 errors
     <Dir validation>
       <Module test_environmental_testing.py>
         Tests for Environmental Robustness Testing Framework.
-        
+
         This module tests the environmental condition validation for SKEMA kelp detection,
         including tidal effects, water clarity, and seasonal variations.
         <Class TestEnvironmentalRobustnessValidator>
@@ -1951,10 +1951,10 @@ collecting ... collected 1383 items / 5 errors
             Test seasonal variations with realistic detection ranges.
       <Module test_real_world_validation.py>
         Comprehensive tests for real-world SKEMA validation framework.
-        
+
         Tests the actual validation of kelp detection algorithms against real satellite
         imagery from validated kelp farm locations as specified in Task A2.5.
-        
+
         Validation Sites:
         - Broughton Archipelago: UVic primary SKEMA site
         - Saanich Inlet: Multi-species validation
@@ -1990,11 +1990,11 @@ collecting ... collected 1383 items / 5 errors
             Test complete validation pipeline with mocked satellite data.
       <Module test_skema_research_benchmarks.py>
         Real-world SKEMA validation tests using published research benchmarks.
-        
+
         Tests mathematical implementations against exact results from:
         - Timmer et al. (2022): Red-edge vs NIR for submerged kelp detection
         - Uhl et al. (2016): Hyperspectral feature detection with 80.18% accuracy
-        
+
         All tests use real kelp farm coordinates and published ground truth data.
         <Class TestSKEMAResearchBenchmarks>
           Validate our implementations against published SKEMA research results.
@@ -2075,7 +2075,7 @@ collecting ... collected 1383 items / 5 errors
             Test ReDoc UI availability.
       <Module test_integration_stability.py>
         Integration stability tests for Kelpie Carbon v1.
-        
+
         Tests import/integration issues, satellite data sources reliability,
         and caching/performance optimizations validation for Task B1.3.
         <Class TestImportIntegrationStability>
@@ -2100,7 +2100,7 @@ collecting ... collected 1383 items / 5 errors
             Test cache size management and cleanup.
       <Module test_production_readiness.py>
         Production readiness tests for Kelpie Carbon v1.
-        
+
         Tests satellite data fallback mechanisms, error handling, graceful degradation,
         and performance validation under production-like conditions.
         <Class TestSatelliteDataFallback>
@@ -2308,7 +2308,7 @@ collecting ... collected 1383 items / 5 errors
             Test fallback behavior when primary systems fail.
     <Module test_optimization.py>
       Tests for optimization module - Task A2.8: Comprehensive testing.
-      
+
       This module tests the threshold optimization functionality including
       adaptive thresholding, environmental condition handling, and real-time optimization.
       <Class TestThresholdOptimizer>
@@ -2370,7 +2370,7 @@ collecting ... collected 1383 items / 5 errors
     <Package unit>
       <Module test_analytics_framework.py>
         Unit tests for Analytics Framework
-        
+
         Tests for:
         - AnalyticsFramework core functionality
         - AnalysisRequest and AnalysisResult classes
@@ -2559,7 +2559,7 @@ collecting ... collected 1383 items / 5 errors
           Test fetch_sentinel_tiles with invalid date formats.
       <Module test_field_survey_integration.py>
         Unit tests for Field Survey Data Integration - Task C2.4
-        
+
         Tests field data ingestion, species validation analysis, and reporting functionality.
         <Class TestFieldSurveyRecord>
           Test FieldSurveyRecord dataclass.
@@ -2649,7 +2649,7 @@ collecting ... collected 1383 items / 5 errors
             Test scenario with performance degradation patterns.
       <Module test_historical_baseline_analysis.py>
         Unit tests for Historical Baseline Analysis module.
-        
+
         This module tests the comprehensive historical baseline analysis capabilities,
         including historical data digitization, change detection algorithms, and temporal
         trend analysis following UVic methodology.
@@ -3023,7 +3023,7 @@ collecting ... collected 1383 items / 5 errors
             Test that morphological features are properly extracted for classification.
       <Module test_phase3_data_acquisition.py>
         Tests for Phase 3 Real Data Acquisition System.
-        
+
         This module tests the Phase 3 data acquisition framework for Task C1.5
         real-world validation capabilities.
         <Class TestValidationSite>
@@ -3106,7 +3106,7 @@ collecting ... collected 1383 items / 5 errors
             Test benchmark suite creation with some invalid sites.
       <Module test_real_data_acquisition.py>
         Tests for Real Satellite Data Acquisition System.
-        
+
         This module tests the real data acquisition framework for validating kelp detection
         algorithms against actual satellite imagery and ground truth data.
         <Class TestValidationSite>
@@ -3459,7 +3459,7 @@ collecting ... collected 1383 items / 5 errors
             Test that we have error codes for different HTTP status ranges.
       <Module test_submerged_kelp_detection.py>
         Tests for Submerged Kelp Detection Enhancement.
-        
+
         This module tests the submerged kelp detection framework including depth-sensitive
         detection, water column modeling, and integrated surface/submerged detection pipelines.
         <Class TestWaterColumnModel>
@@ -3540,7 +3540,7 @@ collecting ... collected 1383 items / 5 errors
             Test detection without water context requirement.
       <Module test_temporal_validation.py>
         Tests for Temporal Validation & Environmental Drivers.
-        
+
         This module tests the temporal validation framework for SKEMA kelp detection,
         including time-series persistence, seasonal patterns, and environmental correlations.
         <Class TestTemporalDataPoint>

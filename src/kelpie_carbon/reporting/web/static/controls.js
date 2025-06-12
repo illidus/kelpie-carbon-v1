@@ -11,10 +11,10 @@ class ImageryControlsManager {
         this.opacityContainer = document.getElementById('opacity-controls');
         this.legendContainer = document.getElementById('legend-container');
         this.metadataContainer = document.getElementById('metadata-container');
-        
+
         this.activeLayers = new Map(); // Store layer info for opacity controls
         this.currentMetadata = null;
-        
+
         this.initializeEventHandlers();
     }
 
@@ -31,8 +31,8 @@ class ImageryControlsManager {
 
         // Close panel when clicking outside (optional)
         document.addEventListener('click', (e) => {
-            if (this.controlPanel.style.display === 'block' && 
-                !this.controlPanel.contains(e.target) && 
+            if (this.controlPanel.style.display === 'block' &&
+                !this.controlPanel.contains(e.target) &&
                 !this.toggleButton.contains(e.target)) {
                 this.hidePanel();
             }
@@ -78,8 +78,8 @@ class ImageryControlsManager {
 
         controlDiv.innerHTML = `
             <div class="opacity-label">${layerName}</div>
-            <input type="range" class="opacity-slider" 
-                   min="0" max="100" value="${opacityValue}" 
+            <input type="range" class="opacity-slider"
+                   min="0" max="100" value="${opacityValue}"
                    data-layer-id="${layerId}">
             <div class="opacity-value">${opacityValue}%</div>
         `;
@@ -91,18 +91,18 @@ class ImageryControlsManager {
         slider.addEventListener('input', (e) => {
             const opacity = parseFloat(e.target.value) / 100;
             valueDisplay.textContent = `${e.target.value}%`;
-            
+
             // Update layer opacity
             if (layerObject && layerObject.setOpacity) {
                 layerObject.setOpacity(opacity);
             }
-            
+
             // Emit custom event for external handlers
             this.emitOpacityChange(layerId, opacity);
         });
 
         this.opacityContainer.appendChild(controlDiv);
-        
+
         // Store layer info
         this.activeLayers.set(layerId, {
             name: layerName,
@@ -146,11 +146,11 @@ class ImageryControlsManager {
     addSpectralLegendItem(indexName) {
         const legendItem = document.createElement('div');
         legendItem.className = 'legend-item dynamic-legend';
-        
+
         const displayNames = {
             'ndvi': 'NDVI',
             'fai': 'FAI (Floating Algae)',
-            'red_edge_ndvi': 'Red Edge NDVI', 
+            'red_edge_ndvi': 'Red Edge NDVI',
             'ndre': 'NDRE',
             'ndwi': 'NDWI',
             'evi': 'EVI'
@@ -176,7 +176,7 @@ class ImageryControlsManager {
     updateStaticLegendVisibility(layerTypes) {
         // Show/hide kelp legend
         const legendItems = this.legendContainer.querySelectorAll('.legend-item');
-        
+
         // Handle different data types for masks
         let masks = [];
         if (layerTypes.masks) {
@@ -188,12 +188,12 @@ class ImageryControlsManager {
                 masks = layerTypes.masks.split(',').map(s => s.trim());
             }
         }
-        
+
         legendItems.forEach(item => {
             const kelpColor = item.querySelector('.kelp-color');
             const waterColor = item.querySelector('.water-color');
             const cloudColor = item.querySelector('.cloud-color');
-            
+
             if (kelpColor) {
                 item.style.display = masks.includes('kelp') ? 'flex' : 'none';
             } else if (waterColor) {
@@ -214,7 +214,7 @@ class ImageryControlsManager {
         try {
             const response = await fetch(`/api/imagery/${analysisId}/metadata`);
             const metadata = await response.json();
-            
+
             this.currentMetadata = metadata;
             this.displayMetadata(metadata);
         } catch (error) {
@@ -297,4 +297,4 @@ class ImageryControlsManager {
 }
 
 // Export for use in other modules
-window.ImageryControlsManager = ImageryControlsManager; 
+window.ImageryControlsManager = ImageryControlsManager;

@@ -157,15 +157,9 @@ class SpectralIndicesModel(BaseModel):
     avg_kelp_index: StrictFloat | None = Field(
         None, description="Average Kelp Index value"
     )
-    std_ndvi: StrictFloat | None = Field(
-        None, description="Standard deviation of NDVI"
-    )
-    std_ndre: StrictFloat | None = Field(
-        None, description="Standard deviation of NDRE"
-    )
-    std_fai: StrictFloat | None = Field(
-        None, description="Standard deviation of FAI"
-    )
+    std_ndvi: StrictFloat | None = Field(None, description="Standard deviation of NDVI")
+    std_ndre: StrictFloat | None = Field(None, description="Standard deviation of NDRE")
+    std_fai: StrictFloat | None = Field(None, description="Standard deviation of FAI")
 
 
 class AnalysisResponse(BaseModel):
@@ -256,9 +250,7 @@ class ReadinessCheck(BaseModel):
     database: bool | None = Field(
         None, description="Database connectivity (if applicable)"
     )
-    external_services: bool | None = Field(
-        None, description="External services status"
-    )
+    external_services: bool | None = Field(None, description="External services status")
 
 
 class ReadinessResponse(BaseModel):
@@ -347,9 +339,7 @@ class ErrorResponse(BaseModel):
 
     error: StrictStr = Field(..., description="Error type")
     message: StrictStr = Field(..., description="Error message")
-    details: dict[str, Any] | None = Field(
-        None, description="Additional error details"
-    )
+    details: dict[str, Any] | None = Field(None, description="Additional error details")
     timestamp: StrictFloat = Field(..., description="Error timestamp")
     request_id: StrictStr | None = Field(
         None, description="Request identifier for tracking"

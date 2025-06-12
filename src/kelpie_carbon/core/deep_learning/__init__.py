@@ -36,26 +36,23 @@ from .classical_ml_enhancer import ClassicalMLEnhancer, setup_classical_ml_envir
 
 __all__ = [
     # Budget-friendly (zero cost)
-    'BudgetSAMKelpDetector',
-    'download_sam_model',
-    'BudgetUNetKelpDetector',
-    'setup_budget_unet_environment',
-    'ClassicalMLEnhancer',
-    'setup_classical_ml_environment',
-    
+    "BudgetSAMKelpDetector",
+    "download_sam_model",
+    "BudgetUNetKelpDetector",
+    "setup_budget_unet_environment",
+    "ClassicalMLEnhancer",
+    "setup_classical_ml_environment",
     # Traditional CNN (future implementation)
     # 'SKEMACNNModel',
-    # 'MaskRCNNKelpDetector', 
+    # 'MaskRCNNKelpDetector',
     # 'train_skema_model',
     # 'load_pretrained_skema_model',
-    
     # Data pipeline (future implementation)
     # 'KelpDatasetLoader',
     # 'SatelliteImageProcessor',
     # 'prepare_training_data',
-    
     # Model training (future implementation)
     # 'SKEMATrainer',
     # 'evaluate_model_performance',
     # 'generate_model_predictions'
-] 
+]

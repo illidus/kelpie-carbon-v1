@@ -1,6 +1,5 @@
 """Utility functions for satellite imagery processing."""
 
-
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -133,7 +132,7 @@ def get_image_bounds(dataset: xr.Dataset) -> tuple[float, float, float, float]:
     # Try different coordinate names, prioritizing geographic coordinates
     x_coords: np.ndarray = np.array([])  # Initialize to prevent Never type
     y_coords: np.ndarray = np.array([])  # Initialize to prevent Never type
-    
+
     if "longitude" in dataset.coords and "latitude" in dataset.coords:
         x_coords = dataset.coords["longitude"].values
         y_coords = dataset.coords["latitude"].values

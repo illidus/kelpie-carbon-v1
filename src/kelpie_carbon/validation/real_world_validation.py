@@ -8,6 +8,6 @@ from .core.real_world_validation import *
 __all__ = [
     "RealWorldValidator",
     "ValidationSite",
-    "GeographicValidationError", 
+    "GeographicValidationError",
     "RealWorldValidationError",
-] 
+]

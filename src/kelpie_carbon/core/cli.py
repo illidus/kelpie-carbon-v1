@@ -126,27 +126,42 @@ def serve(
     try:
         # Extract values and pass them directly to avoid dict typing issues
         from typing import Any, cast
-        
+
         host_str = str(server_config["host"])
-        port_int = int(server_config["port"]) if isinstance(server_config["port"], (int, str)) else 8000
+        port_int = (
+            int(server_config["port"])
+            if isinstance(server_config["port"], (int, str))
+            else 8000
+        )
         reload_bool = bool(server_config["reload"])
         log_level_str = str(server_config["log_level"])
         access_log_bool = bool(server_config["access_log"])
-        
+
         # Prepare conditional arguments
         additional_args: dict[str, Any] = {}
-        
-        # Add reload-specific args if reload is enabled  
+
+        # Add reload-specific args if reload is enabled
         if reload_bool and "reload_dirs" in server_config:
-            additional_args.update({
-                "reload_dirs": server_config["reload_dirs"],
-                "reload_includes": server_config["reload_includes"],
-                "reload_excludes": server_config["reload_excludes"],
-                "reload_delay": float(cast(float, server_config["reload_delay"])) if "reload_delay" in server_config and server_config["reload_delay"] is not None else 2.0,
-            })
-        
+            additional_args.update(
+                {
+                    "reload_dirs": server_config["reload_dirs"],
+                    "reload_includes": server_config["reload_includes"],
+                    "reload_excludes": server_config["reload_excludes"],
+                    "reload_delay": (
+                        float(cast(float, server_config["reload_delay"]))
+                        if "reload_delay" in server_config
+                        and server_config["reload_delay"] is not None
+                        else 2.0
+                    ),
+                }
+            )
+
         # Add workers if not in reload mode
-        if "workers" in server_config and not reload_bool and server_config["workers"] is not None:
+        if (
+            "workers" in server_config
+            and not reload_bool
+            and server_config["workers"] is not None
+        ):
             additional_args["workers"] = int(cast(int, server_config["workers"]))
 
         uvicorn.run(
@@ -156,7 +171,7 @@ def serve(
             reload=reload_bool,
             log_level=log_level_str,
             access_log=access_log_bool,
-            **additional_args
+            **additional_args,
         )
     except OSError as e:
         if "Address already in use" in str(e) or "10048" in str(e):
@@ -176,9 +191,7 @@ def analyze(
     lng: float = typer.Argument(..., help="Longitude of the area of interest"),
     start_date: str = typer.Argument(..., help="Start date (YYYY-MM-DD)"),
     end_date: str = typer.Argument(..., help="End date (YYYY-MM-DD)"),
-    output: str | None = typer.Option(
-        None, "--output", "-o", help="Output file path"
-    ),
+    output: str | None = typer.Option(None, "--output", "-o", help="Output file path"),
 ):
     """Run kelp forest carbon analysis from the command line."""
     setup_logging()
@@ -225,7 +238,7 @@ def analyze(
         )  # Convert to kg C/m²
 
         print("\n🌊 Kelp Forest Carbon Analysis Results")
-        print(f"{'='*50}")
+        print(f"{'=' * 50}")
         print(f"Location: {lat:.4f}, {lng:.4f}")
         print(f"Date Range: {start_date} to {end_date}")
         print(f"Biomass: {biomass:.1f} kg/ha")
@@ -270,7 +283,7 @@ def config(
     config_dict = asdict(settings)
 
     print(f"🔧 Kelpie Carbon v1 Configuration ({env})")
-    print(f"{'='*50}")
+    print(f"{'=' * 50}")
     print(json.dumps(config_dict, indent=2, default=str))
 
 
@@ -303,6 +316,14 @@ def test(
     except subprocess.CalledProcessError as e:
         logger.error(f"Tests failed with exit code {e.returncode}")
         raise typer.Exit(e.returncode)
+
+
+# Add validation sub-application
+try:
+    from ..validation.cli import app as validation_app
+    app.add_typer(validation_app, name="validation", help="Validation framework commands")
+except ImportError:
+    logger.warning("Validation CLI not available")
 
 
 @app.command()

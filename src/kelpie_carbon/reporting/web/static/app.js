@@ -91,12 +91,12 @@ runButton.addEventListener('click', async function() {
 
         // Step 2: Generate and cache imagery
         statusDiv.textContent = 'Generating satellite imagery...';
-        
+
         // Start timer if available
         if (window.performanceMonitor && typeof window.performanceMonitor.startTimer === 'function') {
             performanceMonitor.startTimer('imagery_generation');
         }
-        
+
         console.log('🚀 Starting imagery analysis with request:', {
             aoi: {
                 lat: selectedAOI.lat,
@@ -107,7 +107,7 @@ runButton.addEventListener('click', async function() {
             buffer_km: 1.0,
             max_cloud_cover: 0.3
         });
-        
+
         // Use performanceMonitor if available, otherwise fall back to regular fetch
         let imageryResponse;
         if (window.performanceMonitor && typeof window.performanceMonitor.monitorApiCall === 'function') {
@@ -164,37 +164,37 @@ runButton.addEventListener('click', async function() {
         try {
             imageryResult = await imageryResponse.json();
             currentAnalysisId = imageryResult.analysis_id;
-            
+
             // End timer if available
             if (window.performanceMonitor && typeof window.performanceMonitor.endTimer === 'function') {
-                performanceMonitor.endTimer('imagery_generation', { 
+                performanceMonitor.endTimer('imagery_generation', {
                     analysis_id: currentAnalysisId,
-                    success: true 
+                    success: true
                 });
             }
         } catch (e) {
             console.warn('Failed to parse imagery response');
-            
+
             // End timer if available
             if (window.performanceMonitor && typeof window.performanceMonitor.endTimer === 'function') {
-                performanceMonitor.endTimer('imagery_generation', { 
+                performanceMonitor.endTimer('imagery_generation', {
                     success: false,
-                    error: e.message 
+                    error: e.message
                 });
             }
         }
 
         // Step 3: Display results and load imagery
         displayResults(analysisResult, imageryResult);
-        
+
         if (imageryResult && imageryResult.analysis_id) {
             // Start timer if available
             if (window.performanceMonitor && typeof window.performanceMonitor.startTimer === 'function') {
                 performanceMonitor.startTimer('satellite_imagery_loading');
             }
-            
+
             await loadSatelliteImagery(imageryResult.analysis_id);
-            
+
             // End timer if available
             if (window.performanceMonitor && typeof window.performanceMonitor.endTimer === 'function') {
                 performanceMonitor.endTimer('satellite_imagery_loading', {
@@ -255,7 +255,7 @@ function displayResults(analysisResult, imageryResult = null) {
 // Function to get available layers text
 function getAvailableLayersText(imageryResult) {
     if (!imageryResult.available_layers) return 'None';
-    
+
     const layers = [];
     if (imageryResult.available_layers.base_layers) {
         layers.push(`Base: ${imageryResult.available_layers.base_layers.join(', ')}`);
@@ -269,21 +269,21 @@ function getAvailableLayersText(imageryResult) {
     if (imageryResult.available_layers.biomass) {
         layers.push('Biomass heatmap');
     }
-    
+
     return layers.join('; ') || 'None';
 }
 
 // Function to load satellite imagery with progressive loading
 async function loadSatelliteImagery(analysisId) {
     console.log('🖼️ Starting loadSatelliteImagery with ID:', analysisId);
-    
+
     try {
         // Check if required classes are available
         console.log('🔍 Checking required classes...');
         console.log('LoadingManager available:', typeof LoadingManager !== 'undefined');
         console.log('ImageryControlsManager available:', typeof ImageryControlsManager !== 'undefined');
         console.log('SatelliteLayerManager available:', typeof SatelliteLayerManager !== 'undefined');
-        
+
         // Initialize managers if not already done
         if (!loadingManager) {
             console.log('🔧 Initializing LoadingManager...');
@@ -295,7 +295,7 @@ async function loadSatelliteImagery(analysisId) {
                 throw new Error('LoadingManager class not found');
             }
         }
-        
+
         if (!imageryControlsManager) {
             console.log('🔧 Initializing ImageryControlsManager...');
             if (typeof ImageryControlsManager !== 'undefined') {
@@ -306,7 +306,7 @@ async function loadSatelliteImagery(analysisId) {
                 throw new Error('ImageryControlsManager class not found');
             }
         }
-        
+
         if (!satelliteLayerManager) {
             console.log('🔧 Initializing SatelliteLayerManager...');
             if (typeof SatelliteLayerManager !== 'undefined') {
@@ -321,30 +321,30 @@ async function loadSatelliteImagery(analysisId) {
         // Use progressive loading for better performance
         console.log('🔄 Starting progressive loading...');
         loadingManager.showLoading('map', 'Loading satellite imagery...');
-        
+
         // Load metadata first
         const metadataUrl = `/api/imagery/${analysisId}/metadata`;
         console.log('🔍 Loading metadata from:', metadataUrl);
         const metadataResponse = await fetch(metadataUrl);
-        
+
         if (!metadataResponse.ok) {
             throw new Error(`Failed to load metadata: ${metadataResponse.status} ${metadataResponse.statusText}`);
         }
-        
+
         const metadata = await metadataResponse.json();
         console.log('✅ Metadata loaded:', metadata);
-        
+
         // Update controls with metadata
         console.log('🎛️ Updating controls with metadata...');
         imageryControlsManager.updateMetadata(analysisId);
         imageryControlsManager.showControls();
         console.log('✅ Controls updated');
-        
+
         // Progressive layer loading
         console.log('🖼️ Starting progressive layer loading...');
         await loadingManager.loadLayersProgressively(analysisId, satelliteLayerManager, imageryControlsManager);
         console.log('✅ Progressive layer loading completed');
-        
+
         // Update legend based on loaded layers
         if (metadata && metadata.available_layers) {
             console.log('📋 Updating legend...');
@@ -354,29 +354,29 @@ async function loadSatelliteImagery(analysisId) {
             });
             console.log('✅ Legend updated');
         }
-        
+
         // Add layer control event handlers
         satelliteLayerManager.onLayerAdd((e) => {
             console.log('✅ Layer added:', e.name);
         });
-        
+
         satelliteLayerManager.onLayerRemove((e) => {
             console.log('➖ Layer removed:', e.name);
         });
-        
+
         // Log performance statistics
         const cacheStats = loadingManager.getCacheStats();
         console.log('✅ All satellite imagery layers loaded successfully');
         console.log('📊 Cache Stats:', cacheStats);
-        
+
     } catch (error) {
         console.error('❌ Failed to load satellite imagery:', error);
         console.error('❌ Error stack:', error.stack);
         statusDiv.textContent += ' (Imagery loading failed)';
-        
+
         // Show error with retry option
         if (loadingManager && typeof loadingManager.showError === 'function') {
-            loadingManager.showError('map', 
+            loadingManager.showError('map',
                 'Failed to load satellite imagery. Please try again.',
                 () => loadSatelliteImagery(analysisId)
             );
@@ -387,19 +387,19 @@ async function loadSatelliteImagery(analysisId) {
             try {
                 const rgbUrl = `/api/imagery/${analysisId}/rgb`;
                 console.log('🖼️ Loading RGB image from:', rgbUrl);
-                
+
                 // Create a simple image overlay as fallback
                 const bounds = [[36.79, -121.91], [36.81, -121.89]]; // Approximate bounds
                 const imageOverlay = L.imageOverlay(rgbUrl, bounds, {
                     opacity: 0.8,
                     alt: 'Satellite RGB Image'
                 }).addTo(map);
-                
+
                 console.log('✅ Simple RGB image loaded as fallback');
-                
+
                 // Fit map to bounds
                 map.fitBounds(bounds);
-                
+
             } catch (fallbackError) {
                 console.error('❌ Even simple fallback failed:', fallbackError);
             }

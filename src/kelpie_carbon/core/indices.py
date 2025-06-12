@@ -1,6 +1,5 @@
 """Spectral index calculations for kelp detection."""
 
-
 import numpy as np
 import xarray as xr
 

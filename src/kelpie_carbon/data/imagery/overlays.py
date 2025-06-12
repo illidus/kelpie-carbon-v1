@@ -1,6 +1,5 @@
 """Overlay generators for analysis result visualization."""
 
-
 import numpy as np
 import xarray as xr
 from PIL import Image
@@ -44,7 +43,9 @@ def generate_kelp_mask_overlay(dataset: xr.Dataset, alpha: float = 0.6) -> Image
         raise ValueError("Dataset does not contain kelp_mask")
 
     return generate_mask_overlay(
-        dataset["kelp_mask"], color=(0, 255, 0), alpha=alpha  # Green
+        dataset["kelp_mask"],
+        color=(0, 255, 0),
+        alpha=alpha,  # Green
     )
 
 
@@ -62,7 +63,9 @@ def generate_water_mask_overlay(dataset: xr.Dataset, alpha: float = 0.4) -> Imag
         raise ValueError("Dataset does not contain water_mask")
 
     return generate_mask_overlay(
-        dataset["water_mask"], color=(0, 100, 255), alpha=alpha  # Light blue
+        dataset["water_mask"],
+        color=(0, 100, 255),
+        alpha=alpha,  # Light blue
     )
 
 
@@ -80,7 +83,9 @@ def generate_cloud_mask_overlay(dataset: xr.Dataset, alpha: float = 0.5) -> Imag
         raise ValueError("Dataset does not contain cloud_mask")
 
     return generate_mask_overlay(
-        dataset["cloud_mask"], color=(128, 128, 128), alpha=alpha  # Gray
+        dataset["cloud_mask"],
+        color=(128, 128, 128),
+        alpha=alpha,  # Gray
     )
 
 

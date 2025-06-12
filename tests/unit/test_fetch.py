@@ -1,8 +1,8 @@
 """Tests for fetch module."""
 
-
 import pytest
 import xarray as xr
+
 from kelpie_carbon.core.fetch import fetch_sentinel_tiles
 
 

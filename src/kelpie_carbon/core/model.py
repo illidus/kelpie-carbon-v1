@@ -111,13 +111,21 @@ class KelpBiomassModel:
             kelp_patches = self._analyze_kelp_patches(dataset["kelp_mask"].values)
             # Convert kelp patch values to proper types
             from typing import cast
-            kelp_patches_typed = {k: [float(v[0])] if v else [0.0] for k, v in kelp_patches.items()}
+
+            kelp_patches_typed = {
+                k: [float(v[0])] if v else [0.0] for k, v in kelp_patches.items()
+            }
             features.update(cast("dict[str, list[Any]]", kelp_patches_typed))
 
-        # Spatial features  
-        spatial_features = self._calculate_spatial_features(dataset, kelp_pixels.values if hasattr(kelp_pixels, 'values') else kelp_pixels)
+        # Spatial features
+        spatial_features = self._calculate_spatial_features(
+            dataset,
+            kelp_pixels.values if hasattr(kelp_pixels, "values") else kelp_pixels,
+        )
         # Convert spatial feature values to proper types
-        spatial_features_typed = {k: [float(v[0])] if v else [0.0] for k, v in spatial_features.items()}
+        spatial_features_typed = {
+            k: [float(v[0])] if v else [0.0] for k, v in spatial_features.items()
+        }
         features.update(cast("dict[str, list[Any]]", spatial_features_typed))
 
         df = pd.DataFrame(features)
@@ -339,7 +347,7 @@ class KelpBiomassModel:
         biomass_prediction = self.model.predict(X_scaled)[0]
 
         # Calculate prediction confidence using tree predictions
-        if hasattr(self.model, 'estimators_') and self.model.estimators_ is not None:
+        if hasattr(self.model, "estimators_") and self.model.estimators_ is not None:
             tree_predictions = np.array(
                 [tree.predict(X_scaled)[0] for tree in self.model.estimators_]
             )
@@ -377,6 +385,7 @@ class KelpBiomassModel:
 
         # Simple biomass estimation based on kelp coverage and spectral indices
         from typing import Any, cast
+
         kelp_coverage_raw = features.get("kelp_coverage", [0])[0]
         if hasattr(kelp_coverage_raw, "values"):
             kelp_coverage = float(cast(Any, kelp_coverage_raw.values))
@@ -389,18 +398,23 @@ class KelpBiomassModel:
         # Adjust based on spectral indices if available
         if "fai_mean" in features.columns:
             from typing import cast
+
             fai_val_raw = features["fai_mean"].iloc[0]
             try:
                 if hasattr(fai_val_raw, "values"):
                     # Extract scalar value from numpy array or pandas extension
                     val_extracted = fai_val_raw.values
-                    if hasattr(val_extracted, 'item'):
+                    if hasattr(val_extracted, "item"):
                         fai_val = float(val_extracted.item())
                     else:
                         fai_val = float(cast(Any, val_extracted))
                 else:
                     # Handle scalar values
-                    fai_val = float(cast(Any, fai_val_raw)) if not pd.isna(fai_val_raw) else 0.0
+                    fai_val = (
+                        float(cast(Any, fai_val_raw))
+                        if not pd.isna(fai_val_raw)
+                        else 0.0
+                    )
             except (TypeError, ValueError, AttributeError):
                 fai_val = 0.0
             fai_factor = max(0, fai_val + 0.01) * 2000

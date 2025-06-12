@@ -1,7 +1,7 @@
 """Tests for satellite imagery API endpoints."""
 
-
 from fastapi.testclient import TestClient
+
 from kelpie_carbon.core.api.imagery import _analysis_cache
 from kelpie_carbon.core.api.main import app
 

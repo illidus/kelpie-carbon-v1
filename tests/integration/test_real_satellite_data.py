@@ -1,9 +1,9 @@
 """Tests verifying Phase 9 uses real Sentinel-2 satellite data for model training and prediction."""
 
-
 import numpy as np
 import pytest
 import xarray as xr
+
 from kelpie_carbon.core.fetch import fetch_sentinel_tiles
 from kelpie_carbon.core.indices import calculate_indices_from_dataset
 from kelpie_carbon.core.mask import apply_mask
@@ -57,9 +57,9 @@ class TestRealSatelliteDataUsage:
             for band in required_bands:
                 band_data = dataset[band].values
                 assert np.all(band_data >= 0), f"{band} should have non-negative values"
-                assert np.all(
-                    band_data <= 1
-                ), f"{band} should have values <= 1 (reflectance)"
+                assert np.all(band_data <= 1), (
+                    f"{band} should have values <= 1 (reflectance)"
+                )
                 assert not np.all(band_data == 0), f"{band} should not be all zeros"
 
             print("   ✅ Real satellite data validation passed")
@@ -131,9 +131,9 @@ class TestRealSatelliteDataUsage:
             # Verify training
             assert model.is_trained, "Model should be trained"
             assert metrics["n_samples"] == len(combined_training)
-            assert (
-                metrics["n_features"] >= 40
-            ), "Should extract many features from real data"
+            assert metrics["n_features"] >= 40, (
+                "Should extract many features from real data"
+            )
 
             # Test prediction with trained model
             prediction = model.predict(masked_data)
@@ -144,16 +144,16 @@ class TestRealSatelliteDataUsage:
             print(f"   Model type: {prediction['model_type']}")
 
             # Verify prediction structure
-            assert (
-                prediction["biomass_kg_per_hectare"] >= 0
-            ), "Biomass should be non-negative"
-            assert (
-                0 <= prediction["prediction_confidence"] <= 1
-            ), "Confidence should be 0-1"
+            assert prediction["biomass_kg_per_hectare"] >= 0, (
+                "Biomass should be non-negative"
+            )
+            assert 0 <= prediction["prediction_confidence"] <= 1, (
+                "Confidence should be 0-1"
+            )
             assert prediction["model_type"] == "Random Forest", "Should use RF model"
-            assert (
-                len(prediction.get("top_features", [])) > 0
-            ), "Should have feature importance"
+            assert len(prediction.get("top_features", [])) > 0, (
+                "Should have feature importance"
+            )
 
         except Exception as e:
             pytest.skip(f"Error in model training test: {e}")

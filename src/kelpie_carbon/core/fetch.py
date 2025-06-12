@@ -112,6 +112,7 @@ def fetch_sentinel_tiles(
 
                 # Open with rioxarray and clip to our bounding box
                 from typing import cast
+
                 with cast(xr.DataArray, rxr.open_rasterio(asset_url)) as da:
                     # Clip to our area of interest
                     clipped = da.rio.clip_box(
@@ -253,13 +254,21 @@ def _create_mock_sentinel_data(
 
     # Water areas
     red[water_mask] = np.clip(np.random.normal(0.02, 0.01, np.sum(water_mask)), 0, 0.1)
-    red_edge[water_mask] = np.clip(np.random.normal(0.03, 0.01, np.sum(water_mask)), 0, 0.1)
-    red_edge_2[water_mask] = np.clip(np.random.normal(0.025, 0.008, np.sum(water_mask)), 
-        0, 0.08)  # Slightly lower
-    red_edge_3[water_mask] = np.clip(np.random.normal(0.015, 0.005, np.sum(water_mask)), 
-        0, 0.06)  # Approaching NIR
-    nir[water_mask] = np.clip(np.random.normal(0.01, 0.005, np.sum(water_mask)), 0, 0.05)
-    swir1[water_mask] = np.clip(np.random.normal(0.005, 0.002, np.sum(water_mask)), 0, 0.02)
+    red_edge[water_mask] = np.clip(
+        np.random.normal(0.03, 0.01, np.sum(water_mask)), 0, 0.1
+    )
+    red_edge_2[water_mask] = np.clip(
+        np.random.normal(0.025, 0.008, np.sum(water_mask)), 0, 0.08
+    )  # Slightly lower
+    red_edge_3[water_mask] = np.clip(
+        np.random.normal(0.015, 0.005, np.sum(water_mask)), 0, 0.06
+    )  # Approaching NIR
+    nir[water_mask] = np.clip(
+        np.random.normal(0.01, 0.005, np.sum(water_mask)), 0, 0.05
+    )
+    swir1[water_mask] = np.clip(
+        np.random.normal(0.005, 0.002, np.sum(water_mask)), 0, 0.02
+    )
 
     # Land areas (mix of vegetation and bare soil)
     land_mask = ~water_mask
@@ -269,23 +278,31 @@ def _create_mock_sentinel_data(
     veg_mask = land_mask & vegetation_prob
     red[veg_mask] = np.clip(np.random.normal(0.04, 0.02, np.sum(veg_mask)), 0, 0.15)
     red_edge[veg_mask] = np.clip(np.random.normal(0.15, 0.05, np.sum(veg_mask)), 0, 0.4)
-    red_edge_2[veg_mask] = np.clip(np.random.normal(0.20, 0.06, np.sum(veg_mask)), 
-        0.05, 0.45)  # Peak red-edge
-    red_edge_3[veg_mask] = np.clip(np.random.normal(0.30, 0.08, np.sum(veg_mask)), 
-        0.15, 0.65)  # Transitioning to NIR
+    red_edge_2[veg_mask] = np.clip(
+        np.random.normal(0.20, 0.06, np.sum(veg_mask)), 0.05, 0.45
+    )  # Peak red-edge
+    red_edge_3[veg_mask] = np.clip(
+        np.random.normal(0.30, 0.08, np.sum(veg_mask)), 0.15, 0.65
+    )  # Transitioning to NIR
     nir[veg_mask] = np.clip(np.random.normal(0.4, 0.1, np.sum(veg_mask)), 0.2, 0.8)
     swir1[veg_mask] = np.clip(np.random.normal(0.25, 0.05, np.sum(veg_mask)), 0.1, 0.5)
 
     # Non-vegetated land
     bare_mask = land_mask & ~vegetation_prob
     red[bare_mask] = np.clip(np.random.normal(0.15, 0.05, np.sum(bare_mask)), 0.05, 0.4)
-    red_edge[bare_mask] = np.clip(np.random.normal(0.18, 0.05, np.sum(bare_mask)), 0.1, 0.4)
-    red_edge_2[bare_mask] = np.clip(np.random.normal(0.20, 0.05, np.sum(bare_mask)), 
-        0.12, 0.42)  # Similar to red_edge
-    red_edge_3[bare_mask] = np.clip(np.random.normal(0.22, 0.06, np.sum(bare_mask)), 
-        0.14, 0.45)  # Slightly higher
+    red_edge[bare_mask] = np.clip(
+        np.random.normal(0.18, 0.05, np.sum(bare_mask)), 0.1, 0.4
+    )
+    red_edge_2[bare_mask] = np.clip(
+        np.random.normal(0.20, 0.05, np.sum(bare_mask)), 0.12, 0.42
+    )  # Similar to red_edge
+    red_edge_3[bare_mask] = np.clip(
+        np.random.normal(0.22, 0.06, np.sum(bare_mask)), 0.14, 0.45
+    )  # Slightly higher
     nir[bare_mask] = np.clip(np.random.normal(0.25, 0.08, np.sum(bare_mask)), 0.1, 0.5)
-    swir1[bare_mask] = np.clip(np.random.normal(0.3, 0.08, np.sum(bare_mask)), 0.15, 0.6)
+    swir1[bare_mask] = np.clip(
+        np.random.normal(0.3, 0.08, np.sum(bare_mask)), 0.15, 0.6
+    )
 
     # Add some kelp patches in water areas near coastline
     # Kelp has distinctive spectral signature: low red, high red-edge, moderate NIR
@@ -299,14 +316,21 @@ def _create_mock_sentinel_data(
 
     # Kelp spectral signature - Based on SKEMA research findings
     red[kelp_mask] = np.clip(np.random.normal(0.02, 0.005, np.sum(kelp_mask)), 0, 0.05)
-    red_edge[kelp_mask] = np.clip(np.random.normal(0.08, 0.02, np.sum(kelp_mask)), 
-        0.04, 0.15)
-    red_edge_2[kelp_mask] = np.clip(np.random.normal(0.12, 0.025, np.sum(kelp_mask)), 
-        0.06, 0.18)  # Higher for submerged detection
-    red_edge_3[kelp_mask] = np.clip(np.random.normal(0.09, 0.02, np.sum(kelp_mask)), 
-        0.05, 0.14)  # Lower than peak red-edge
-    nir[kelp_mask] = np.clip(np.random.normal(0.06, 0.02, np.sum(kelp_mask)), 0.02, 0.12)
-    swir1[kelp_mask] = np.clip(np.random.normal(0.01, 0.005, np.sum(kelp_mask)), 0, 0.03)
+    red_edge[kelp_mask] = np.clip(
+        np.random.normal(0.08, 0.02, np.sum(kelp_mask)), 0.04, 0.15
+    )
+    red_edge_2[kelp_mask] = np.clip(
+        np.random.normal(0.12, 0.025, np.sum(kelp_mask)), 0.06, 0.18
+    )  # Higher for submerged detection
+    red_edge_3[kelp_mask] = np.clip(
+        np.random.normal(0.09, 0.02, np.sum(kelp_mask)), 0.05, 0.14
+    )  # Lower than peak red-edge
+    nir[kelp_mask] = np.clip(
+        np.random.normal(0.06, 0.02, np.sum(kelp_mask)), 0.02, 0.12
+    )
+    swir1[kelp_mask] = np.clip(
+        np.random.normal(0.01, 0.005, np.sum(kelp_mask)), 0, 0.03
+    )
 
     # Apply spatial smoothing for more realistic appearance
     red = ndimage.gaussian_filter(red, sigma=1.0)
