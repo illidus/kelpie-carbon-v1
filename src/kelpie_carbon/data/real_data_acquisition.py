@@ -1,5 +1,5 @@
 """
-Real Data Acquisition for Kelp Detection Validation.
+Data package real satellite data acquisition for kelp detection validation.
 
 This module implements real satellite data acquisition capabilities for validating
 kelp detection algorithms against actual Sentinel-2 imagery from known kelp sites.
