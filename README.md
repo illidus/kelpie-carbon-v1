@@ -1,11 +1,14 @@
 # Kelpie Carbon v1 - Kelp Detection & Carbon Monitoring System
 
-**Status**: ✅ **FULLY FUNCTIONAL** (100% tests passing, ready for enhancements)  
-**Version**: 0.1.0  
-**Last Updated**: January 10, 2025  
+**Status**: ✅ **FULLY FUNCTIONAL** (100% tests passing, ready for enhancements)
+**Version**: 0.1.0
+**Last Updated**: January 10, 2025
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![CI](https://github.com/illidus/kelpie-carbon-v1/workflows/CI/badge.svg)](https://github.com/illidus/kelpie-carbon-v1/actions)
 [![Tests](https://img.shields.io/badge/tests-614_passing-green.svg)](#testing-status)
+[![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing-status)
+[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://illidus.github.io/kelpie-carbon-v1/)
 [![Development](https://img.shields.io/badge/status-active_development-orange.svg)](#current-status)
 
 ## 🌊 Overview
@@ -65,13 +68,13 @@ Total Tests: 633
 
 ### **Test Categories**
 - **Unit Tests**: Component-level testing
-- **Integration Tests**: System integration testing  
+- **Integration Tests**: System integration testing
 - **E2E Tests**: End-to-end workflow testing
 - **Performance Tests**: System performance validation
 
 ### **System Status**
 - ✅ All 614 tests passing successfully
-- ✅ Core functionality fully operational  
+- ✅ Core functionality fully operational
 - ✅ Async test configuration resolved
 - ✅ Type consistency issues resolved
 - ⚠️ Minor FutureWarnings for Dataset.dims usage (non-breaking)
@@ -82,15 +85,15 @@ Total Tests: 633
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/kelpie-carbon-v1.git
+git clone https://github.com/illidus/kelpie-carbon-v1.git
 cd kelpie-carbon-v1
 
 # Install dependencies with Poetry (recommended)
 pip install poetry
 poetry install
 
-# Or install with pip
-pip install -e .
+# Or install with pip (including docs dependencies)
+pip install -e .[docs]
 
 # Run system verification
 poetry run pytest tests/ -x  # Stop on first failure
@@ -99,8 +102,8 @@ poetry run pytest tests/ -x  # Stop on first failure
 ### **Basic Usage**
 
 ```python
-from kelpie_carbon_v1.analytics import AnalyticsFramework
-from kelpie_carbon_v1.analytics import StakeholderReports
+from kelpie_carbon.core import AnalyticsFramework
+from kelpie_carbon.reporting import StakeholderReports
 
 # Initialize analytics framework
 analytics = AnalyticsFramework()
@@ -114,6 +117,19 @@ results = analytics.run_comprehensive_analysis(
 # Generate stakeholder reports
 reporter = StakeholderReports()
 reports = reporter.generate_all_reports(results, region="Broughton_Archipelago")
+```
+
+### **CLI Usage**
+
+```bash
+# Run validation analysis
+kelpie validate --dataset sample_data.json --out validation/results/
+
+# Display validation configuration
+kelpie validation config
+
+# Run comprehensive analysis
+kelpie analyze --region "Broughton_Archipelago" --start-date "2023-06-01" --end-date "2023-08-31"
 ```
 
 ### **Demo & Validation**
@@ -201,7 +217,7 @@ kelpie-carbon-v1/
 - Seasonal calendars and traditional use considerations
 - Community engagement and capacity building materials
 
-### **Scientific Community**  
+### **Scientific Community**
 - Peer-review quality methodology and documentation
 - Statistical validation and uncertainty quantification
 - Open architecture for research collaboration
@@ -270,6 +286,6 @@ Built on established research from:
 
 ---
 
-**Project**: Kelpie Carbon v1  
-**Status**: 🚧 **Active Development** (97.4% functional)  
+**Project**: Kelpie Carbon v1
+**Status**: 🚧 **Active Development** (97.4% functional)
 **Impact**: 🌊 **Advanced kelp monitoring system for BC coastal waters**

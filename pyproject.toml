@@ -48,6 +48,8 @@ weasyprint = "^62.3"
 sympy = "^1.12"
 omegaconf = "^2.3.0"
 rich = "^14.0.0"
+mkdocs-material = {version = "^9.6.14", optional = true}
+mkdocstrings = {extras = ["python"], version = "^0.29.1", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.0"
@@ -63,11 +65,12 @@ pytest-asyncio = "^1.0.0"
 pytest-mock = "^3.14.1"
 pytest-xdist = "^3.7.0"
 ruff = "^0.11.13"
-mkdocs-material = "^9.6.14"
-mkdocstrings = {extras = ["python"], version = "^0.29.1"}
 
 [tool.poetry.scripts]
 kelpie-carbon = "kelpie_carbon.core.cli:app"
+
+[tool.poetry.extras]
+docs = ["mkdocs-material", "mkdocstrings"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

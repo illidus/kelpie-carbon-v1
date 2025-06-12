@@ -6,7 +6,7 @@ _Last updated: 2025‑06‑11_
 This **ROADMAP.md** is the **single source of truth** for outstanding technical work.
 *Rule of thumb*: every pull‑request must tick at least one box below (or add a new one).
 
-> **How to use with Cursor / Claude 4**
+> **How to use with Cursor / Claude 4**
 > 1. Copy the code‑block shown under the next unchecked item.
 > 2. Paste it as a prompt in Cursor.
 > 3. Accept the generated patch, run `pytest`, commit.
@@ -14,11 +14,11 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 
 ---
 
-## Track 1 · Refactor & Repo Layout
+## Track 1 · Refactor & Repo Layout
 
-- [ ] **T1‑001** Move modules into 4‑package layout (`core/`, `data/`, `validation/`, `reporting/`)
+- [x] **T1‑001** Move modules into 4‑package layout (`core/`, `data/`, `validation/`, `reporting/`)
   ```text
-  # Cursor prompt – Refactor skeleton
+  # Cursor prompt – Refactor skeleton
   1. mkdir -p src/kelpie_carbon/{core,data,validation,reporting}
   2. git mv src/kelpie_carbon_v1/indices.py src/kelpie_carbon/core/indices.py
   3. For every module in kelpie_carbon_v1 that isn't tests, relocate into the four‑package tree; update imports.
@@ -26,9 +26,9 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   5. Update pyproject.toml to point to new namespace.
   ```
 
-- [ ] **T1‑002** Unify configuration into **`config/kelpie.yml`**
+- [x] **T1‑002** Unify configuration into **`config/kelpie.yml`** **(partial)**
   ```text
-  # Cursor prompt – Single YAML config
+  # Cursor prompt – Single YAML config
   CREATE config/kelpie.yml merging:
     * validation/config.json
     * validation_config.json
@@ -37,21 +37,21 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   Replace all json loads with this.
   ```
 
-- [ ] **T1‑003** Add type‑safety & lint
+- [ ] **T1‑003** Add type‑safety & lint
   * Adopt **ruff**, **mypy**, **black**, **isort** via `pre‑commit`.
   * Add `pyproject.toml [tool.ruff]` to mirror Black prefs.
 
 ---
 
-## Track 2 · Validation Layer
+## Track 2 · Validation Layer
 
-- [ ] **T2‑001** Implement `ValidationResult` & metric helpers (MAE, RMSE, R², IoU, Dice).
+- [ ] **T2‑001** Implement `ValidationResult` & metric helpers (MAE, RMSE, R², IoU, Dice).
 
-- [ ] **T2‑002** Config‑driven thresholds in `kelpie.yml → validation:`.
+- [ ] **T2‑002** Config‑driven thresholds in `kelpie.yml → validation:`.
 
-- [ ] **T2‑003** Functional validation CLI
+- [ ] **T2‑003** Functional validation CLI
   ```text
-  # Cursor prompt – Validation CLI
+  # Cursor prompt – Validation CLI
   1. new file src/kelpie_carbon/validation/cli.py with Typer app:
        kelpie validate --dataset data/val --out validation/results
   2. Implement metrics in metrics.py.
@@ -59,31 +59,37 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   4. Hook into poetry scripts: [tool.poetry.scripts] kelpie = "kelpie_carbon.cli:app"
   ```
 
-- [ ] **T2‑004** Replace narrative benchmark script
+- [ ] **T2‑004** Replace narrative benchmark script
   * Make `research_benchmark_comparison.py` read latest validation results
-    and benchmarks from YAML; **exit ≠ 0** if any metric fails.
+    and benchmarks from YAML; **exit ≠ 0** if any metric fails.
+
+- [x] **T2‑005** Validation CLI implementation
+  * Complete validation CLI with Typer integration
+  * Metrics computation (MAE, RMSE, R², IoU, Dice) via MetricHelpers
+  * JSON and Markdown report generation
+  * Sub‑command integration with core CLI
 
 ---
 
-## Track 3 · Tests & CI
+## Track 3 · Tests & CI
 
-- [ ] **T3‑001** Profile & cache heavy fixtures; slice data to minimal sample.
+- [ ] **T3‑001** Profile & cache heavy fixtures; slice data to minimal sample.
 
-- [ ] **T3‑002** Enable parallel execution & markers
+- [ ] **T3‑002** Enable parallel execution & markers
   ```text
-  # Cursor prompt – Speed‑up tests
+  # Cursor prompt – Speed‑up tests
   1. Create tests/conftest.py with session‑scoped fixtures sentinel_tile(), rf_model().
   2. Monkeypatch time.sleep & httpx.get in integration tests.
   3. Add pytest.ini:
        addopts = -n auto -m "not slow" --cov=kelpie_carbon --cov-report=term-missing
-  4. Mark >10 s tests with @pytest.mark.slow.
+  4. Mark >10 s tests with @pytest.mark.slow.
   ```
 
-- [ ] **T3‑003** Coverage gate ≥ baseline ‑ 1 %.
+- [ ] **T3‑003** Coverage gate ≥ baseline ‑ 1 %.
 
-- [ ] **T3‑004** CI matrix & nightly job
+- [ ] **T3‑004** CI matrix & nightly job
   ```yaml
-  # Cursor prompt – GitHub Actions CI
+  # Cursor prompt – GitHub Actions CI
   jobs:
     lint:   {runs-on: ubuntu-latest, steps: [ {run: ruff .} ] }
     type:   {runs-on: ubuntu-latest, steps: [ {run: mypy src/} ] }
@@ -99,14 +105,20 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 
 ---
 
-## Track 4 · Documentation
+## Track 4 · Documentation
 
-- [ ] **T4‑001** Adopt **MkDocs Material**; auto‑generate API docs with `mkdocstrings[python]`.
+- [ ] **T4‑001** Adopt **MkDocs Material**; auto‑generate API docs with `mkdocstrings[python]`.
 
-- [ ] **T4‑002** Validation CLI writes Markdown into `docs/reports/`; MkDocs picks it up.
+- [ ] **T4‑002** Validation CLI writes Markdown into `docs/reports/`; MkDocs picks it up.
 
-- [ ] **T4‑003** Keep this ROADMAP.md up to date
+- [ ] **T4‑003** Keep this ROADMAP.md up to date
   *CI fails if a PR touches code but not this file.*
+
+- [x] **T4‑004** MkDocs site & API docs
+  * Complete documentation overhaul with MkDocs Material theme
+  * Automatic API documentation generation with mkdocstrings[python]
+  * Archive legacy documentation files
+  * CI integration with `mkdocs build --strict`
 
 ---
 
