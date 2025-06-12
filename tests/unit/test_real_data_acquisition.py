@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from kelpie_carbon.validation.core.real_data_acquisition import RealDataAcquisition
+from kelpie_carbon.data.real_data_acquisition import RealDataAcquisition
 
 
 class TestRealDataAcquisition(unittest.TestCase):
@@ -22,8 +22,8 @@ class TestRealDataAcquisition(unittest.TestCase):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.data_acquisition = RealDataAcquisition(self.temp_dir.name)
 
-        # Create test sample data directory
-        self.sample_data_dir = Path("validation/sample_data")
+        # Create test sample data directory inside the temp directory
+        self.sample_data_dir = Path(self.temp_dir.name) / "sample_data"
         self.sample_data_dir.mkdir(parents=True, exist_ok=True)
 
     def tearDown(self):
@@ -159,7 +159,7 @@ class TestRealDataAcquisition(unittest.TestCase):
         # Create mock satellite scenes
         import datetime
 
-        from kelpie_carbon.validation.core.real_data_acquisition import SatelliteScene
+        from kelpie_carbon.data.real_data_acquisition import SatelliteScene
 
         scenes = [
             SatelliteScene(
@@ -208,7 +208,7 @@ class TestRealDataAcquisition(unittest.TestCase):
         # Create mock satellite scenes
         import datetime
 
-        from kelpie_carbon.validation.core.real_data_acquisition import SatelliteScene
+        from kelpie_carbon.data.real_data_acquisition import SatelliteScene
 
         scenes = [
             SatelliteScene(
@@ -233,7 +233,7 @@ class TestRealDataAcquisition(unittest.TestCase):
         # Should be synthetic data type, not SKEMA
         self.assertEqual(gt.data_type, "synthetic_validation")
 
-    @patch("kelpie_carbon.validation.core.real_data_acquisition.Path.exists")
+    @patch("kelpie_carbon.data.real_data_acquisition.Path.exists")
     def test_create_validation_dataset_with_real_data(self, mock_exists):
         """Test creating validation dataset with real SKEMA data."""
         # Mock the CSV file exists
@@ -285,7 +285,7 @@ class TestRealDataAcquisition(unittest.TestCase):
                 # Create mock scene
                 import datetime
 
-                from kelpie_carbon.validation.core.real_data_acquisition import (
+                from kelpie_carbon.data.real_data_acquisition import (
                     SatelliteScene,
                 )
 

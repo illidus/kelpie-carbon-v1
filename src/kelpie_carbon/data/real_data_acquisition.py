@@ -1,5 +1,5 @@
 """
-Real Satellite Data Acquisition for SKEMA Validation.
+Real Data Acquisition for Kelp Detection Validation.
 
 This module implements real satellite data acquisition capabilities for validating
 kelp detection algorithms against actual Sentinel-2 imagery from known kelp sites.
@@ -233,7 +233,7 @@ class RealDataAcquisition:
             ValueError: If CSV schema validation fails
         """
         # Construct path to SKEMA CSV file
-        csv_path = Path("validation/sample_data") / f"{site_id}_skema.csv"
+        csv_path = self.data_directory / "sample_data" / f"{site_id}_skema.csv"
 
         if not csv_path.exists():
             raise FileNotFoundError(f"SKEMA CSV file not found: {csv_path}")
