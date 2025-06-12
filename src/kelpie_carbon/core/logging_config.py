@@ -1,131 +1,18 @@
-"""Logging configuration for Kelpie Carbon v1."""
+"""Lightweight logging configuration for Kelpie Carbon v1."""
 
 import logging
-import logging.handlers
-import sys
-from pathlib import Path
-from typing import Any
-
-from .config import get_settings
 
 
-class ColoredFormatter(logging.Formatter):
-    """Colored formatter for console output."""
-
-    COLORS = {
-        "DEBUG": "\033[36m",  # Cyan
-        "INFO": "\033[32m",  # Green
-        "WARNING": "\033[33m",  # Yellow
-        "ERROR": "\033[31m",  # Red
-        "CRITICAL": "\033[35m",  # Magenta
-    }
-    RESET = "\033[0m"
-
-    def format(self, record: logging.LogRecord) -> str:
-        """Format log record with colors."""
-        if hasattr(record, "levelname"):
-            color = self.COLORS.get(record.levelname, "")
-            record.levelname = f"{color}{record.levelname}{self.RESET}"
-
-        return super().format(record)
-
-
-def setup_logging() -> None:
-    """Setup logging configuration based on settings."""
-    settings = get_settings()
-
-    # Handle both old and new config formats
-    if hasattr(settings, "logging"):
-        # Old config format
-        log_config = settings.logging
-        log_level = log_config.level.upper()
-        log_file = log_config.log_file
-        console_output = log_config.console_output
-        file_output = log_config.file_output
-        log_format = log_config.format
-        include_module = log_config.include_module
-        include_timestamp = log_config.include_timestamp
-    else:
-        # New simplified config format
-        log_level = settings.log_level.upper()
-        log_file = f"{settings.logs_path}/kelpie_carbon.log"
-        console_output = True
-        file_output = True
-        log_format = settings.log_format
-        include_module = True
-        include_timestamp = True
-
-    # Create logs directory if it doesn't exist
-    log_file_path = Path(log_file)
-    log_file_path.parent.mkdir(parents=True, exist_ok=True)
-
-    # Configure root logger
-    root_logger = logging.getLogger()
-    root_logger.setLevel(getattr(logging, log_level))
-
-    # Clear existing handlers
-    root_logger.handlers.clear()
-
-    # Console handler
-    if console_output:
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setLevel(getattr(logging, log_level))
-
-        if log_format == "detailed":
-            if include_module:
-                console_format = (
-                    "%(asctime)s | %(levelname)-8s | %(name)s:%(lineno)d | %(message)s"
-                    if include_timestamp
-                    else "%(levelname)-8s | %(name)s:%(lineno)d | %(message)s"
-                )
-            else:
-                console_format = (
-                    "%(asctime)s | %(levelname)-8s | %(message)s"
-                    if include_timestamp
-                    else "%(levelname)-8s | %(message)s"
-                )
-        elif log_format == "json":
-            # For JSON format, we'll use a simple format for console
-            console_format = "%(levelname)s: %(message)s"
-        else:
-            console_format = "%(message)s"
-
-        console_formatter = ColoredFormatter(console_format)
-        console_handler.setFormatter(console_formatter)
-        root_logger.addHandler(console_handler)
-
-    # File handler
-    if file_output:
-        file_handler = logging.handlers.RotatingFileHandler(
-            log_file,
-            maxBytes=10 * 1024 * 1024,
-            backupCount=5,  # 10MB
-        )
-        file_handler.setLevel(getattr(logging, log_level))
-
-        file_formatter: JsonFormatter | logging.Formatter
-        if log_format == "json":
-            file_formatter = JsonFormatter()
-        else:
-            if include_module:
-                file_format = (
-                    "%(asctime)s | %(levelname)-8s | %(name)s:%(lineno)d | %(message)s"
-                    if include_timestamp
-                    else "%(levelname)-8s | %(name)s:%(lineno)d | %(message)s"
-                )
-            else:
-                file_format = (
-                    "%(asctime)s | %(levelname)-8s | %(message)s"
-                    if include_timestamp
-                    else "%(levelname)-8s | %(message)s"
-                )
-            file_formatter = logging.Formatter(file_format)
-
-        file_handler.setFormatter(file_formatter)
-        root_logger.addHandler(file_handler)
-
-    # Set third-party library log levels
-    _configure_third_party_loggers()
+def setup_logging(level: int = logging.INFO) -> None:
+    """Set up basic logging configuration.
+    
+    Args:
+        level: Logging level (default: INFO)
+    """
+    logging.basicConfig(
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        level=level,
+    )
 
 
 def _configure_third_party_loggers() -> None:
