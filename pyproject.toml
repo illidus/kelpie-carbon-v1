@@ -63,6 +63,7 @@ pytest-asyncio = "^1.0.0"
 pytest-mock = "^3.14.1"
 pytest-xdist = "^3.7.0"
 ruff = "^0.11.13"
+mkdocs-material = "^9.6.14"
 
 [tool.poetry.scripts]
 kelpie-carbon = "kelpie_carbon.core.cli:app"
