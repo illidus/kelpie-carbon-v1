@@ -320,10 +320,8 @@ class StatisticalBenchmarker:
         our_correct = our_pred == ground_truth
 
         # McNemar's table: 2x2 contingency table
-        both_correct = np.sum(skema_correct & our_correct)
         skema_only = np.sum(skema_correct & ~our_correct)
         our_only = np.sum(~skema_correct & our_correct)
-        both_wrong = np.sum(~skema_correct & ~our_correct)
 
         # McNemar's statistic focuses on discordant pairs
         if skema_only + our_only == 0:
@@ -454,7 +452,7 @@ class StatisticalBenchmarker:
                     metric_value = metric_func(pred_boot, truth_boot)
                     if np.isfinite(metric_value):
                         bootstrap_values.append(metric_value)
-                except:
+                except (ValueError, TypeError, ZeroDivisionError):
                     pass  # Skip failed calculations
 
             if len(bootstrap_values) == 0:

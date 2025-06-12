@@ -280,7 +280,7 @@ class TestErrorRecoveryPatterns:
                             import json
 
                             return json.loads(data)
-                        except:
+                        except json.JSONDecodeError:
                             return fallback
                     return data if data else fallback
             except Exception:

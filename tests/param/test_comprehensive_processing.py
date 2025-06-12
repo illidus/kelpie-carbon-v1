@@ -88,13 +88,13 @@ def test_data_processing_scenarios(
                 with pytest.raises((ValueError, TypeError)):
                     if not input_value:
                         raise ValueError("Empty temporal data")
-                    for year, value in input_value.items():
-                        if not isinstance(value, (int, float)):
+                    for _year, value in input_value.items():
+                        if not isinstance(value, int | float):
                             raise TypeError("Invalid temporal value")
             else:
                 assert len(input_value) > 0
                 for value in input_value.values():
-                    assert isinstance(value, (int, float))
+                    assert isinstance(value, int | float)
 
     except ImportError:
         pytest.skip("Required modules not available")

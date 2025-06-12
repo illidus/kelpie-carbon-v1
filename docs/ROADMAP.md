@@ -152,6 +152,47 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
 
 ---
 
+## Track 5 · Linting and Code Quality
+
+- [ ] **T5‑001** Fix unused imports and variables
+  * Remove unused imports across codebase (F401)
+  * Remove unused variables (F841)
+  * Fix variable assignments that are never used
+  * Focus on reporting and validation modules
+
+- [ ] **T5‑002** Fix improper error handling and exception patterns
+  * Replace bare `except:` blocks with specific exception types (E722)
+  * Use proper exception chaining with `raise ... from err` (B904)
+  * Fix SIM105 patterns by using `contextlib.suppress(ImportError)`
+
+- [ ] **T5‑003** Fix Python type hinting issues
+  * Convert tuple type hints to union syntax: `(X, Y)` → `X | Y` (UP038)
+  * Fix `Any` imports in core modules
+  * Ensure proper annotation of function arguments
+
+- [ ] **T5‑004** Fix star imports and namespace best practices
+  * Replace `from x import *` patterns with explicit imports (F403)
+  * Fix redefinition of functions and shadowed imports (F811, F402)
+  * Ensure proper namespace handling in validation submodules
+
+- [ ] **T5‑005** Optimize code patterns and convention adherence
+  * Replace dict comprehensions with set comprehensions where appropriate (C401, C403)
+  * Use Python idioms like `key in dict` instead of `key in dict.keys()` (SIM118)
+  * Use ternary operators instead of if-else blocks for simple assignments (SIM108)
+  * Fix variable naming: rename uppercase statistical variables to lowercase (N806)
+
+- [ ] **T5‑006** Fix Typer CLI best practices
+  * Fix Typer Option/Argument function calls in parameter defaults (B008)
+  * Move to module-level singleton variables for CLI option defaults
+  * Ensure proper help text and argument typing
+
+- [ ] **T5‑007** Modernize `pyproject.toml` configuration
+  * Update deprecated ruff settings to use `lint.` namespace
+  * Migrate linting configuration to fully leverage ruff capabilities
+  * Set appropriate lint inclusion/exclusion patterns
+
+---
+
 ### Changelog template
 
 When ticking a box, add to PR description:

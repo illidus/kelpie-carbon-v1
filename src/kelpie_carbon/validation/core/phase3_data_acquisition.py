@@ -434,7 +434,7 @@ class Phase3DataAcquisition:
         else:
             # Season crosses year boundary
             if start_month <= month <= 12 or 1 <= month <= end_month:
-                if month == start_month or month == end_month:
+                if month in (start_month, end_month):
                     return "transition_season"
                 else:
                     return "peak_season"
@@ -794,7 +794,7 @@ class Phase3DataAcquisition:
             )
 
         # Convert set to list for JSON serialization
-        summary["data_sources"] = sorted(list(summary["data_sources"]))
+        summary["data_sources"] = sorted(summary["data_sources"])
 
         # Add coverage statistics
         summary["coverage_stats"] = {

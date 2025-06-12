@@ -153,10 +153,7 @@ class FieldDataIngestor:
 
                 # Parse biomass measurements
                 biomass = row.get("biomass_kg_per_m2")
-                if pd.isna(biomass):
-                    biomass = None
-                else:
-                    biomass = float(biomass)
+                biomass = None if pd.isna(biomass) else float(biomass)
 
                 record = FieldSurveyRecord(
                     record_id=str(row.get("record_id", f"survey_{len(records)}")),
@@ -436,7 +433,7 @@ class SpeciesValidationAnalyzer:
 
         # Calculate by species
         by_species = {}
-        all_species = list(set([pair[1].primary_species for pair in biomass_pairs]))
+        all_species = {pair[1].primary_species for pair in biomass_pairs}
 
         for species in all_species:
             species_pairs = [
@@ -872,17 +869,10 @@ class FieldSurveyIntegrationManager:
                 self.data_manager.add_ground_truth(ground_truth)
 
             # Store validation metrics
-            metrics_data = {
-                "species_accuracy": metrics.species_accuracy,
-                "biomass_mae": metrics.biomass_mae,
-                "biomass_rmse": metrics.biomass_rmse,
-                "biomass_r2": metrics.biomass_r2,
-                "total_samples": metrics.total_samples,
-            }
-
-            # Note: In a full implementation, we'd have a dedicated validation results table
-            self.logger.info(
-                f"Stored {len(field_records)} validation records for campaign {campaign_id}"
+            logger.info(
+                f"Validation metrics: accuracy={metrics.species_accuracy:.2f}, "
+                f"biomass MAE={metrics.biomass_mae:.2f}, "
+                f"confidence={metrics.confidence:.2f}"
             )
 
         except Exception as e:
@@ -894,21 +884,6 @@ def create_field_survey_integration_manager(
 ) -> FieldSurveyIntegrationManager:
     """Factory function to create a field survey integration manager."""
     return FieldSurveyIntegrationManager(data_manager, species_classifier)
-
-
-def create_field_data_ingestor() -> FieldDataIngestor:
-    """Factory function to create a field data ingestor."""
-    return FieldDataIngestor()
-
-
-def create_validation_analyzer() -> SpeciesValidationAnalyzer:
-    """Factory function to create a species validation analyzer."""
-    return SpeciesValidationAnalyzer()
-
-
-def create_survey_reporter() -> FieldSurveyReporter:
-    """Factory function to create a field survey reporter."""
-    return FieldSurveyReporter()
 
 
 def create_field_data_ingestor() -> FieldDataIngestor:

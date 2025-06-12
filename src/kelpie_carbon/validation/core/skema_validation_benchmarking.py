@@ -222,7 +222,7 @@ def calculate_confidence_interval(estimate, method_std, data_std):
 
         comparisons = {}
 
-        for formula_name in self.skema_formulas.keys():
+        for formula_name in self.skema_formulas:
             if formula_name in self.pipeline_formulas:
                 skema_formula = self.skema_formulas[formula_name]
                 our_formula = self.pipeline_formulas[formula_name]
@@ -419,18 +419,9 @@ class VisualProcessingDemonstrator:
         y, x = np.ogrid[:height, :width]
 
         # Base water body (left side)
-        water = x < width * 0.7
-
-        # Add irregular coastline
+        # Create irregular coastline
         coastline_noise = np.sin(y * 0.1) * 20 + np.sin(y * 0.05) * 10
         irregular_coastline = x < (width * 0.7 + coastline_noise)
-
-        # Add some islands/rocks
-        island_centers = [(height // 3, width // 2), (2 * height // 3, width // 3)]
-        for iy, ix in island_centers:
-            island_dist = np.sqrt((y - iy) ** 2 + (x - ix) ** 2)
-            island = island_dist < 15
-            irregular_coastline = irregular_coastline & ~island
 
         return irregular_coastline
 
@@ -471,8 +462,6 @@ class VisualProcessingDemonstrator:
         y, x = np.ogrid[:height, :width]
 
         # Land is right side of image
-        land = x >= width * 0.7
-
         # Add some coastal complexity
         coastline_noise = np.sin(y * 0.1) * 15 + np.sin(y * 0.08) * 8
         land_with_coast = x >= (width * 0.7 + coastline_noise)

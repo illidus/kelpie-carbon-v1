@@ -133,7 +133,6 @@ class TestErrorHandlingGracefulDegradation:
     def test_memory_pressure_handling(self):
         """Test behavior under memory pressure conditions."""
         # Fill cache to near capacity
-        large_datasets = []
         for i in range(3):  # Reduced for test performance
             with patch("kelpie_carbon.core.fetch.fetch_sentinel_tiles") as mock_fetch:
                 mock_dataset = xr.Dataset(
@@ -324,7 +323,6 @@ class TestSystemIntegration:
             )
 
             assert analysis_response.status_code == 200
-            analysis_result = analysis_response.json()
 
             # Step 2: Cache for imagery
             cache_response = self.client.post(

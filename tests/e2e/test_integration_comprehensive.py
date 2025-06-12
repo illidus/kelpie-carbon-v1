@@ -492,8 +492,6 @@ class TestPerformanceIntegration:
         response = self.client.get("/static/style.css")
         if response.status_code == 200:
             # Some cache control should be present
-            headers = response.headers
-            # At minimum, the file should be served successfully
             assert len(response.content) > 0
 
     def test_progressive_loading_endpoints(self):

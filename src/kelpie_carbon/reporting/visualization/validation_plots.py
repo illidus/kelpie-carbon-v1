@@ -54,13 +54,11 @@ class ValidationVisualizationSuite:
         """
         logger.info("Creating comprehensive accuracy assessment dashboard")
 
-        dashboard_plots = []
-
         # Create individual plots
-        rmse_mae_r2_plot = self.plot_rmse_mae_r2_comparison(validation_results)
-        scatter_plots = self.create_predicted_vs_actual_plots(validation_results)
-        spatial_plot = self.visualize_spatial_accuracy_distribution(validation_results)
-        species_plot = self.create_species_accuracy_comparison(validation_results)
+        self.plot_rmse_mae_r2_comparison(validation_results)
+        self.create_predicted_vs_actual_plots(validation_results)
+        self.visualize_spatial_accuracy_distribution(validation_results)
+        self.create_species_accuracy_comparison(validation_results)
 
         # Combine into dashboard using plotly
         dashboard_fig = make_subplots(
@@ -207,7 +205,6 @@ class ValidationVisualizationSuite:
 
             # Generate sample data consistent with the calculated metrics
             rmse = result.biomass_metrics.get("rmse_biomass_kg_m2", 0.2)
-            r2 = result.biomass_metrics.get("r2_biomass_correlation", 0.8)
 
             # Create synthetic data for visualization (in practice, use actual data)
             obs = np.random.normal(1.5, 0.5, n_points)
@@ -226,13 +223,13 @@ class ValidationVisualizationSuite:
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
         # Biomass plot
-        scatter1 = ax1.scatter(
+        ax1.scatter(
             all_biomass_obs,
             all_biomass_pred,
-            c=[hash(label) % 10 for label in site_labels],
-            cmap="tab10",
-            alpha=0.7,
-            s=50,
+            color="green",
+            alpha=0.6,
+            edgecolors="white",
+            s=80,
         )
 
         # Add 1:1 line
@@ -254,13 +251,13 @@ class ValidationVisualizationSuite:
         ax1.grid(True, alpha=0.3)
 
         # Carbon plot
-        scatter2 = ax2.scatter(
+        ax2.scatter(
             all_carbon_obs,
             all_carbon_pred,
-            c=[hash(label) % 10 for label in site_labels],
-            cmap="tab10",
-            alpha=0.7,
-            s=50,
+            color="blue",
+            alpha=0.6,
+            edgecolors="white",
+            s=80,
         )
 
         # Add 1:1 line
@@ -842,7 +839,7 @@ class ValidationVisualizationSuite:
             transform=ax.transAxes,
             fontsize=14,
             verticalalignment="center",
-            bbox=dict(boxstyle="round,pad=0.3", facecolor="lightblue"),
+            bbox={"boxstyle": "round,pad=0.3", "facecolor": "lightblue"},
         )
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)

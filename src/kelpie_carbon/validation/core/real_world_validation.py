@@ -379,7 +379,7 @@ class RealWorldValidator:
         }
         if kelp_sites:
             logger.info("KELP FARM VALIDATION RESULTS:")
-            for site_name, result in kelp_sites.items():
+            for _site_name, result in kelp_sites.items():
                 status = "✅ PASS" if result.success else "❌ FAIL"
                 logger.info(
                     f"  {result.site.name}: {result.detection_rate:.1%} detection {status}"
@@ -392,7 +392,7 @@ class RealWorldValidator:
         }
         if control_sites:
             logger.info("CONTROL SITE VALIDATION RESULTS:")
-            for site_name, result in control_sites.items():
+            for _site_name, result in control_sites.items():
                 status = "✅ PASS" if result.success else "❌ FAIL"
                 logger.info(
                     f"  {result.site.name}: {result.detection_rate:.1%} false positive {status}"

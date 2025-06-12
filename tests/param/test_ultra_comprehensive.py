@@ -56,7 +56,7 @@ def test_comprehensive_scenarios(test_scenario, input_data, expected_outcome):
                     raise ValueError("Invalid biomass parameters")
             elif test_scenario == "temporal_analysis":
                 if not input_data.get("data") or any(
-                    not isinstance(v, (int, float)) for v in input_data["data"].values()
+                    not isinstance(v, int | float) for v in input_data["data"].values()
                 ):
                     raise ValueError("Invalid temporal data")
             elif test_scenario == "full_pipeline":
@@ -70,12 +70,10 @@ def test_comprehensive_scenarios(test_scenario, input_data, expected_outcome):
                     raise ValueError("Invalid coordinates")
                 if input_data.get("date") == "invalid-date":
                     raise ValueError("Invalid date")
-            elif test_scenario == "data_validation":
-                if (
-                    input_data.get("lat", 0) > 90
-                    or input_data.get("quality") == "invalid"
-                ):
-                    raise ValueError("Invalid validation data")
+            elif test_scenario == "data_validation" and (
+                input_data.get("lat", 0) > 90 or input_data.get("quality") == "invalid"
+            ):
+                raise ValueError("Invalid validation data")
     else:
         # Success cases - just verify the input makes sense
         assert input_data is not None

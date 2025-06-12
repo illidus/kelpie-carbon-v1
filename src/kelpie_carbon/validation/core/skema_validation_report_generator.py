@@ -494,7 +494,7 @@ Visual processing demonstrations have been generated for the following sites:
 """
 
         # Add visual demonstration info
-        for site_name in self.processing_demonstrations.keys():
+        for site_name in self.processing_demonstrations:
             report += f"- **{site_name}**: Step-by-step satellite imagery processing comparison\n"
 
         report += """

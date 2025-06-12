@@ -14,8 +14,13 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 try:
-    import requests
+    import numpy as np
+    
+    PANDAS_NUMPY_AVAILABLE = True
+except ImportError:
+    PANDAS_NUMPY_AVAILABLE = False
 
+try:
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
@@ -580,7 +585,7 @@ class SKEMABiomassDatasetIntegrator:
             species_stats[species]["sites"].append(site.site_id)
 
         # Calculate statistics
-        for species, stats in species_stats.items():
+        for _species, stats in species_stats.items():
             biomass_values = np.array(stats["biomass_values"])
             carbon_values = np.array(stats["carbon_values"])
 
@@ -703,7 +708,7 @@ class SKEMABiomassDatasetIntegrator:
         # Generate representative measurements
         measurements = []
 
-        for i in range(50):  # 50 representative measurements
+        for _i in range(50):  # 50 representative measurements
             measurement = {
                 "date": datetime.now() - timedelta(days=np.random.randint(0, 730)),
                 "latitude": 48.5833 + np.random.normal(0, 0.01),

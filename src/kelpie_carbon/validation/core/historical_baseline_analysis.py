@@ -165,29 +165,29 @@ class ChangeDetectionAnalyzer:
             return 0.0, 1.0
 
         # Calculate S statistic
-        S = 0
+        s = 0
         for i in range(n - 1):
             for j in range(i + 1, n):
                 if data[j] > data[i]:
-                    S += 1
+                    s += 1
                 elif data[j] < data[i]:
-                    S -= 1
+                    s -= 1
 
         # Calculate variance
-        var_S = n * (n - 1) * (2 * n + 5) / 18
+        var_s = n * (n - 1) * (2 * n + 5) / 18
 
         # Calculate Z statistic
-        if S > 0:
-            Z = (S - 1) / np.sqrt(var_S)
-        elif S < 0:
-            Z = (S + 1) / np.sqrt(var_S)
+        if s > 0:
+            z = (s - 1) / np.sqrt(var_s)
+        elif s < 0:
+            z = (s + 1) / np.sqrt(var_s)
         else:
-            Z = 0
+            z = 0
 
         # Calculate p-value (two-tailed)
-        p_value = 2 * (1 - stats.norm.cdf(abs(Z)))
+        p_value = 2 * (1 - stats.norm.cdf(abs(z)))
 
-        return Z, p_value
+        return z, p_value
 
     def analyze_change_patterns(
         self,
@@ -626,7 +626,7 @@ class HistoricalBaselineAnalysis:
         # Calculate baseline extent (typically early period average)
         baseline_years = [
             year
-            for year in processed_data.keys()
+            for year in processed_data
             if site.historical_period[0] <= year <= site.historical_period[0] + 10
         ]
         baseline_extent = np.mean(
@@ -871,13 +871,10 @@ class HistoricalBaselineAnalysis:
             "baseline_extent_range": [np.min(all_baselines), np.max(all_baselines)],
             "mean_extent_range": [np.min(all_means), np.max(all_means)],
             "regional_diversity": len(
-                set(results["region"] for results in comparative_results.values())
+                {results["region"] for results in comparative_results.values()}
             ),
             "species_diversity": len(
-                set(
-                    tuple(results["species"])
-                    for results in comparative_results.values()
-                )
+                {tuple(results["species"]) for results in comparative_results.values()}
             ),
         }
 
@@ -918,16 +915,16 @@ class HistoricalBaselineAnalysis:
             ]
         )
 
-        for site_name, stats in report["site_comparisons"].items():
+        for site_name, site_stats in report["site_comparisons"].items():
             md_lines.extend(
                 [
                     f"\n### {site_name}",
-                    f"- **Region:** {stats['region']}",
-                    f"- **Species:** {', '.join(stats['species'])}",
-                    f"- **Baseline Extent:** {stats['baseline_extent']:.1f} hectares",
-                    f"- **Mean Historical Extent:** {stats['mean_extent']:.1f} hectares",
-                    f"- **Temporal Span:** {stats['temporal_span'][0]} - {stats['temporal_span'][1]}",
-                    f"- **Data Quality Score:** {stats['data_quality_score']:.2f}",
+                    f"- **Region:** {site_stats['region']}",
+                    f"- **Species:** {', '.join(site_stats['species'])}",
+                    f"- **Baseline Extent:** {site_stats['baseline_extent']:.1f} hectares",
+                    f"- **Mean Historical Extent:** {site_stats['mean_extent']:.1f} hectares",
+                    f"- **Temporal Span:** {site_stats['temporal_span'][0]} - {site_stats['temporal_span'][1]}",
+                    f"- **Data Quality Score:** {site_stats['data_quality_score']:.2f}",
                 ]
             )
 
@@ -1137,7 +1134,7 @@ def create_sample_historical_dataset() -> HistoricalDataset:
     analyzer = HistoricalBaselineAnalysis()
 
     # Create Broughton site
-    site = analyzer.create_historical_site(
+    analyzer.create_historical_site(
         name="Sample Broughton Site",
         latitude=50.0833,
         longitude=-126.1667,

@@ -33,6 +33,24 @@ app = typer.Typer(
 console = Console()
 logger = get_logger(__name__)
 
+# Define module-level Typer Option variables
+DATASET_OPTION = typer.Option(
+    ...,
+    "--dataset",
+    "-d",
+    help="Path to validation dataset (JSON format)",
+    exists=True,
+    file_okay=True,
+    dir_okay=False,
+)
+
+OUTPUT_OPTION = typer.Option(
+    "validation/results",
+    "--out",
+    "-o",
+    help="Output directory for validation results",
+)
+
 
 def load_validation_config() -> dict:
     """
@@ -93,7 +111,7 @@ def load_dataset(dataset_path: Path) -> tuple[np.ndarray, np.ndarray]:
 
     except Exception as e:
         console.print(f"[red]Error loading dataset:[/red] {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
@@ -200,21 +218,8 @@ def generate_markdown_report(
 
 @app.command()
 def validate(
-    dataset: Path = typer.Option(
-        ...,
-        "--dataset",
-        "-d",
-        help="Path to validation dataset (JSON format)",
-        exists=True,
-        file_okay=True,
-        dir_okay=False,
-    ),
-    output: Path = typer.Option(
-        "validation/results",
-        "--out",
-        "-o",
-        help="Output directory for validation results",
-    ),
+    dataset: Path = DATASET_OPTION,
+    output: Path = OUTPUT_OPTION,
     campaign_id: str | None = typer.Option(
         None,
         "--campaign-id",
@@ -235,13 +240,9 @@ def validate(
     ),
 ) -> None:
     """
-    Run validation on a dataset and generate reports.
+    Validate satellite-based kelp detection against ground truth.
 
-    Loads dataset, computes MAE, RMSE, R² metrics using MetricHelpers,
-    and generates JSON and Markdown reports in the specified output directory.
-
-    Example:
-        kelpie validate --dataset data/test_set.json --out validation/results
+    Processes validation dataset and generates comprehensive metrics report.
     """
     console.print("[bold blue]🌊 Kelpie-Carbon Validation[/bold blue]")
 

@@ -78,7 +78,7 @@ def serve(
                 )
         except RuntimeError as e:
             logger.error(f"Failed to find available port: {e}")
-            raise typer.Exit(1)
+            raise typer.Exit(1) from e
 
     # Override with CLI arguments if provided
     server_config = {
@@ -130,7 +130,7 @@ def serve(
         host_str = str(server_config["host"])
         port_int = (
             int(server_config["port"])
-            if isinstance(server_config["port"], (int, str))
+            if isinstance(server_config["port"], int | str)
             else 8000
         )
         reload_bool = bool(server_config["reload"])
@@ -182,7 +182,7 @@ def serve(
             logger.info("Or: poetry run kelpie-carbon-v1 serve --port 8001")
         else:
             logger.error(f"Failed to start server: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -266,7 +266,7 @@ def analyze(
 
     except Exception as e:
         logger.error(f"Analysis failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -315,7 +315,7 @@ def test(
         logger.info("Tests completed successfully")
     except subprocess.CalledProcessError as e:
         logger.error(f"Tests failed with exit code {e.returncode}")
-        raise typer.Exit(e.returncode)
+        raise typer.Exit(e.returncode) from e
 
 
 # Import validation CLI for proxy command
@@ -328,14 +328,18 @@ except ImportError:
     validation_available = False
 
 
+# Define command-line arguments for validation as module-level variables
+VALIDATION_ARGS = typer.Argument(..., help="Arguments for validation CLI")
+
+
 @app.command()
 def validation(
-    args: list[str] = typer.Argument(..., help="Arguments for validation CLI"),
+    args: list[str] = VALIDATION_ARGS,
 ):
     """
-    Proxy to kelpie_carbon.validation.cli so users can run:
-      kelpie validation satellite …
-      kelpie validation run …
+    Run validation commands to test system accuracy against ground truth.
+
+    This command forwards arguments to the validation CLI.
     """
     if not validation_available:
         logger.error("Validation CLI is not available")

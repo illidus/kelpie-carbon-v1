@@ -736,8 +736,8 @@ class TemporalValidator:
             return False
 
         # Check if we have data across multiple seasons
-        months = set(dp.timestamp.month for dp in data_points)
-        seasons_covered = len(set(self._get_season(month) for month in months))
+        months = {dp.timestamp.month for dp in data_points}
+        seasons_covered = len({self._get_season(month) for month in months})
 
         return seasons_covered >= 3  # At least 3 seasons covered
 
@@ -993,7 +993,7 @@ class TemporalValidator:
 
         # Aggregate all metrics
         aggregated = {}
-        for metric_name in all_persistence_metrics[0].keys():
+        for metric_name in all_persistence_metrics[0]:
             values = [
                 metrics.get(metric_name, 0.0) for metrics in all_persistence_metrics
             ]
