@@ -125,7 +125,7 @@ def create_validation_config():
         },
     }
 
-    config_path = Path("validation/validation_config.json")
+    config_path = Path("validation/kelpie.yml")
     with open(config_path, "w") as f:
         json.dump(config, f, indent=2)
 
@@ -159,7 +159,7 @@ def download_sentinel2_sample_data():
     print("🛰️ Acquiring Sentinel-2 Sample Data...")
 
     # Load validation config
-    config_path = Path("validation/validation_config.json")
+    config_path = Path("validation/kelpie.yml")
     with open(config_path) as f:
         config = json.load(f)
 
@@ -270,7 +270,7 @@ def evaluate_implementations():
         return
 
     # Load validation config
-    config_path = Path("validation/validation_config.json")
+    config_path = Path("validation/kelpie.yml")
     if not config_path.exists():
         print("❌ Validation config not found. Run create_validation_framework.py first.")
         return
@@ -561,7 +561,7 @@ validation/
 ├── benchmarks/        # Research paper benchmarks
 ├── tools/             # Data acquisition and evaluation scripts
 ├── reports/           # Generated validation reports
-└── validation_config.json  # Configuration file
+└── kelpie.yml  # Configuration file
 ```
 
 ## Implementations Being Validated

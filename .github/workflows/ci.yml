@@ -59,3 +59,19 @@ jobs:
 
       - name: Build docs
         run: poetry run mkdocs build --strict
+
+  pages-deploy:
+    needs: docs-build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v4
+      - name: Upload docs to gh-pages/docs
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/docs
+      - name: Deploy
+        uses: actions/deploy-pages@v4

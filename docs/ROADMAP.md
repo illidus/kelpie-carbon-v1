@@ -31,7 +31,7 @@ This **ROADMAP.md** is the **single source of truth** for outstanding technical 
   # Cursor prompt – Single YAML config
   CREATE config/kelpie.yml merging:
     * validation/config.json
-    * validation_config.json
+    * kelpie.yml
     * hard‑coded constants in research_benchmark_comparison.py
   Write loader: kelpie_carbon.core.config.load() returns OmegaConf DictConfig.
   Replace all json loads with this.

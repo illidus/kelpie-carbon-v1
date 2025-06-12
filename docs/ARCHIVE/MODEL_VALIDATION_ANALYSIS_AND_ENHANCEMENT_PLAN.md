@@ -244,7 +244,7 @@ class EnhancedKelpBiomassModel(KelpBiomassModel):
 # Training pipeline implementation
 poetry run python scripts/retrain_with_biomass_data.py \
     --skema-data-path data/skema_biomass_validation.csv \
-    --validation-sites validation/validation_config.json \
+    --validation-sites validation/kelpie.yml \
     --output-model models/biomass_calibrated_model.pkl \
     --cross-validation-folds 5
 ```
@@ -416,7 +416,7 @@ def create_model_validation_dashboard():
 - `src/kelpie_carbon_v1/validation/` - Validation framework enhancement
 - `src/kelpie_carbon_v1/data/skema_integration.py` - SKEMA data integration
 - `src/kelpie_carbon_v1/core/model.py` - Model enhancement
-- `validation/validation_config.json` - Configuration updates
+- `validation/kelpie.yml` - Configuration updates
 
 ---
 
