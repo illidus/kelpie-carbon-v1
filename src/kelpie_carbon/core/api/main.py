@@ -151,7 +151,7 @@ def readiness():
         logger.error(f"Readiness check failed: {e}")
         raise create_service_unavailable_error(
             "Application readiness check", details=str(e)[:100]
-        )
+        ) from e
 
 
 @app.post("/api/run", response_model=AnalysisResponse)
@@ -199,12 +199,12 @@ def run_analysis(request: AnalysisRequest):
                 end_date=request.end_date,
             )
 
-    except ValueError:
+    except ValueError as e:
         raise create_date_range_error(
             "Invalid date format",
             start_date=request.start_date,
             end_date=request.end_date,
-        )
+        ) from e
 
     try:
         # Import pipeline modules
@@ -225,7 +225,7 @@ def run_analysis(request: AnalysisRequest):
         except Exception as e:
             raise create_processing_error(
                 "Satellite data retrieval", e, analysis_id=analysis_id
-            )
+            ) from e
 
         # Step 2: Calculate spectral indices and merge with satellite data
         try:
@@ -238,7 +238,7 @@ def run_analysis(request: AnalysisRequest):
         except Exception as e:
             raise create_processing_error(
                 "Spectral index calculation", e, analysis_id=analysis_id
-            )
+            ) from e
 
         # Step 3: Apply advanced masking
         try:
@@ -247,7 +247,9 @@ def run_analysis(request: AnalysisRequest):
             masked_data = apply_mask(combined_data)
             mask_stats = get_mask_statistics(masked_data)
         except Exception as e:
-            raise create_processing_error("Data masking", e, analysis_id=analysis_id)
+            raise create_processing_error(
+                "Data masking", e, analysis_id=analysis_id
+            ) from e
 
         # Step 4: Predict biomass using Random Forest model
         try:
@@ -255,7 +257,7 @@ def run_analysis(request: AnalysisRequest):
         except Exception as e:
             raise create_processing_error(
                 "Biomass prediction", e, analysis_id=analysis_id
-            )
+            ) from e
 
         # Extract biomass prediction
         biomass_kg_ha = biomass_result["biomass_kg_per_hectare"]
@@ -361,4 +363,6 @@ def run_analysis(request: AnalysisRequest):
         processing_time = f"{time.time() - start_time:.2f}s"
         logger.error(f"Analysis {analysis_id} failed after {processing_time}: {str(e)}")
 
-        raise handle_unexpected_error("analysis processing", e, analysis_id=analysis_id)
+        raise handle_unexpected_error(
+            "analysis processing", e, analysis_id=analysis_id
+        ) from e

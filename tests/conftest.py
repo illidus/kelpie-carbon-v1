@@ -1,6 +1,13 @@
+"""Test configuration and fixtures for kelpie-carbon test suite.
+
+This module provides session-scoped fixtures and performance optimizations
+for the test suite, including minimal data fixtures and mock operations.
+"""
+
 import asyncio
 import tempfile
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -138,7 +145,7 @@ def mock_fastapi_client():
 @pytest.fixture(scope="session")
 def optimized_cache():
     """Pre-warmed cache for session."""
-    cache = {}
+    cache: dict[str, Any] = {}
     # Pre-populate with common test data
     cache["test_coordinates"] = (48.5, -123.5)
     cache["test_date_range"] = ("2023-01-01", "2023-12-31")
@@ -210,7 +217,16 @@ def mock_network_requests(monkeypatch):
 
         def raise_for_status(self):
             if self.status_code >= 400:
-                raise httpx.HTTPStatusError("Mock error", request=None, response=self)
+                # Create a minimal mock request for the error
+                class MockRequest:
+                    def __init__(self):
+                        self.url = "http://mock.test"
+                        self.method = "GET"
+
+                mock_request = MockRequest()
+                raise httpx.HTTPStatusError(
+                    "Mock error", request=mock_request, response=self
+                )  # type: ignore[arg-type]
 
     def mock_get(*args, **kwargs):
         return MockResponse({"status": "success", "data": []})

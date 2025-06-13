@@ -11,5 +11,4 @@ from ..core.processing.species_classifier import (
 __all__ = [
     "KelpSpecies",
     "SpeciesClassifier",
-    "SpeciesClassificationError",
 ]

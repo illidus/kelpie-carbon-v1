@@ -14,7 +14,7 @@ Task C1.1: Research SKEMA CNN architecture specifics
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as f
 import torchvision.models as models
 from torchvision.models.detection import maskrcnn_resnet50_fpn
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
@@ -189,7 +189,7 @@ class SKEMACNNModel(nn.Module):
         segmentation_logits = self.segmentation_head(backbone_features)
 
         # Resize segmentation to match input size
-        segmentation_logits = F.interpolate(
+        segmentation_logits = f.interpolate(
             segmentation_logits, size=x.shape[2:], mode="bilinear", align_corners=False
         )
 

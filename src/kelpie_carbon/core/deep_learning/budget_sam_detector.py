@@ -6,6 +6,8 @@ No training required - uses pre-trained SAM model with spectral guidance from ex
 Total Cost: $0 (after one-time SAM model download)
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 
 import cv2

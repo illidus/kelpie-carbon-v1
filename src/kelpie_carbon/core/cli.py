@@ -6,19 +6,15 @@ including data processing, analysis, and validation workflows.
 
 from __future__ import annotations
 
-import asyncio
 import json
-import logging
-import sys
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+import socket
+
+import typer
+import uvicorn
+
 from .config import get_settings
 from .constants import KelpAnalysis, Network
 from .logging_config import get_logger, setup_logging
-import click
-import socket
-import typer
-import uvicorn
 
 app = typer.Typer(
     name="kelpie-carbon-v1",
@@ -77,9 +73,7 @@ def serve(
     if workers is None:
         workers = settings.server.workers
 
-    logger.info(
-        f"Starting Kelpie Carbon v1 server on {host}:{target_port}"
-    )
+    logger.info(f"Starting Kelpie Carbon v1 server on {host}:{target_port}")
     logger.info(f"Environment: {settings.environment}")
     logger.info(f"Debug mode: {settings.debug}")
 
@@ -196,7 +190,6 @@ def config(
     ),
 ):
     """Show current configuration."""
-    import json
     from dataclasses import asdict
 
     settings = get_settings()

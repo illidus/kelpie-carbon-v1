@@ -160,6 +160,7 @@ class TestRealSatelliteDataUsage:
             pytest.skip(f"Error in model training test: {e}")
 
 
+@pytest.mark.slow
 def test_phase_9_real_satellite_integration():
     """Comprehensive test demonstrating Phase 9 uses real satellite data."""
     print("\n" + "=" * 60)

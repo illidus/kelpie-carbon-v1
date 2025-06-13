@@ -6,6 +6,7 @@ and optimization utilities for the Kelpie Carbon system.
 
 from __future__ import annotations
 
+import contextlib
 import functools
 import logging
 import threading
@@ -346,10 +347,8 @@ def benchmark_function(
 
     # Warmup runs
     for _ in range(warmup_iterations):
-        try:
+        with contextlib.suppress(Exception):
             func(*args, **kwargs)
-        except Exception:
-            pass  # Ignore warmup errors
 
     # Benchmark runs
     execution_times = []

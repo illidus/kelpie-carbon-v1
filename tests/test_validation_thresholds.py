@@ -2,8 +2,6 @@
 Test config-driven validation thresholds (T2-002).
 """
 
-import numpy as np
-
 from kelpie_carbon.validation.cli import validate_against_thresholds
 
 
@@ -117,9 +115,7 @@ class TestValidationThresholds:
     def test_validate_against_thresholds_with_test_data(self):
         """Test validation with test data."""
         # Create test data for demonstration
-        n_samples = 100
-        # Note: x and y_pred are created for demonstration but not used in this test
-        # In a real scenario, these would be used for model training/evaluation
+        # Note: In a real scenario, test data would be used for model training/evaluation
 
         metrics = {
             "accuracy": 0.85,

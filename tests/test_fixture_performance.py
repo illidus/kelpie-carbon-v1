@@ -1,5 +1,9 @@
 """Test file to verify session-scoped fixtures and performance optimizations."""
 
+from __future__ import annotations
+
+import time
+
 import numpy as np
 import pytest
 import xarray as xr
@@ -112,7 +116,6 @@ class TestMockFixtures:
 
     def test_mock_sleep_fixture(self, mock_sleep):
         """Test that mock_sleep fixture eliminates sleep delays."""
-        import time
 
         # Test synchronous sleep
         start_time = time.time()

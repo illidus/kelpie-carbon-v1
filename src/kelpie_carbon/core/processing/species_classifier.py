@@ -8,6 +8,8 @@ This module implements automated multi-species kelp classification based on:
 Addresses SKEMA Phase 4: Species-Level Detection gaps.
 """
 
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass
 from enum import Enum

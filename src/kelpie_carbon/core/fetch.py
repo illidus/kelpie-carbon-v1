@@ -170,10 +170,13 @@ def fetch_sentinel_tiles(
         first_band = list(data_arrays.values())[0]
 
         # Ensure coordinates are in geographic format (lat/lon)
-        if hasattr(first_band, "rio") and first_band.rio.crs is not None:
+        if (
+            hasattr(first_band, "rio")
+            and first_band.rio.crs is not None
+            and first_band.rio.crs != "EPSG:4326"
+        ):
             # Transform to WGS84 if not already
-            if first_band.rio.crs != "EPSG:4326":
-                first_band = first_band.rio.reproject("EPSG:4326")
+            first_band = first_band.rio.reproject("EPSG:4326")
 
         coords = {"x": first_band.x, "y": first_band.y}
 
@@ -181,9 +184,12 @@ def fetch_sentinel_tiles(
         dataset_dict = {}
         for band_name, data_array in data_arrays.items():
             # Transform each band to WGS84 if needed
-            if hasattr(data_array, "rio") and data_array.rio.crs is not None:
-                if data_array.rio.crs != "EPSG:4326":
-                    data_array = data_array.rio.reproject("EPSG:4326")
+            if (
+                hasattr(data_array, "rio")
+                and data_array.rio.crs is not None
+                and data_array.rio.crs != "EPSG:4326"
+            ):
+                data_array = data_array.rio.reproject("EPSG:4326")
 
             # Ensure all bands have the same coordinates
             data_array = data_array.interp(

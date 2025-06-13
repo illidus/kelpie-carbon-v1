@@ -1,15 +1,10 @@
-"""Enhanced Satellite Integration Module for Professional Reporting.
+"""Enhanced Satellite Integration for Kelp Carbon Monitoring.
 
-This module provides advanced multi-temporal, multi-spectral satellite analysis
-for comprehensive kelp carbon monitoring and validation reporting.
-
-Features:
-- Multi-temporal change detection
-- Advanced spectral signature analysis
-- Confidence interval mapping
-- Bathymetric context integration
-- Interactive geospatial visualization
+This module provides advanced satellite data integration capabilities with
+enhanced processing, visualization, and analysis features.
 """
+
+from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
@@ -20,12 +15,8 @@ import numpy as np
 import xarray as xr
 
 try:
-    import contextily as ctx
-    import earthpy.plot as ep
     import folium
-    import plotly.express as px
     import plotly.graph_objects as go
-    import rasterio
     from plotly.subplots import make_subplots
 except ImportError as e:
     logging.warning(f"Optional dependency not available: {e}")

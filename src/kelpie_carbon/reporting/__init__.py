@@ -10,7 +10,7 @@ This package contains:
 # Import reporting functionality
 import contextlib
 
-try:
+with contextlib.suppress(ImportError):
     from .analytics import (
         AnalyticsFramework,
         FirstNationsReport,
@@ -18,9 +18,6 @@ try:
         ScientificReport,
         create_analytics_framework,
     )
-except ImportError:
-    # Modules may not be fully organized yet
-    pass
 
 with contextlib.suppress(ImportError):
     from .visualization import *

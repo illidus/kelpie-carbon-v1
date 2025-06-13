@@ -48,7 +48,7 @@ with contextlib.suppress(ImportError):
 __all__: list[str] = [
     # Core data integration
     "SKEMADataIntegrator",
-    "SKEMAValidationPoint", 
+    "SKEMAValidationPoint",
     "get_skema_validation_data",
     # Imagery functions
     "apply_colormap",

@@ -1,15 +1,14 @@
 """SKEMA Data Integration Module.
 
-This module provides integration with the SKEMA (Satellite-based Kelp Mapping) project
-from the University of Victoria's SPECTRAL Remote Sensing Laboratory.
-
-SKEMA focuses on developing satellite-based tools for kelp forest monitoring using
-Sentinel-2 imagery and deep learning methods, primarily for British Columbia waters.
+This module provides comprehensive integration with SKEMA (Satellite Kelp
+Ecosystem Monitoring and Assessment) data sources and methodologies.
 """
+
+from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from datetime import date
+from datetime import datetime
 
 import numpy as np
 import requests
@@ -27,7 +26,7 @@ class SKEMAValidationPoint:
     species: str | None
     confidence: float
     biomass_estimate: float | None
-    observation_date: date | None
+    observation_date: datetime | None
     source: str = "skema_uvic"
 
 
@@ -81,7 +80,7 @@ class SKEMADataIntegrator:
                 "Macrocystis pyrifera",
                 0.95,
                 1250.0,
-                date(2023, 8, 15),
+                datetime(2023, 8, 15),
             ),
             SKEMAValidationPoint(
                 49.7512,
@@ -90,7 +89,7 @@ class SKEMADataIntegrator:
                 "Nereocystis luetkeana",
                 0.91,
                 850.0,
-                date(2023, 8, 15),
+                datetime(2023, 8, 15),
             ),
             SKEMAValidationPoint(
                 49.7523,
@@ -99,7 +98,7 @@ class SKEMADataIntegrator:
                 "Macrocystis pyrifera",
                 0.88,
                 920.0,
-                date(2023, 8, 16),
+                datetime(2023, 8, 16),
             ),
             SKEMAValidationPoint(
                 49.7456,
@@ -108,7 +107,7 @@ class SKEMADataIntegrator:
                 "Saccharina sessilis",
                 0.86,
                 650.0,
-                date(2023, 8, 16),
+                datetime(2023, 8, 16),
             ),
             SKEMAValidationPoint(
                 49.7489,
@@ -117,17 +116,17 @@ class SKEMADataIntegrator:
                 "Macrocystis pyrifera",
                 0.93,
                 1100.0,
-                date(2023, 8, 17),
+                datetime(2023, 8, 17),
             ),
             # Non-kelp locations with high confidence
             SKEMAValidationPoint(
-                49.7445, -125.1378, False, None, 0.92, 0.0, date(2023, 8, 15)
+                49.7445, -125.1378, False, None, 0.92, 0.0, datetime(2023, 8, 15)
             ),
             SKEMAValidationPoint(
-                49.7467, -125.1334, False, None, 0.89, 0.0, date(2023, 8, 16)
+                49.7467, -125.1334, False, None, 0.89, 0.0, datetime(2023, 8, 16)
             ),
             SKEMAValidationPoint(
-                49.7434, -125.1356, False, None, 0.94, 0.0, date(2023, 8, 17)
+                49.7434, -125.1356, False, None, 0.94, 0.0, datetime(2023, 8, 17)
             ),
             # Lower confidence points
             SKEMAValidationPoint(
@@ -137,10 +136,10 @@ class SKEMADataIntegrator:
                 "Macrocystis pyrifera",
                 0.78,
                 450.0,
-                date(2023, 8, 17),
+                datetime(2023, 8, 17),
             ),
             SKEMAValidationPoint(
-                49.7478, -125.1367, False, None, 0.82, 0.0, date(2023, 8, 18)
+                49.7478, -125.1367, False, None, 0.82, 0.0, datetime(2023, 8, 18)
             ),
         ]
 

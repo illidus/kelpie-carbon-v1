@@ -90,4 +90,5 @@ __all__ = [
     "ValidationResult",
     "validate_primary_sites",
     "validate_with_controls",
+    "api",
 ]

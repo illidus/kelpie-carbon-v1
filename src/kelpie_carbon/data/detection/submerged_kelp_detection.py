@@ -17,6 +17,8 @@ Based on research from:
 - Bell et al. (2020): Kelp depth distribution analysis
 """
 
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass, field
 from typing import Any

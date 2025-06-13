@@ -1,12 +1,17 @@
 """Historical baseline analysis module for backwards compatibility.
 
-This module provides backwards compatibility by importing from validation.core.historical_baseline_analysis.
+This module provides backwards compatibility by importing from
+validation.core.historical_baseline_analysis.
 """
 
-__all__ = [
+from .core.historical_baseline_analysis import (
+    ChangeDetectionAnalyzer,
+    HistoricalDataset,
+    HistoricalSite,
+)
+
+__all__: list[str] = [
+    "ChangeDetectionAnalyzer",
     "HistoricalDataset",
     "HistoricalSite",
-    "ChangeDetectionAnalyzer",
-    "HistoricalDataValidationError",
-    "HistoricalValidationConfig",
 ]

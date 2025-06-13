@@ -1126,30 +1126,3 @@ def create_stakeholder_reporter(
         raise ValueError(f"Unknown stakeholder type: {stakeholder_type}")
 
     return report_classes[stakeholder_type]()
-
-
-def create_stakeholder_reporter(
-    stakeholder_type: str = "scientific",
-) -> BaseStakeholderReport:
-    """Create a stakeholder reporter instance.
-
-    Args:
-        stakeholder_type: Type of stakeholder report to create
-
-    Returns:
-        Configured stakeholder reporter instance
-
-    """
-    report_classes = {
-        "first_nations": FirstNationsReport,
-        "scientific": ScientificReport,
-        "management": ManagementReport,
-        "conservation": ManagementReport,  # Use management format for now
-        "policy": ScientificReport,  # Use scientific format for now
-        "community": FirstNationsReport,  # Use First Nations format for now
-    }
-
-    if stakeholder_type not in report_classes:
-        raise ValueError(f"Unknown stakeholder type: {stakeholder_type}")
-
-    return report_classes[stakeholder_type]()
