@@ -19,6 +19,7 @@ def generate_mask_overlay(
 
     Returns:
         RGBA PIL Image
+
     """
     # Convert to boolean numpy array
     mask_array: np.ndarray = mask.values.astype(bool)
@@ -38,6 +39,7 @@ def generate_kelp_mask_overlay(dataset: xr.Dataset, alpha: float = 0.6) -> Image
 
     Returns:
         Green kelp mask overlay
+
     """
     if "kelp_mask" not in dataset:
         raise ValueError("Dataset does not contain kelp_mask")
@@ -58,6 +60,7 @@ def generate_water_mask_overlay(dataset: xr.Dataset, alpha: float = 0.4) -> Imag
 
     Returns:
         Blue water mask overlay
+
     """
     if "water_mask" not in dataset:
         raise ValueError("Dataset does not contain water_mask")
@@ -78,6 +81,7 @@ def generate_cloud_mask_overlay(dataset: xr.Dataset, alpha: float = 0.5) -> Imag
 
     Returns:
         Gray cloud mask overlay
+
     """
     if "cloud_mask" not in dataset:
         raise ValueError("Dataset does not contain cloud_mask")
@@ -105,6 +109,7 @@ def generate_biomass_heatmap(
 
     Returns:
         Biomass heatmap image
+
     """
     values = biomass_data.values
 
@@ -152,6 +157,7 @@ def create_colored_mask(
 
     Returns:
         RGBA array
+
     """
     height, width = mask.shape
     rgba = np.zeros((height, width, 4), dtype=np.uint8)
@@ -181,6 +187,7 @@ def generate_confidence_overlay(
 
     Returns:
         Confidence overlay image
+
     """
     values = confidence_data.values
     height, width = values.shape
@@ -224,6 +231,7 @@ def generate_change_detection_overlay(
 
     Returns:
         Change detection overlay
+
     """
     # Calculate difference
     diff = after_data.values - before_data.values
@@ -258,6 +266,7 @@ def generate_multi_class_overlay(
 
     Returns:
         Multi-class overlay image
+
     """
     values = classification_data.values
     height, width = values.shape
@@ -289,6 +298,7 @@ def generate_gradient_overlay(
 
     Returns:
         Gradient overlay image
+
     """
     # Normalize data to 0-1
     normalized = normalize_to_0_1(data)

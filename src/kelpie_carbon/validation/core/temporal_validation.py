@@ -1,5 +1,4 @@
-"""
-Temporal Validation & Environmental Drivers for SKEMA Kelp Detection.
+"""Temporal Validation & Environmental Drivers for SKEMA Kelp Detection.
 
 This module implements comprehensive temporal validation following UVic's
 Broughton Archipelago methodology for multi-year kelp detection persistence,
@@ -14,6 +13,8 @@ Key Features:
 
 Based on UVic SKEMA research and Timmer et al. (2024) temporal studies.
 """
+
+from __future__ import annotations
 
 import logging
 import warnings
@@ -81,8 +82,7 @@ class TemporalValidationResult:
 
 
 class TemporalValidator:
-    """
-    Comprehensive temporal validation framework for SKEMA kelp detection.
+    """Comprehensive temporal validation framework for SKEMA kelp detection.
 
     Implements UVic's Broughton Archipelago time-series approach for:
     - Multi-year persistence validation
@@ -92,6 +92,7 @@ class TemporalValidator:
     """
 
     def __init__(self):
+        """Initialize temporal validator."""
         self.env_validator = EnvironmentalRobustnessValidator()
         self.real_world_validator = RealWorldValidator()
         self.waf = WaterAnomalyFilter()
@@ -99,8 +100,7 @@ class TemporalValidator:
         self.results: list[TemporalValidationResult] = []
 
     def get_broughton_validation_config(self) -> dict[str, Any]:
-        """
-        Get UVic Broughton Archipelago validation configuration.
+        """Get UVic Broughton Archipelago validation configuration.
 
         Based on UVic SKEMA research methodology for temporal consistency.
         """
@@ -149,8 +149,7 @@ class TemporalValidator:
         end_date: datetime,
         sampling_interval_days: int = 15,
     ) -> TemporalValidationResult:
-        """
-        Validate temporal persistence following UVic methodology.
+        """Validate temporal persistence following UVic methodology.
 
         Args:
             site: Validation site configuration
@@ -160,6 +159,7 @@ class TemporalValidator:
 
         Returns:
             Comprehensive temporal validation results
+
         """
         logger.info(f"Starting temporal persistence validation for {site.name}")
         logger.info(
@@ -229,9 +229,7 @@ class TemporalValidator:
     async def _collect_temporal_data_point(
         self, site: ValidationSite, sample_date: datetime
     ) -> TemporalDataPoint | None:
-        """
-        Collect a single temporal data point with environmental conditions.
-        """
+        """Collect a single temporal data point with environmental conditions."""
         try:
             # Format date for satellite data fetch
             date_str = sample_date.strftime("%Y-%m-%d")
@@ -312,8 +310,7 @@ class TemporalValidator:
     def _simulate_environmental_conditions(
         self, site: ValidationSite, date: datetime
     ) -> dict[str, float]:
-        """
-        Simulate environmental conditions for temporal analysis.
+        """Simulate environmental conditions for temporal analysis.
 
         In production, this would fetch real data from:
         - NOAA tidal data
@@ -877,8 +874,7 @@ class TemporalValidator:
     async def run_broughton_archipelago_validation(
         self, validation_years: int = 3
     ) -> TemporalValidationResult:
-        """
-        Run comprehensive Broughton Archipelago temporal validation.
+        """Run comprehensive Broughton Archipelago temporal validation.
 
         Implements UVic's multi-year validation methodology.
         """

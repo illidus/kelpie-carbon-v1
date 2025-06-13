@@ -1,5 +1,4 @@
-"""
-Visualization Module for Kelpie Carbon v1
+"""Visualization Module for Kelpie Carbon v1
 Provides visualization tools for model validation and accuracy assessment.
 """
 

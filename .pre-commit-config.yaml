@@ -43,16 +43,16 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [types-pyyaml, types-requests]
-        args: [--ignore-missing-imports]
-        exclude: ^scripts/
+        args: [--ignore-missing-imports, --explicit-package-bases]
+        exclude: ^(scripts/|tools/|validation/tools/)
 
   # Security linting with bandit
   - repo: https://github.com/pycqa/bandit
     rev: 1.8.0
     hooks:
       - id: bandit
-        args: ["-r", "src/", "-f", "json"]
-        exclude: ^tests/
+        args: ["-r", "src/"]
+        exclude: ^(tests/|scripts/|tools/)
 
   # Poetry dependency validation
   - repo: https://github.com/python-poetry/poetry

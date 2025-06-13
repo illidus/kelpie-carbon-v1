@@ -1,5 +1,4 @@
-"""
-Mathematical Transparency Module for Kelp Carbon Calculations
+"""Mathematical Transparency Module for Kelp Carbon Calculations.
 
 This module provides comprehensive mathematical documentation and step-by-step
 breakdowns of all carbon calculation methodologies for VERA/SKEMA compliance
@@ -13,6 +12,8 @@ Features:
 - Latex formula generation for reports
 """
 
+from __future__ import annotations
+
 import json
 import logging
 from abc import ABC, abstractmethod
@@ -22,9 +23,6 @@ from pathlib import Path
 from typing import Any
 
 try:
-    import sympy as sp
-    from sympy import diff, lambdify, latex, simplify, symbols
-
     HAS_SYMPY = True
 except ImportError:
     HAS_SYMPY = False
@@ -88,12 +86,12 @@ class MathematicalFormula(ABC):
         pass
 
     @abstractmethod
-    def calculate(self, **kwargs) -> tuple[float, float]:
+    def calculate(self, *args: Any, **kwargs: Any) -> tuple[float, float]:
         """Calculate result and uncertainty."""
         pass
 
     @abstractmethod
-    def get_calculation_steps(self, **kwargs) -> list[CalculationStep]:
+    def get_calculation_steps(self, *args: Any, **kwargs: Any) -> list[CalculationStep]:
         """Get detailed calculation steps."""
         pass
 
@@ -142,6 +140,7 @@ class BiomassToWetWeightFormula(MathematicalFormula):
 
         Returns:
             Tuple of (wet_weight, uncertainty)
+
         """
         if dry_weight_fraction <= 0 or dry_weight_fraction > 1:
             raise ValueError("Dry weight fraction must be between 0 and 1")
@@ -154,11 +153,11 @@ class BiomassToWetWeightFormula(MathematicalFormula):
         fraction_uncertainty = dry_weight_fraction * 0.15  # 15% fraction uncertainty
 
         # Partial derivatives
-        dW_dB = 1 / dry_weight_fraction
-        dW_df = -dry_biomass / (dry_weight_fraction**2)
+        dw_db = 1 / dry_weight_fraction
+        dw_df = -dry_biomass / (dry_weight_fraction**2)
 
-        total_uncertainty = abs(dW_dB * biomass_uncertainty) + abs(
-            dW_df * fraction_uncertainty
+        total_uncertainty = abs(dw_db * biomass_uncertainty) + abs(
+            dw_df * fraction_uncertainty
         )
 
         return wet_weight, total_uncertainty
@@ -201,10 +200,10 @@ class BiomassToWetWeightFormula(MathematicalFormula):
         # Step 3: Uncertainty calculation
         biomass_uncertainty = dry_biomass * 0.20
         fraction_uncertainty = dry_weight_fraction * 0.15
-        dW_dB = 1 / dry_weight_fraction
-        dW_df = -dry_biomass / (dry_weight_fraction**2)
-        total_uncertainty = abs(dW_dB * biomass_uncertainty) + abs(
-            dW_df * fraction_uncertainty
+        dw_db = 1 / dry_weight_fraction
+        dw_df = -dry_biomass / (dry_weight_fraction**2)
+        total_uncertainty = abs(dw_db * biomass_uncertainty) + abs(
+            dw_df * fraction_uncertainty
         )
 
         steps.append(
@@ -215,10 +214,10 @@ class BiomassToWetWeightFormula(MathematicalFormula):
                 input_values={
                     "σ(B_dry)": biomass_uncertainty,
                     "σ(f_dry)": fraction_uncertainty,
-                    "∂W_wet/∂B_dry": dW_dB,
-                    "∂W_wet/∂f_dry": dW_df,
+                    "∂W_wet/∂B_dry": dw_db,
+                    "∂W_wet/∂f_dry": dw_df,
                 },
-                calculation=f"|{dW_dB:.3f}| × {biomass_uncertainty:.3f} + |{dW_df:.3f}| × {fraction_uncertainty:.3f}",
+                calculation=f"|{dw_db:.3f}| × {biomass_uncertainty:.3f} + |{dw_df:.3f}| × {fraction_uncertainty:.3f}",
                 result=total_uncertainty,
                 units="kg/m²",
                 uncertainty=total_uncertainty,
@@ -283,6 +282,7 @@ class WetWeightToCarbonFormula(MathematicalFormula):
 
         Returns:
             Tuple of (carbon_content, uncertainty)
+
         """
         carbon_content = wet_weight * dry_weight_fraction * carbon_fraction
 
@@ -292,14 +292,14 @@ class WetWeightToCarbonFormula(MathematicalFormula):
         carbon_fraction_uncertainty = carbon_fraction * 0.08  # 8% uncertainty
 
         # Partial derivatives
-        dC_dW = dry_weight_fraction * carbon_fraction
-        dC_df_dry = wet_weight * carbon_fraction
-        dC_df_carbon = wet_weight * dry_weight_fraction
+        dc_dw = dry_weight_fraction * carbon_fraction
+        dc_df_dry = wet_weight * carbon_fraction
+        dc_df_carbon = wet_weight * dry_weight_fraction
 
         total_uncertainty = (
-            abs(dC_dW * wet_weight_uncertainty)
-            + abs(dC_df_dry * dry_fraction_uncertainty)
-            + abs(dC_df_carbon * carbon_fraction_uncertainty)
+            abs(dc_dw * wet_weight_uncertainty)
+            + abs(dc_df_dry * dry_fraction_uncertainty)
+            + abs(dc_df_carbon * carbon_fraction_uncertainty)
         )
 
         return carbon_content, total_uncertainty
@@ -337,14 +337,14 @@ class WetWeightToCarbonFormula(MathematicalFormula):
         dry_fraction_uncertainty = dry_weight_fraction * 0.10
         carbon_fraction_uncertainty = carbon_fraction * 0.08
 
-        dC_dW = dry_weight_fraction * carbon_fraction
-        dC_df_dry = wet_weight * carbon_fraction
-        dC_df_carbon = wet_weight * dry_weight_fraction
+        dc_dw = dry_weight_fraction * carbon_fraction
+        dc_df_dry = wet_weight * carbon_fraction
+        dc_df_carbon = wet_weight * dry_weight_fraction
 
         total_uncertainty = (
-            abs(dC_dW * wet_weight_uncertainty)
-            + abs(dC_df_dry * dry_fraction_uncertainty)
-            + abs(dC_df_carbon * carbon_fraction_uncertainty)
+            abs(dc_dw * wet_weight_uncertainty)
+            + abs(dc_df_dry * dry_fraction_uncertainty)
+            + abs(dc_df_carbon * carbon_fraction_uncertainty)
         )
 
         steps.append(
@@ -353,14 +353,14 @@ class WetWeightToCarbonFormula(MathematicalFormula):
                 description="Three-term uncertainty propagation",
                 formula=r"σ(C) = |∂C/∂W_{wet}| × σ(W_{wet}) + |∂C/∂f_{dry}| × σ(f_{dry}) + |∂C/∂f_{carbon}| × σ(f_{carbon})",
                 input_values={
-                    "∂C/∂W_wet": dC_dW,
-                    "∂C/∂f_dry": dC_df_dry,
-                    "∂C/∂f_carbon": dC_df_carbon,
+                    "∂C/∂W_wet": dc_dw,
+                    "∂C/∂f_dry": dc_df_dry,
+                    "∂C/∂f_carbon": dc_df_carbon,
                     "σ(W_wet)": wet_weight_uncertainty,
                     "σ(f_dry)": dry_fraction_uncertainty,
                     "σ(f_carbon)": carbon_fraction_uncertainty,
                 },
-                calculation=f"|{dC_dW:.4f}| × {wet_weight_uncertainty:.3f} + |{dC_df_dry:.4f}| × {dry_fraction_uncertainty:.4f} + |{dC_df_carbon:.4f}| × {carbon_fraction_uncertainty:.4f}",
+                calculation=f"|{dc_dw:.4f}| × {wet_weight_uncertainty:.3f} + |{dc_df_dry:.4f}| × {dry_fraction_uncertainty:.4f} + |{dc_df_carbon:.4f}| × {carbon_fraction_uncertainty:.4f}",
                 result=total_uncertainty,
                 units="kg C/m²",
                 uncertainty=total_uncertainty,
@@ -424,6 +424,7 @@ class CarbonSequestrationRateFormula(MathematicalFormula):
 
         Returns:
             Tuple of (sequestration_rate, uncertainty)
+
         """
         if time_span_years <= 0:
             raise ValueError("Time span must be positive")
@@ -436,14 +437,14 @@ class CarbonSequestrationRateFormula(MathematicalFormula):
         time_uncertainty = time_span_years * 0.05  # 5% time uncertainty
 
         # Partial derivatives
-        dR_dC_final = 1 / time_span_years
-        dR_dC_initial = -1 / time_span_years
-        dR_dt = -(final_carbon - initial_carbon) / (time_span_years**2)
+        dr_dc_final = 1 / time_span_years
+        dr_dc_initial = -1 / time_span_years
+        dr_dt = -(final_carbon - initial_carbon) / (time_span_years**2)
 
         total_uncertainty = (
-            abs(dR_dC_final * final_uncertainty)
-            + abs(dR_dC_initial * initial_uncertainty)
-            + abs(dR_dt * time_uncertainty)
+            abs(dr_dc_final * final_uncertainty)
+            + abs(dr_dc_initial * initial_uncertainty)
+            + abs(dr_dt * time_uncertainty)
         )
 
         return sequestration_rate, total_uncertainty
@@ -489,14 +490,14 @@ class CarbonSequestrationRateFormula(MathematicalFormula):
         final_uncertainty = final_carbon * 0.15
         time_uncertainty = time_span_years * 0.05
 
-        dR_dC_final = 1 / time_span_years
-        dR_dC_initial = -1 / time_span_years
-        dR_dt = -carbon_change / (time_span_years**2)
+        dr_dc_final = 1 / time_span_years
+        dr_dc_initial = -1 / time_span_years
+        dr_dt = -carbon_change / (time_span_years**2)
 
         total_uncertainty = (
-            abs(dR_dC_final * final_uncertainty)
-            + abs(dR_dC_initial * initial_uncertainty)
-            + abs(dR_dt * time_uncertainty)
+            abs(dr_dc_final * final_uncertainty)
+            + abs(dr_dc_initial * initial_uncertainty)
+            + abs(dr_dt * time_uncertainty)
         )
 
         steps.append(
@@ -505,14 +506,14 @@ class CarbonSequestrationRateFormula(MathematicalFormula):
                 description="Uncertainty propagation for rate calculation",
                 formula=r"σ(R_{seq}) = |∂R/∂C_{final}| × σ(C_{final}) + |∂R/∂C_{initial}| × σ(C_{initial}) + |∂R/∂t| × σ(t)",
                 input_values={
-                    "∂R/∂C_final": dR_dC_final,
-                    "∂R/∂C_initial": dR_dC_initial,
-                    "∂R/∂t": dR_dt,
+                    "∂R/∂C_final": dr_dc_final,
+                    "∂R/∂C_initial": dr_dc_initial,
+                    "∂R/∂t": dr_dt,
                     "σ(C_final)": final_uncertainty,
                     "σ(C_initial)": initial_uncertainty,
                     "σ(t)": time_uncertainty,
                 },
-                calculation=f"|{dR_dC_final:.4f}| × {final_uncertainty:.3f} + |{dR_dC_initial:.4f}| × {initial_uncertainty:.3f} + |{dR_dt:.4f}| × {time_uncertainty:.3f}",
+                calculation=f"|{dr_dc_final:.4f}| × {final_uncertainty:.3f} + |{dr_dc_initial:.4f}| × {initial_uncertainty:.3f} + |{dr_dt:.4f}| × {time_uncertainty:.3f}",
                 result=total_uncertainty,
                 units="kg C/m²/year",
                 uncertainty=total_uncertainty,
@@ -554,6 +555,7 @@ class MathematicalTransparencyEngine:
 
         Returns:
             Complete carbon calculation breakdown
+
         """
         calculation_id = f"carbon_calc_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         all_steps = []
@@ -657,6 +659,7 @@ class MathematicalTransparencyEngine:
 
         Returns:
             LaTeX formatted report string
+
         """
         latex_report = []
 
@@ -699,7 +702,7 @@ class MathematicalTransparencyEngine:
             ]
         )
 
-        for i, doc in enumerate(breakdown.formula_documentation):
+        for _i, doc in enumerate(breakdown.formula_documentation):
             latex_report.extend(
                 [
                     f"\\subsection{{{doc.name}}}",
@@ -806,6 +809,7 @@ class MathematicalTransparencyEngine:
 
         Returns:
             JSON-serializable dictionary
+
         """
         # Convert to JSON-serializable format
         json_data = {
@@ -873,5 +877,5 @@ class MathematicalTransparencyEngine:
 
 
 def create_mathematical_transparency_engine() -> MathematicalTransparencyEngine:
-    """Factory function to create mathematical transparency engine."""
+    """Create mathematical transparency engine."""
     return MathematicalTransparencyEngine()

@@ -1,5 +1,4 @@
-"""
-Environmental Robustness Testing for SKEMA Kelp Detection.
+"""Environmental Robustness Testing for SKEMA Kelp Detection.
 
 This module implements comprehensive environmental condition testing for
 SKEMA kelp detection algorithms, validating performance across:
@@ -52,8 +51,7 @@ class EnvironmentalTestResult:
 
 
 class EnvironmentalRobustnessValidator:
-    """
-    Validates SKEMA kelp detection robustness across environmental conditions.
+    """Validates SKEMA kelp detection robustness across environmental conditions.
 
     Implements testing framework for:
     - Tidal state variations with correction factors
@@ -63,6 +61,7 @@ class EnvironmentalRobustnessValidator:
     """
 
     def __init__(self):
+        """Initialize environmental robustness validator."""
         self.waf = WaterAnomalyFilter()
         self.derivative_features = DerivativeFeatures()
         self.results: list[EnvironmentalTestResult] = []
@@ -166,8 +165,7 @@ class EnvironmentalRobustnessValidator:
     def apply_tidal_correction(
         self, detection_mask: np.ndarray, condition: EnvironmentalCondition
     ) -> np.ndarray:
-        """
-        Apply tidal height correction based on Timmer et al. (2024) research.
+        """Apply tidal height correction based on Timmer et al. (2024) research.
 
         Research findings:
         - Low current (<10 cm/s): 22.5% extent decrease per meter
@@ -408,8 +406,7 @@ class EnvironmentalRobustnessValidator:
     async def run_comprehensive_environmental_testing(
         self, lat: float, lng: float, base_date: str, date_range_days: int = 30
     ) -> dict[str, Any]:
-        """
-        Run comprehensive environmental robustness testing.
+        """Run comprehensive environmental robustness testing.
 
         Tests all environmental conditions and provides summary report.
         """
@@ -657,6 +654,7 @@ def create_environmental_validator() -> EnvironmentalRobustnessValidator:
 
     Returns:
         Configured EnvironmentalRobustnessValidator instance
+
     """
     return EnvironmentalRobustnessValidator()
 
@@ -674,6 +672,7 @@ async def run_comprehensive_environmental_testing(
 
     Returns:
         Comprehensive environmental testing report
+
     """
     validator = create_environmental_validator()
     return await validator.run_comprehensive_environmental_testing(

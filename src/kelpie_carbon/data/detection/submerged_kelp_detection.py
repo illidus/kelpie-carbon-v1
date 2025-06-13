@@ -1,5 +1,4 @@
-"""
-Submerged Kelp Detection Enhancement for SKEMA Kelp Detection.
+"""Submerged Kelp Detection Enhancement for SKEMA Kelp Detection.
 
 This module implements advanced submerged kelp detection capabilities using red-edge
 methodology, depth sensitivity analysis, and integrated detection pipelines.
@@ -30,8 +29,6 @@ from kelpie_carbon.core.mask import (
     calculate_ndre,
     create_water_mask,
 )
-
-# # from kelpie_carbon.core.spectral import apply_spectral_enhancement  # Module doesn't exist  # Module doesn't exist
 from kelpie_carbon.logging_config import setup_logging
 
 setup_logging()
@@ -100,8 +97,7 @@ class SubmergedKelpConfig:
 
 
 class SubmergedKelpDetector:
-    """
-    Advanced submerged kelp detection using red-edge methodology.
+    """Advanced submerged kelp detection using red-edge methodology.
 
     This detector implements depth-sensitive kelp detection capabilities
     that extend beyond traditional surface canopy detection to identify
@@ -121,8 +117,7 @@ class SubmergedKelpDetector:
         species: str = "Mixed",
         include_depth_analysis: bool = True,
     ) -> DepthDetectionResult:
-        """
-        Comprehensive submerged kelp detection with depth analysis.
+        """Comprehensive submerged kelp detection with depth analysis.
 
         Args:
             dataset: Satellite imagery dataset with required spectral bands
@@ -131,6 +126,7 @@ class SubmergedKelpDetector:
 
         Returns:
             DepthDetectionResult with comprehensive detection information
+
         """
         logger.info(f"Starting submerged kelp detection for species: {species}")
 
@@ -203,8 +199,7 @@ class SubmergedKelpDetector:
     def _calculate_depth_sensitive_indices(
         self, dataset: xr.Dataset
     ) -> dict[str, np.ndarray]:
-        """
-        Calculate spectral indices optimized for depth-sensitive kelp detection.
+        """Calculate spectral indices optimized for depth-sensitive kelp detection.
 
         Implements multiple red-edge indices with varying depth sensitivity:
         - NDRE (primary): Best for shallow submerged kelp (0-50cm)
@@ -216,6 +211,7 @@ class SubmergedKelpDetector:
 
         Returns:
             Dictionary of depth-sensitive spectral indices
+
         """
         logger.debug("Calculating depth-sensitive spectral indices")
 
@@ -271,8 +267,7 @@ class SubmergedKelpDetector:
     def _apply_depth_stratified_detection(
         self, dataset: xr.Dataset, indices: dict[str, np.ndarray], species: str
     ) -> tuple[np.ndarray, np.ndarray]:
-        """
-        Apply depth-stratified kelp detection using multiple thresholds.
+        """Apply depth-stratified kelp detection using multiple thresholds.
 
         Uses different spectral thresholds optimized for different depth ranges:
         - Surface layer (0-30cm): Standard NDRE with high threshold
@@ -286,6 +281,7 @@ class SubmergedKelpDetector:
 
         Returns:
             Tuple of (surface_mask, submerged_mask) as boolean arrays
+
         """
         logger.debug(f"Applying depth-stratified detection for {species}")
 
@@ -340,8 +336,7 @@ class SubmergedKelpDetector:
         surface_mask: np.ndarray,
         submerged_mask: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray, dict[str, np.ndarray]]:
-        """
-        Estimate kelp depths using water column optical modeling.
+        """Estimate kelp depths using water column optical modeling.
 
         Implements a physics-based approach to estimate kelp depth from
         spectral reflectance using water column attenuation modeling.
@@ -354,6 +349,7 @@ class SubmergedKelpDetector:
 
         Returns:
             Tuple of (depth_estimates, depth_confidence, water_column_properties)
+
         """
         logger.debug("Estimating kelp depths using water column modeling")
 
@@ -376,9 +372,7 @@ class SubmergedKelpDetector:
         # Submerged kelp depth estimation
         if np.any(submerged_mask):
             submerged_indices = indices["ndre_enhanced"][submerged_mask]
-            submerged_warei = indices.get("warei", indices["ndre_enhanced"])[
-                submerged_mask
-            ]
+            indices.get("warei", indices["ndre_enhanced"])[submerged_mask]
 
             # Physics-based depth estimation using Beer-Lambert law
             # I_observed = I_surface * exp(-k * depth * 2)  # Factor of 2 for up/down path
@@ -415,8 +409,7 @@ class SubmergedKelpDetector:
     def _model_water_column_properties(
         self, dataset: xr.Dataset, indices: dict[str, np.ndarray]
     ) -> dict[str, np.ndarray]:
-        """
-        Model water column optical properties for depth estimation.
+        """Model water column optical properties for depth estimation.
 
         Estimates key water optical properties from spectral data:
         - Turbidity from blue/green ratio
@@ -429,6 +422,7 @@ class SubmergedKelpDetector:
 
         Returns:
             Dictionary of water column property arrays
+
         """
         logger.debug("Modeling water column optical properties")
 
@@ -470,8 +464,7 @@ class SubmergedKelpDetector:
         submerged_mask: np.ndarray,
         depth_confidence: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """
-        Apply quality control filtering to detection results.
+        """Apply quality control filtering to detection results.
 
         Removes small isolated patches, low-confidence detections,
         and applies morphological filtering for noise reduction.
@@ -483,6 +476,7 @@ class SubmergedKelpDetector:
 
         Returns:
             Tuple of filtered (surface_mask, submerged_mask)
+
         """
         logger.debug("Applying quality control to detection results")
 
@@ -526,8 +520,7 @@ class SubmergedKelpDetector:
     def _combine_detection_layers(
         self, surface_mask: np.ndarray, submerged_mask: np.ndarray
     ) -> np.ndarray:
-        """
-        Combine surface and submerged detection layers intelligently.
+        """Combine surface and submerged detection layers intelligently.
 
         Creates a unified kelp detection mask that preserves both
         surface and submerged kelp while avoiding double-counting.
@@ -538,6 +531,7 @@ class SubmergedKelpDetector:
 
         Returns:
             Combined kelp detection mask
+
         """
         logger.debug("Combining surface and submerged detection layers")
 
@@ -610,14 +604,14 @@ class SubmergedKelpDetector:
 def create_submerged_kelp_detector(
     config: SubmergedKelpConfig | None = None,
 ) -> SubmergedKelpDetector:
-    """
-    Factory function to create a SubmergedKelpDetector instance.
+    """Create a SubmergedKelpDetector instance.
 
     Args:
         config: Optional configuration for the detector
 
     Returns:
         Configured SubmergedKelpDetector instance
+
     """
     return SubmergedKelpDetector(config)
 
@@ -629,8 +623,7 @@ def detect_submerged_kelp(
     config: SubmergedKelpConfig | None = None,
     include_depth_analysis: bool = True,
 ) -> DepthDetectionResult:
-    """
-    High-level function for submerged kelp detection.
+    """High-level function for submerged kelp detection.
 
     Args:
         dataset: Satellite imagery dataset
@@ -640,6 +633,7 @@ def detect_submerged_kelp(
 
     Returns:
         DepthDetectionResult with comprehensive detection information
+
     """
     detector = create_submerged_kelp_detector(config)
     return detector.detect_submerged_kelp(dataset, species, include_depth_analysis)
@@ -647,14 +641,14 @@ def detect_submerged_kelp(
 
 # Depth analysis utilities
 def analyze_depth_distribution(result: DepthDetectionResult) -> dict[str, float]:
-    """
-    Analyze the depth distribution of detected kelp.
+    """Analyze the depth distribution of detected kelp.
 
     Args:
         result: DepthDetectionResult from submerged kelp detection
 
     Returns:
         Dictionary with depth distribution statistics
+
     """
     depths = result.depth_estimate[result.combined_kelp_mask]
     confidence = result.depth_confidence[result.combined_kelp_mask]
@@ -663,8 +657,8 @@ def analyze_depth_distribution(result: DepthDetectionResult) -> dict[str, float]
         return {"error": "No kelp detected for depth analysis"}
 
     # Weight statistics by confidence
-    weighted_depths = depths * confidence
-    total_confidence = np.sum(confidence)
+    depths * confidence
+    np.sum(confidence)
 
     analysis = {
         "mean_depth_m": float(np.average(depths, weights=confidence)),

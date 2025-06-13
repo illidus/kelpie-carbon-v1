@@ -33,6 +33,7 @@ def fetch_sentinel_tiles(
     Raises:
         ValueError: If coordinates or dates are invalid
         RuntimeError: If data fetch fails
+
     """
     # Validate inputs
     if not (-90 <= lat <= 90):
@@ -44,7 +45,7 @@ def fetch_sentinel_tiles(
         datetime.strptime(start_date, "%Y-%m-%d")
         datetime.strptime(end_date, "%Y-%m-%d")
     except ValueError as e:
-        raise ValueError(f"Invalid date format. Use YYYY-MM-DD: {e}")
+        raise ValueError(f"Invalid date format. Use YYYY-MM-DD: {e}") from e
 
     # Create bounding box around the point
     # Rough conversion: 1 degree ≈ 111 km at equator
@@ -229,10 +230,14 @@ def _create_mock_sentinel_data(
     # Generate base terrain (water vs land)
     x = np.linspace(0, 10, width)
     y = np.linspace(0, 10, height)
-    X, Y = np.meshgrid(x, y)
+    x_grid, y_grid = np.meshgrid(x, y)
 
     # Create a realistic coastline pattern
-    coastline = np.sin(X * 0.5) + 0.3 * np.cos(Y * 0.7) + 0.2 * np.sin(X * Y * 0.1)
+    coastline = (
+        np.sin(x_grid * 0.5)
+        + 0.3 * np.cos(y_grid * 0.7)
+        + 0.2 * np.sin(x_grid * y_grid * 0.1)
+    )
     water_mask = coastline < 0.2
 
     # Add some noise to make it more realistic

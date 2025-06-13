@@ -1,5 +1,4 @@
-"""
-Satellite Data Processing Optimization - Task ML2
+"""Satellite Data Processing Optimization - Task ML2
 Enhanced Sentinel-2 processing with dual-satellite fusion for improved temporal coverage.
 Implements optimization recommendations from benchmarking analysis.
 """
@@ -73,8 +72,7 @@ class PixelQualityMetrics:
 
 
 class SatelliteDataOptimization:
-    """
-    Enhanced satellite data processing with dual-satellite fusion and optimization.
+    """Enhanced satellite data processing with dual-satellite fusion and optimization.
     Implements recommendations from benchmarking analysis for carbon market compliance.
     """
 
@@ -94,8 +92,7 @@ class SatelliteDataOptimization:
     def implement_dual_sentinel_fusion(
         self, s2a_data: xr.Dataset, s2b_data: xr.Dataset
     ) -> dict[str, Any]:
-        """
-        Optimize Sentinel-2A/B dual-satellite 5-day revisit capability.
+        """Optimize Sentinel-2A/B dual-satellite 5-day revisit capability.
 
         Args:
             s2a_data: Sentinel-2A dataset
@@ -103,6 +100,7 @@ class SatelliteDataOptimization:
 
         Returns:
             Fused dataset with enhanced temporal coverage
+
         """
         logger.info("Implementing dual-satellite fusion for enhanced temporal coverage")
 
@@ -149,14 +147,14 @@ class SatelliteDataOptimization:
     def create_enhanced_cloud_masking(
         self, sentinel_data: xr.Dataset
     ) -> dict[str, xr.Dataset | np.ndarray]:
-        """
-        Advanced cloud detection and gap-filling for temporal consistency.
+        """Advanced cloud detection and gap-filling for temporal consistency.
 
         Args:
             sentinel_data: Input Sentinel-2 dataset
 
         Returns:
             Enhanced cloud-masked dataset with gap-filling
+
         """
         logger.info("Creating enhanced cloud masking with gap-filling")
 
@@ -201,11 +199,11 @@ class SatelliteDataOptimization:
             raise
 
     def implement_carbon_market_optimization(self) -> dict[str, Any]:
-        """
-        Pixel-level uncertainty, quality flags, chain of custody for carbon markets.
+        """Pixel-level uncertainty, quality flags, chain of custody for carbon markets.
 
         Returns:
             Carbon market compliance framework
+
         """
         logger.info("Implementing carbon market optimization framework")
 
@@ -245,11 +243,11 @@ class SatelliteDataOptimization:
             raise
 
     def create_processing_provenance_system(self) -> dict[str, str]:
-        """
-        Full processing transparency documentation for verification.
+        """Full processing transparency documentation for verification.
 
         Returns:
             Processing provenance system documentation
+
         """
         logger.info("Creating processing provenance system")
 
@@ -284,11 +282,11 @@ class SatelliteDataOptimization:
             raise
 
     def create_multi_sensor_validation_protocols(self) -> dict[str, Any]:
-        """
-        Multi-sensor validation protocols with strategic Landsat integration.
+        """Multi-sensor validation protocols with strategic Landsat integration.
 
         Returns:
             Multi-sensor validation framework
+
         """
         logger.info("Creating multi-sensor validation protocols")
 
@@ -404,7 +402,6 @@ class SatelliteDataOptimization:
         logger.debug("Performing multi-method cloud detection")
 
         # Check for required bands
-        required_bands = ["blue", "red", "nir"]
         available_bands = list(sentinel_data.data_vars.keys())
 
         # Method 1: Simple threshold-based detection
@@ -628,7 +625,7 @@ class SatelliteDataOptimization:
         return "processing_documentation_v1.0.pdf"
 
     def _setup_processing_version_control(self) -> str:
-        """Setup version control for processing."""
+        """Set up version control for processing."""
         return "git_repository_hash_abc123"
 
     def _create_processing_audit_trail(self) -> str:
@@ -711,8 +708,7 @@ def create_satellite_optimization(
 def optimize_dual_satellite_coverage(
     s2a_data: xr.Dataset, s2b_data: xr.Dataset
 ) -> dict[str, Any]:
-    """
-    Optimize dual-satellite coverage with fusion.
+    """Optimize dual-satellite coverage with fusion.
 
     Args:
         s2a_data: Sentinel-2A dataset
@@ -720,20 +716,21 @@ def optimize_dual_satellite_coverage(
 
     Returns:
         Optimized satellite data with enhanced temporal coverage
+
     """
     optimizer = create_satellite_optimization()
     return optimizer.implement_dual_sentinel_fusion(s2a_data, s2b_data)
 
 
 def enhance_cloud_processing(sentinel_data: xr.Dataset) -> dict[str, Any]:
-    """
-    Enhance cloud processing with advanced gap-filling.
+    """Enhance cloud processing with advanced gap-filling.
 
     Args:
         sentinel_data: Input Sentinel-2 dataset
 
     Returns:
         Enhanced cloud-processed dataset
+
     """
     optimizer = create_satellite_optimization()
     return optimizer.create_enhanced_cloud_masking(sentinel_data)

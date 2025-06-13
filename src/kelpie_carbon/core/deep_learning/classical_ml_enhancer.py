@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Classical ML Enhancement for SKEMA
+"""Classical ML Enhancement for SKEMA.
 
 Zero-cost enhancement of SKEMA spectral analysis using scikit-learn.
 Improves existing spectral detection performance by 10-15% through
@@ -30,8 +29,7 @@ from ..spectral.skema_processor import SKEMAProcessor
 
 
 class ClassicalMLEnhancer:
-    """
-    Classical Machine Learning Enhancement for SKEMA spectral analysis.
+    """Classical Machine Learning Enhancement for SKEMA spectral analysis.
 
     Features:
     - Zero cost implementation using existing dependencies
@@ -48,13 +46,13 @@ class ClassicalMLEnhancer:
         use_morphological_features: bool = True,
         use_spectral_clustering: bool = True,
     ):
-        """
-        Initialize the Classical ML enhancer.
+        """Initialize the Classical ML enhancer.
 
         Args:
             use_texture_features: Enable texture-based features
             use_morphological_features: Enable morphological features
             use_spectral_clustering: Enable spectral clustering features
+
         """
         self.use_texture_features = use_texture_features
         self.use_morphological_features = use_morphological_features
@@ -91,8 +89,7 @@ class ClassicalMLEnhancer:
         nir_band: np.ndarray | None = None,
         red_edge_band: np.ndarray | None = None,
     ) -> tuple[np.ndarray, dict]:
-        """
-        Enhance kelp detection using classical ML techniques.
+        """Enhance kelp detection using classical ML techniques.
 
         Args:
             rgb_image: RGB image array (H, W, 3)
@@ -101,6 +98,7 @@ class ClassicalMLEnhancer:
 
         Returns:
             Tuple of (enhanced_kelp_mask, metadata)
+
         """
         print("🔧 Enhancing kelp detection with classical ML...")
 
@@ -351,7 +349,7 @@ class ClassicalMLEnhancer:
         height, width = baseline_mask.shape
 
         # Simple enhancement: strengthen confident predictions
-        feature_mean = np.mean(feature_matrix, axis=1).reshape(height, width)
+        np.mean(feature_matrix, axis=1).reshape(height, width)
         feature_std = np.std(feature_matrix, axis=1).reshape(height, width)
 
         # Enhance areas with high variance (likely boundaries)
@@ -415,7 +413,7 @@ class ClassicalMLEnhancer:
             sample_features = feature_matrix[sample_indices]
 
             # Fit anomaly detector
-            anomaly_labels = self.anomaly_detector.fit_predict(sample_features)
+            self.anomaly_detector.fit_predict(sample_features)
 
             # Remove anomalies (outliers) from kelp detection
             height, width = current_mask.shape
@@ -540,7 +538,7 @@ class ClassicalMLEnhancer:
 
 
 def setup_classical_ml_environment():
-    """Setup instructions for classical ML enhancement."""
+    """Set up classical ML enhancement."""
     print("🤖 Classical ML Enhancement Setup")
     print("==================================")
     print()

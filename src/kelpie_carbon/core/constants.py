@@ -1,6 +1,6 @@
 # 🔢 Application Constants
-"""
-Centralized constants for Kelpie Carbon v1 application.
+"""Centralized constants for Kelpie Carbon v1 application.
+
 Extracted from codebase to improve maintainability.
 """
 

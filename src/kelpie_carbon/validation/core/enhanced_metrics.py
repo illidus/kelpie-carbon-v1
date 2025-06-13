@@ -1,5 +1,4 @@
-"""
-Enhanced Validation Metrics - Task ML1
+"""Enhanced Validation Metrics - Task ML1
 Implements RMSE, MAE, R² accuracy metrics for biomass and carbon quantification.
 User-requested metrics for 4 validation coordinates (BC, California, Tasmania, Broughton).
 """
@@ -52,8 +51,7 @@ class ValidationMetricsResult:
 
 
 class EnhancedValidationMetrics:
-    """
-    Enhanced validation metrics implementing RMSE, MAE, R² for biomass and carbon validation.
+    """Enhanced validation metrics implementing RMSE, MAE, R² for biomass and carbon validation.
     Addresses critical validation gaps identified in model validation analysis.
     """
 
@@ -103,8 +101,7 @@ class EnhancedValidationMetrics:
     def calculate_biomass_accuracy_metrics(
         self, predicted: np.ndarray, observed: np.ndarray
     ) -> dict[str, float]:
-        """
-        Calculate comprehensive biomass prediction accuracy with RMSE, MAE, R².
+        """Calculate comprehensive biomass prediction accuracy with RMSE, MAE, R².
 
         Args:
             predicted: Predicted biomass values (kg/m²)
@@ -112,6 +109,7 @@ class EnhancedValidationMetrics:
 
         Returns:
             Dictionary of biomass accuracy metrics
+
         """
         logger.debug(
             f"Calculating biomass accuracy metrics for {len(predicted)} data points"
@@ -237,8 +235,7 @@ class EnhancedValidationMetrics:
         biomass_obs: np.ndarray,
         carbon_factors: dict[str, float],
     ) -> dict[str, float]:
-        """
-        Calculate carbon sequestration accuracy metrics (RMSE, MAE, R²).
+        """Calculate carbon sequestration accuracy metrics (RMSE, MAE, R²).
 
         Args:
             biomass_pred: Predicted biomass values (kg/m²)
@@ -247,6 +244,7 @@ class EnhancedValidationMetrics:
 
         Returns:
             Dictionary of carbon accuracy metrics
+
         """
         logger.debug(
             f"Calculating carbon accuracy metrics for {len(biomass_pred)} data points"
@@ -320,14 +318,14 @@ class EnhancedValidationMetrics:
     def validate_model_predictions_against_real_data(
         self, validation_data: list[BiomassValidationData]
     ) -> dict[str, ValidationMetricsResult]:
-        """
-        Comprehensive validation against all four validation sample points.
+        """Comprehensive validation against all four validation sample points.
 
         Args:
             validation_data: List of biomass validation data for each coordinate
 
         Returns:
             Dictionary mapping coordinate names to validation results
+
         """
         logger.info(
             "Starting comprehensive model validation against 4 coordinate sites"
@@ -400,14 +398,14 @@ class EnhancedValidationMetrics:
     def generate_validation_summary(
         self, validation_results: dict[str, ValidationMetricsResult]
     ) -> dict[str, Any]:
-        """
-        Generate comprehensive validation summary across all coordinates.
+        """Generate comprehensive validation summary across all coordinates.
 
         Args:
             validation_results: Results from validate_model_predictions_against_real_data
 
         Returns:
             Summary of validation performance across all sites
+
         """
         logger.info("Generating validation summary across all coordinates")
 
@@ -730,14 +728,14 @@ def create_enhanced_validation_metrics() -> EnhancedValidationMetrics:
 def validate_four_coordinate_sites(
     validation_data: list[BiomassValidationData],
 ) -> dict[str, ValidationMetricsResult]:
-    """
-    Validate model against the four primary validation coordinates.
+    """Validate model against the four primary validation coordinates.
 
     Args:
         validation_data: Biomass validation data for BC, California, Tasmania, Broughton
 
     Returns:
         Validation results for all four coordinates
+
     """
     metrics_calculator = create_enhanced_validation_metrics()
     return metrics_calculator.validate_model_predictions_against_real_data(
@@ -748,14 +746,14 @@ def validate_four_coordinate_sites(
 def calculate_validation_summary(
     validation_results: dict[str, ValidationMetricsResult],
 ) -> dict[str, Any]:
-    """
-    Calculate comprehensive validation summary across all coordinates.
+    """Calculate comprehensive validation summary across all coordinates.
 
     Args:
         validation_results: Results from validate_four_coordinate_sites
 
     Returns:
         Summary of validation performance
+
     """
     metrics_calculator = create_enhanced_validation_metrics()
     return metrics_calculator.generate_validation_summary(validation_results)

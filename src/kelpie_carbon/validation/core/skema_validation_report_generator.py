@@ -1,5 +1,4 @@
-"""
-SKEMA Validation Report Generator
+"""SKEMA Validation Report Generator.
 
 This module creates comprehensive validation reports comparing our kelp detection
 pipeline against SKEMA methodology with mathematical transparency, visual
@@ -40,19 +39,18 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 class SKEMAValidationReportGenerator:
-    """
-    Comprehensive SKEMA validation report generator.
+    """Comprehensive SKEMA validation report generator.
 
     This class integrates all validation components to create detailed reports
     comparing our pipeline against SKEMA methodology.
     """
 
     def __init__(self, output_dir: str = "validation_reports"):
-        """
-        Initialize validation report generator.
+        """Initialize validation report generator.
 
         Args:
             output_dir: Directory to save validation reports
+
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
@@ -72,7 +70,6 @@ class SKEMAValidationReportGenerator:
 
     def create_validation_sites(self) -> list[ValidationSite]:
         """Create realistic validation sites with SKEMA ground truth data."""
-
         print("\n🌊 Creating validation sites with SKEMA ground truth...")
 
         validation_sites = [
@@ -182,7 +179,6 @@ class SKEMAValidationReportGenerator:
 
     def perform_mathematical_comparison(self) -> dict[str, Any]:
         """Perform comprehensive mathematical formula comparison."""
-
         print("\n🧮 Performing mathematical formula comparison...")
 
         self.formula_comparisons = self.math_analyzer.compare_formulas()
@@ -196,7 +192,6 @@ class SKEMAValidationReportGenerator:
 
     def perform_visual_demonstrations(self) -> dict[str, Any]:
         """Create visual processing demonstrations for all validation sites."""
-
         print("\n📸 Creating visual processing demonstrations...")
 
         self.processing_demonstrations = {}
@@ -230,7 +225,6 @@ class SKEMAValidationReportGenerator:
 
     def perform_statistical_benchmarking(self) -> list[BenchmarkResults]:
         """Perform statistical benchmarking analysis."""
-
         print("\n📊 Performing statistical benchmarking...")
 
         # Create benchmark results for each validation site
@@ -285,7 +279,6 @@ class SKEMAValidationReportGenerator:
 
     def _calculate_site_accuracy(self, site: ValidationSite, method: str) -> float:
         """Calculate accuracy for a specific method at a site."""
-
         if method == "skema":
             # SKEMA accuracy based on confidence score and historical validation
             base_accuracy = 0.85  # From published SKEMA validation studies
@@ -299,7 +292,6 @@ class SKEMAValidationReportGenerator:
 
     def _calculate_correlation(self, site: ValidationSite) -> float:
         """Calculate correlation between methods for a site."""
-
         # Use area and biomass measurements as proxy for correlation
         skema_area = site.skema_ground_truth["total_kelp_area_ha"]
         our_area = site.our_results["total_kelp_area_ha"]
@@ -316,7 +308,6 @@ class SKEMAValidationReportGenerator:
 
     def _calculate_rmse(self, site: ValidationSite) -> float:
         """Calculate RMSE between methods."""
-
         area_diff = (
             site.our_results["total_kelp_area_ha"]
             - site.skema_ground_truth["total_kelp_area_ha"]
@@ -330,7 +321,6 @@ class SKEMAValidationReportGenerator:
 
     def _calculate_bias(self, site: ValidationSite) -> float:
         """Calculate bias between methods."""
-
         area_bias = (
             site.our_results["total_kelp_area_ha"]
             - site.skema_ground_truth["total_kelp_area_ha"]
@@ -344,7 +334,6 @@ class SKEMAValidationReportGenerator:
 
     def _calculate_significance(self, site: ValidationSite) -> float:
         """Calculate statistical significance score."""
-
         # Based on difference magnitude and confidence scores
         area_diff = (
             abs(
@@ -365,7 +354,6 @@ class SKEMAValidationReportGenerator:
         self, site: ValidationSite
     ) -> tuple[float, float]:
         """Calculate 95% confidence interval for the comparison."""
-
         # Use confidence scores to estimate interval
         combined_confidence = (
             site.skema_ground_truth["confidence_score"]
@@ -382,7 +370,6 @@ class SKEMAValidationReportGenerator:
 
     def generate_comprehensive_report(self) -> str:
         """Generate comprehensive validation report."""
-
         print("\n📋 Generating comprehensive validation report...")
 
         report_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -563,7 +550,6 @@ The high correlation ({avg_correlation:.3f}) between methods indicates consisten
 
     def save_validation_data(self) -> None:
         """Save all validation data to JSON for future analysis."""
-
         print("\n💾 Saving validation data...")
 
         validation_data = {
@@ -629,7 +615,6 @@ The high correlation ({avg_correlation:.3f}) between methods indicates consisten
 
     def run_full_validation(self) -> dict[str, Any]:
         """Run complete SKEMA validation analysis."""
-
         print("🚀 Starting comprehensive SKEMA validation analysis...")
         print("=" * 70)
 

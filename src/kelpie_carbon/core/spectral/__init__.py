@@ -1,5 +1,4 @@
-"""
-Spectral Analysis Module for SKEMA Integration
+"""Spectral Analysis Module for SKEMA Integration.
 
 This module provides spectral analysis capabilities for kelp detection,
 including integration with deep learning models like SAM.

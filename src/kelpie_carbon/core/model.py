@@ -22,6 +22,7 @@ class KelpBiomassModel:
 
         Args:
             model_params: Parameters for Random Forest model
+
         """
         if model_params is None:
             model_params = {
@@ -45,6 +46,7 @@ class KelpBiomassModel:
 
         Returns:
             DataFrame with extracted features
+
         """
         features = {}
 
@@ -249,6 +251,7 @@ class KelpBiomassModel:
 
         Returns:
             Dictionary with training metrics
+
         """
         if len(training_data) == 0:
             raise ValueError("No training data provided")
@@ -263,43 +266,49 @@ class KelpBiomassModel:
             targets.append(biomass)
 
         # Combine all features
-        X = pd.concat(feature_list, ignore_index=True)
-        y = np.array(targets)
+        features = pd.concat(feature_list, ignore_index=True)
+        targets_array = np.array(targets)
 
         # Handle missing values
-        X = X.fillna(0)
+        features = features.fillna(0)
 
         # Split data
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
+        features_train, features_test, targets_train, targets_test = train_test_split(
+            features, targets_array, test_size=0.2, random_state=42
         )
 
         # Scale features
-        X_train_scaled = self.scaler.fit_transform(X_train)
-        X_test_scaled = self.scaler.transform(X_test)
+        features_train_scaled = self.scaler.fit_transform(features_train)
+        features_test_scaled = self.scaler.transform(features_test)
 
         # Train model
-        self.model.fit(X_train_scaled, y_train)
+        self.model.fit(features_train_scaled, targets_train)
 
         # Make predictions
-        y_pred_train = self.model.predict(X_train_scaled)
-        y_pred_test = self.model.predict(X_test_scaled)
+        targets_pred_train = self.model.predict(features_train_scaled)
+        targets_pred_test = self.model.predict(features_test_scaled)
 
         # Calculate metrics
         metrics = {
-            "train_r2": r2_score(y_train, y_pred_train),
-            "test_r2": r2_score(y_test, y_pred_test),
-            "train_rmse": np.sqrt(mean_squared_error(y_train, y_pred_train)),
-            "test_rmse": np.sqrt(mean_squared_error(y_test, y_pred_test)),
+            "train_r2": r2_score(targets_train, targets_pred_train),
+            "test_r2": r2_score(targets_test, targets_pred_test),
+            "train_rmse": np.sqrt(
+                mean_squared_error(targets_train, targets_pred_train)
+            ),
+            "test_rmse": np.sqrt(mean_squared_error(targets_test, targets_pred_test)),
             "n_samples": len(training_data),
-            "n_features": X.shape[1],
+            "n_features": features.shape[1],
         }
 
         # Cross-validation score (adjust folds based on sample size)
         cv_folds = min(5, len(training_data))  # Use min of 5 or number of samples
         if cv_folds >= 2:  # Need at least 2 folds for CV
             cv_scores = cross_val_score(
-                self.model, X_train_scaled, y_train, cv=cv_folds, scoring="r2"
+                self.model,
+                features_train_scaled,
+                targets_train,
+                cv=cv_folds,
+                scoring="r2",
             )
             metrics["cv_r2_mean"] = np.mean(cv_scores)
             metrics["cv_r2_std"] = np.std(cv_scores)
@@ -319,6 +328,7 @@ class KelpBiomassModel:
 
         Returns:
             Dictionary with biomass prediction and confidence metrics
+
         """
         if not self.is_trained:
             # Use default pre-trained model if available
@@ -341,15 +351,15 @@ class KelpBiomassModel:
             features = features[self.feature_names]
 
         # Scale features
-        X_scaled = self.scaler.transform(features)
+        features_scaled = self.scaler.transform(features)
 
         # Make prediction
-        biomass_prediction = self.model.predict(X_scaled)[0]
+        biomass_prediction = self.model.predict(features_scaled)[0]
 
         # Calculate prediction confidence using tree predictions
         if hasattr(self.model, "estimators_") and self.model.estimators_ is not None:
             tree_predictions = np.array(
-                [tree.predict(X_scaled)[0] for tree in self.model.estimators_]
+                [tree.predict(features_scaled)[0] for tree in self.model.estimators_]
             )
         else:
             tree_predictions = np.array([biomass_prediction])
@@ -481,7 +491,7 @@ class KelpBiomassModel:
 def predict_biomass(
     dataset: xr.Dataset, model_path: str | None = None
 ) -> dict[str, Any]:
-    """Main function to predict biomass from satellite dataset.
+    """Predict biomass from satellite dataset.
 
     Args:
         dataset: xarray Dataset with satellite bands and masks
@@ -489,6 +499,7 @@ def predict_biomass(
 
     Returns:
         Dictionary with biomass prediction and metadata
+
     """
     model = KelpBiomassModel()
 
@@ -506,11 +517,12 @@ def generate_training_data(n_samples: int = 100) -> list[tuple[xr.Dataset, float
 
     Returns:
         List of (dataset, biomass) tuples
+
     """
     training_data = []
     np.random.seed(42)
 
-    for i in range(n_samples):
+    for _i in range(n_samples):
         # Generate synthetic satellite data
         height, width = 50, 50
 

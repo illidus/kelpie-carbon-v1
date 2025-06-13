@@ -1,5 +1,4 @@
-"""
-Real-world validation framework for SKEMA kelp detection algorithms.
+"""Real-world validation framework for SKEMA kelp detection algorithms.
 
 This module implements comprehensive validation against actual satellite imagery
 from validated kelp farm locations as specified in Task A2.5.
@@ -10,6 +9,8 @@ Primary validation sites:
 - Monterey Bay (36.8000°N, 121.9000°W): Giant kelp validation
 - Control Sites: Mojave Desert + Open Ocean for false positive testing
 """
+
+from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
@@ -72,6 +73,7 @@ class RealWorldValidator:
 
         Args:
             validation_config: Optional configuration for validation parameters
+
         """
         self.config = validation_config or self._get_default_config()
         self.sites = self._initialize_validation_sites()
@@ -177,6 +179,7 @@ class RealWorldValidator:
 
         Returns:
             Dictionary mapping site names to validation results
+
         """
         logger.info(f"Starting real-world validation for {len(self.sites)} sites")
         logger.info(f"Date range: {start_date} to {end_date}")
@@ -235,6 +238,7 @@ class RealWorldValidator:
 
         Returns:
             ValidationResult with detection results and metadata
+
         """
         start_time = datetime.now()
 
@@ -328,6 +332,7 @@ class RealWorldValidator:
 
         Returns:
             True if validation is considered successful
+
         """
         if site.site_type == "kelp_farm":
             # For kelp farms, detection rate should meet or exceed expected rate
@@ -416,6 +421,7 @@ class RealWorldValidator:
 
         Args:
             filepath: Path to save the validation report
+
         """
         report: dict[str, Any] = {
             "validation_timestamp": datetime.now().isoformat(),
@@ -464,6 +470,7 @@ async def validate_primary_sites(
 
     Returns:
         Dictionary of validation results for primary sites
+
     """
     end_date = datetime.now()
     start_date = end_date - timedelta(days=date_range_days)
@@ -493,6 +500,7 @@ async def validate_with_controls(
 
     Returns:
         Dictionary of validation results for all sites
+
     """
     end_date = datetime.now()
     start_date = end_date - timedelta(days=date_range_days)
@@ -514,6 +522,7 @@ def create_real_world_validator(
 
     Returns:
         Configured RealWorldValidator instance
+
     """
     return RealWorldValidator(validation_config=validation_config)
 
@@ -528,5 +537,6 @@ async def run_comprehensive_validation(
 
     Returns:
         Dictionary of validation results for all sites
+
     """
     return await validate_with_controls(date_range_days=date_range_days)

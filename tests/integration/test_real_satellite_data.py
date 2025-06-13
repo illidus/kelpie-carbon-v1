@@ -67,6 +67,7 @@ class TestRealSatelliteDataUsage:
         except Exception as e:
             pytest.skip(f"Cannot test with real satellite data: {e}")
 
+    @pytest.mark.slow
     def test_real_data_model_training(self):
         """Test training a model with real satellite data."""
         print("\n=== Testing Model Training with Real Satellite Data ===")

@@ -1,5 +1,4 @@
-"""
-Detection module for Kelpie Carbon v1.
+"""Detection module for Kelpie Carbon v1.
 
 This module provides comprehensive kelp detection capabilities including:
 - Traditional surface kelp detection using NDVI/NDRE

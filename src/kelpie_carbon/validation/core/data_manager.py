@@ -1,7 +1,8 @@
-"""
-ValidationDataManager - Task 2.1/2.2
+"""ValidationDataManager - Task 2.1/2.2
 Comprehensive data management for field validation campaigns.
 """
+
+from __future__ import annotations
 
 import json
 import logging

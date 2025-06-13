@@ -1,5 +1,4 @@
-"""
-Jupyter Notebook Templates for Scientific Reporting
+"""Jupyter Notebook Templates for Scientific Reporting.
 
 This module provides Jupyter notebook templates for comprehensive scientific
 analysis and reporting of kelp carbon monitoring results.
@@ -11,6 +10,8 @@ Features:
 - Mathematical transparency integration
 - Peer-review ready formatting
 """
+
+from __future__ import annotations
 
 import json
 import logging
@@ -25,9 +26,10 @@ class JupyterNotebookTemplate:
     """Base class for Jupyter notebook templates."""
 
     def __init__(self, template_name: str, description: str):
+        """Initialize base Jupyter template."""
         self.template_name = template_name
         self.description = description
-        self.cells = []
+        self.cells: list[dict[str, Any]] = []
 
     def add_markdown_cell(self, content: str, metadata: dict | None = None):
         """Add a markdown cell to the notebook."""
@@ -74,7 +76,10 @@ class JupyterNotebookTemplate:
 class ScientificAnalysisTemplate(JupyterNotebookTemplate):
     """Template for comprehensive scientific analysis and reporting."""
 
-    def __init__(self, site_name: str = "Sample Site", analysis_date: str = None):
+    def __init__(
+        self, site_name: str = "Sample Site", analysis_date: str | None = None
+    ):
+        """Initialize scientific analysis template."""
         super().__init__(
             "Scientific Analysis Template",
             "Comprehensive scientific analysis template for kelp carbon monitoring",
@@ -85,7 +90,6 @@ class ScientificAnalysisTemplate(JupyterNotebookTemplate):
 
     def _build_template(self):
         """Build the complete scientific analysis template."""
-
         # Title and metadata
         self.add_markdown_cell(
             f"""# Kelp Carbon Monitoring - Scientific Analysis Report
@@ -516,6 +520,7 @@ class TemporalAnalysisTemplate(JupyterNotebookTemplate):
     """Template for temporal trend analysis."""
 
     def __init__(self, site_name: str = "Sample Site"):
+        """Initialize temporal analysis template."""
         super().__init__(
             "Temporal Analysis Template",
             "Multi-temporal kelp carbon monitoring and trend analysis",
@@ -525,7 +530,6 @@ class TemporalAnalysisTemplate(JupyterNotebookTemplate):
 
     def _build_template(self):
         """Build temporal analysis template."""
-
         self.add_markdown_cell(
             f"""# Temporal Kelp Carbon Analysis
 
@@ -589,6 +593,7 @@ class JupyterTemplateManager:
     """Manager for Jupyter notebook templates."""
 
     def __init__(self):
+        """Initialize Jupyter template manager."""
         self.templates = {
             "scientific_analysis": ScientificAnalysisTemplate,
             "temporal_analysis": TemporalAnalysisTemplate,
@@ -604,6 +609,7 @@ class JupyterTemplateManager:
 
         Returns:
             Path to generated notebook
+
         """
         if template_type not in self.templates:
             raise ValueError(f"Unknown template type: {template_type}")
@@ -628,5 +634,5 @@ class JupyterTemplateManager:
 
 
 def create_jupyter_template_manager() -> JupyterTemplateManager:
-    """Factory function to create Jupyter template manager."""
+    """Create Jupyter template manager."""
     return JupyterTemplateManager()

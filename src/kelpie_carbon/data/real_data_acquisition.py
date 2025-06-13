@@ -1,5 +1,4 @@
-"""
-Data package real satellite data acquisition for kelp detection validation.
+"""Data package real satellite data acquisition for kelp detection validation.
 
 This module implements real satellite data acquisition capabilities for validating
 kelp detection algorithms against actual Sentinel-2 imagery from known kelp sites.
@@ -20,6 +19,8 @@ Based on validation sites from:
 - Tasmania Kelp Monitoring (Giant kelp forests)
 - Washington State Kelp Recovery (Puget Sound)
 """
+
+from __future__ import annotations
 
 import datetime
 import json
@@ -96,8 +97,7 @@ class ValidationDataset:
 
 
 class RealDataAcquisition:
-    """
-    Real satellite data acquisition system for kelp detection validation.
+    """Real satellite data acquisition system for kelp detection validation.
 
     This class provides comprehensive capabilities for acquiring and preprocessing
     real Sentinel-2 satellite imagery from validated kelp sites for algorithm
@@ -221,8 +221,7 @@ class RealDataAcquisition:
         return sites
 
     def load_skema_csv_data(self, site_id: str) -> pd.DataFrame:
-        """
-        Load real SKEMA CSV data for a validation site.
+        """Load real SKEMA CSV data for a validation site.
 
         Args:
             site_id: Validation site identifier
@@ -233,6 +232,7 @@ class RealDataAcquisition:
         Raises:
             FileNotFoundError: If SKEMA CSV file is not found
             ValueError: If CSV schema validation fails
+
         """
         # Construct path to SKEMA CSV file
         csv_path = self.data_directory / "sample_data" / f"{site_id}_skema.csv"
@@ -283,8 +283,7 @@ class RealDataAcquisition:
     def create_real_ground_truth_from_skema(
         self, site_id: str, scenes: list[SatelliteScene]
     ) -> list[GroundTruthData]:
-        """
-        Create real ground truth data from SKEMA CSV files.
+        """Create real ground truth data from SKEMA CSV files.
 
         Args:
             site_id: Validation site identifier
@@ -292,6 +291,7 @@ class RealDataAcquisition:
 
         Returns:
             List of real ground truth data based on SKEMA measurements
+
         """
         # Load SKEMA CSV data
         try:
@@ -379,8 +379,7 @@ class RealDataAcquisition:
     def download_scenes(
         self, site_id: str, start: str, end: str, max_cloud_pct: float = 10.0
     ) -> list[SatelliteScene]:
-        """
-        Query Earth-Search STAC and fetch Sentinel-2 L2A COGs
+        """Query Earth-Search STAC and fetch Sentinel-2 L2A COGs
         that intersect the site's bbox and cloud < threshold.
         Save to self.data_directory/'satellite'.
         Return list of SatelliteScene objects with file_path populated.
@@ -393,6 +392,7 @@ class RealDataAcquisition:
 
         Returns:
             List of SatelliteScene objects with downloaded data
+
         """
         if site_id not in self.validation_sites:
             raise ValueError(f"Unknown site_id: {site_id}")
@@ -508,8 +508,7 @@ class RealDataAcquisition:
     def get_validation_sites(
         self, region: str | None = None, species: str | None = None
     ) -> list[ValidationSite]:
-        """
-        Get validation sites filtered by region and/or species.
+        """Get validation sites filtered by region and/or species.
 
         Args:
             region: Filter by region (e.g., "British Columbia", "California")
@@ -517,6 +516,7 @@ class RealDataAcquisition:
 
         Returns:
             List of matching validation sites
+
         """
         sites = list(self.validation_sites.values())
 
@@ -537,8 +537,7 @@ class RealDataAcquisition:
         num_scenes: int = 5,
         date_range: tuple[datetime.datetime, datetime.datetime] | None = None,
     ) -> list[SatelliteScene]:
-        """
-        Create synthetic satellite data for testing when real data is not available.
+        """Create synthetic satellite data for testing when real data is not available.
 
         This is used for demonstration and testing purposes until real Sentinel-2
         data acquisition is implemented.
@@ -550,6 +549,7 @@ class RealDataAcquisition:
 
         Returns:
             List of synthetic satellite scenes
+
         """
         if site_id not in self.validation_sites:
             raise ValueError(f"Unknown site_id: {site_id}")
@@ -608,8 +608,7 @@ class RealDataAcquisition:
     def create_synthetic_ground_truth(
         self, site_id: str, scenes: list[SatelliteScene]
     ) -> list[GroundTruthData]:
-        """
-        Create synthetic ground truth data corresponding to satellite scenes.
+        """Create synthetic ground truth data corresponding to satellite scenes.
 
         Args:
             site_id: Validation site identifier
@@ -617,6 +616,7 @@ class RealDataAcquisition:
 
         Returns:
             List of synthetic ground truth data
+
         """
         if site_id not in self.validation_sites:
             raise ValueError(f"Unknown site_id: {site_id}")
@@ -717,8 +717,7 @@ class RealDataAcquisition:
     def create_validation_dataset(
         self, site_id: str, num_scenes: int = 5, use_synthetic: bool = True
     ) -> ValidationDataset:
-        """
-        Create a complete validation dataset for a site.
+        """Create a complete validation dataset for a site.
 
         Args:
             site_id: Validation site identifier
@@ -727,6 +726,7 @@ class RealDataAcquisition:
 
         Returns:
             Complete validation dataset
+
         """
         if site_id not in self.validation_sites:
             raise ValueError(f"Unknown site_id: {site_id}")
@@ -823,8 +823,7 @@ class RealDataAcquisition:
     def save_validation_dataset(
         self, dataset: ValidationDataset, filename: str | None = None
     ) -> str:
-        """
-        Save a validation dataset to disk.
+        """Save a validation dataset to disk.
 
         Args:
             dataset: ValidationDataset to save
@@ -832,6 +831,7 @@ class RealDataAcquisition:
 
         Returns:
             Path to saved file
+
         """
         if filename is None:
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -891,14 +891,14 @@ class RealDataAcquisition:
         return str(filepath)
 
     def load_validation_dataset(self, filepath: str) -> ValidationDataset:
-        """
-        Load a validation dataset from disk.
+        """Load a validation dataset from disk.
 
         Args:
             filepath: Path to saved validation dataset
 
         Returns:
             Loaded ValidationDataset
+
         """
         with open(filepath) as f:
             dataset_dict = json.load(f)
@@ -940,14 +940,14 @@ class RealDataAcquisition:
     def create_benchmark_suite(
         self, include_sites: list[str] | None = None
     ) -> dict[str, ValidationDataset]:
-        """
-        Create a comprehensive benchmark suite across multiple sites.
+        """Create a comprehensive benchmark suite across multiple sites.
 
         Args:
             include_sites: List of site IDs to include (all sites if None)
 
         Returns:
             Dictionary mapping site_id to ValidationDataset
+
         """
         if include_sites is None:
             include_sites = list(self.validation_sites.keys())
@@ -1013,14 +1013,14 @@ class RealDataAcquisition:
 def create_real_data_acquisition(
     data_directory: str | None = None,
 ) -> RealDataAcquisition:
-    """
-    Create a RealDataAcquisition instance.
+    """Create a RealDataAcquisition instance.
 
     Args:
         data_directory: Optional data directory path
 
     Returns:
         Configured RealDataAcquisition instance
+
     """
     return RealDataAcquisition(data_directory)
 

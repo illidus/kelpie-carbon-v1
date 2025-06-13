@@ -1,5 +1,4 @@
-"""
-Validation CLI for Kelpie-Carbon.
+"""Validation CLI for Kelpie-Carbon.
 
 Provides command-line interface for validation tasks including:
 - Dataset validation with MAE, RMSE, R² metrics
@@ -9,6 +8,8 @@ Provides command-line interface for validation tasks including:
 Usage:
     kelpie validate --dataset <path> --out validation/results
 """
+
+from __future__ import annotations
 
 import json
 from datetime import datetime
@@ -53,11 +54,11 @@ OUTPUT_OPTION = typer.Option(
 
 
 def load_validation_config() -> dict:
-    """
-    Load validation configuration from unified config.
+    """Load validation configuration from unified config.
 
     Returns:
         Validation configuration dictionary
+
     """
     try:
         config = load()
@@ -68,8 +69,7 @@ def load_validation_config() -> dict:
 
 
 def load_dataset(dataset_path: Path) -> tuple[np.ndarray, np.ndarray]:
-    """
-    Load validation dataset from file.
+    """Load validation dataset from file.
 
     Supports JSON format with 'y_true' and 'y_pred' arrays.
 
@@ -81,6 +81,7 @@ def load_dataset(dataset_path: Path) -> tuple[np.ndarray, np.ndarray]:
 
     Raises:
         typer.Exit: If dataset cannot be loaded
+
     """
     try:
         if not dataset_path.exists():
@@ -115,8 +116,7 @@ def load_dataset(dataset_path: Path) -> tuple[np.ndarray, np.ndarray]:
 
 
 def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
-    """
-    Compute validation metrics using MetricHelpers.
+    """Compute validation metrics using MetricHelpers.
 
     Args:
         y_true: Ground truth values
@@ -124,6 +124,7 @@ def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
 
     Returns:
         Dictionary of computed metrics
+
     """
     helpers = MetricHelpers()
 
@@ -141,15 +142,68 @@ def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     return metrics
 
 
+def validate_against_thresholds(metrics: dict, config: dict) -> tuple[bool, list[str]]:
+    """Validate metrics against config-driven thresholds (T2-002).
+
+    Args:
+        metrics: Dictionary of computed metrics
+        config: Validation configuration with thresholds
+
+    Returns:
+        Tuple of (passed_validation, validation_errors)
+
+    """
+    thresholds = config.get("thresholds", {})
+    validation_errors = []
+
+    # Check each metric against its thresholds
+    for metric_name, metric_value in metrics.items():
+        if metric_value is None:
+            continue
+
+        metric_thresholds = thresholds.get(metric_name, {})
+        if not metric_thresholds:
+            continue
+
+        # For metrics where lower is better (MAE, RMSE)
+        if metric_name in ["mae", "rmse"]:
+            max_threshold = metric_thresholds.get("max")
+            if max_threshold is not None and metric_value > max_threshold:
+                validation_errors.append(
+                    f"{metric_name.upper()} {metric_value:.4f} exceeds maximum threshold {max_threshold}"
+                )
+
+        # For metrics where higher is better (accuracy, precision, recall, f1, r2, iou, dice)
+        else:
+            min_threshold = metric_thresholds.get("min")
+            if min_threshold is not None and metric_value < min_threshold:
+                validation_errors.append(
+                    f"{metric_name.upper()} {metric_value:.4f} below minimum threshold {min_threshold}"
+                )
+
+    # Check performance metrics if present
+    for perf_metric in ["inference_time_ms", "memory_usage_mb"]:
+        if perf_metric in metrics:
+            perf_thresholds = thresholds.get(perf_metric, {})
+            max_threshold = perf_thresholds.get("max")
+            if max_threshold is not None and metrics[perf_metric] > max_threshold:
+                validation_errors.append(
+                    f"{perf_metric} {metrics[perf_metric]} exceeds maximum threshold {max_threshold}"
+                )
+
+    passed_validation = len(validation_errors) == 0
+    return passed_validation, validation_errors
+
+
 def generate_json_report(
     validation_result: ValidationResult, output_path: Path
 ) -> None:
-    """
-    Generate JSON validation report.
+    """Generate JSON validation report.
 
     Args:
         validation_result: ValidationResult object
         output_path: Output directory path
+
     """
     json_path = output_path / "validation_report.json"
 
@@ -168,13 +222,13 @@ def generate_json_report(
 def generate_markdown_report(
     validation_result: ValidationResult, metrics: dict, output_path: Path
 ) -> None:
-    """
-    Generate Markdown validation report.
+    """Generate Markdown validation report.
 
     Args:
         validation_result: ValidationResult object
         metrics: Computed metrics dictionary
         output_path: Output directory path
+
     """
     md_path = output_path / "validation_report.md"
 
@@ -216,6 +270,96 @@ def generate_markdown_report(
         logger.error(f"Failed to generate Markdown report: {e}")
 
 
+def generate_docs_report(validation_result: ValidationResult, metrics: dict) -> None:
+    """Generate Markdown validation report for MkDocs integration (T4-002).
+
+    Writes reports to docs/reports/ directory for automatic inclusion in documentation.
+
+    Args:
+        validation_result: ValidationResult object
+        metrics: Computed metrics dictionary
+
+    """
+    # Create docs/reports directory structure
+    docs_reports_dir = Path("docs/reports")
+    docs_reports_dir.mkdir(parents=True, exist_ok=True)
+
+    # Create timestamped report filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    report_filename = f"validation_{validation_result.test_site}_{timestamp}.md"
+    docs_report_path = docs_reports_dir / report_filename
+
+    try:
+        with open(docs_report_path, "w", encoding="utf-8") as f:
+            # Enhanced Markdown report for documentation
+            f.write(f"# Validation Report: {validation_result.test_site}\n\n")
+
+            f.write('!!! info "Report Information"\n')
+            f.write(f"    - **Campaign ID:** {validation_result.campaign_id}\n")
+            f.write(f"    - **Timestamp:** {validation_result.timestamp}\n")
+            f.write(f"    - **Test Site:** {validation_result.test_site}\n")
+            f.write(f"    - **Model:** {validation_result.model_name}\n\n")
+
+            # Validation status with colored admonition
+            if validation_result.passed_validation:
+                f.write('!!! success "Validation Status"\n')
+                f.write(
+                    "    ✅ **PASSED** - All metrics meet validation thresholds\n\n"
+                )
+            else:
+                f.write('!!! failure "Validation Status"\n')
+                f.write("    ❌ **FAILED** - One or more metrics failed validation\n\n")
+                if validation_result.validation_errors:
+                    f.write("    **Errors:**\n")
+                    for error in validation_result.validation_errors:
+                        f.write(f"    - {error}\n")
+                    f.write("\n")
+
+            f.write("## Performance Metrics\n\n")
+            f.write("| Metric | Value | Description |\n")
+            f.write("|--------|-------|-------------|\n")
+
+            metric_descriptions = {
+                "mae": "Mean Absolute Error - Average absolute difference between predictions and ground truth",
+                "rmse": "Root Mean Square Error - Square root of average squared differences",
+                "r2": "R-squared - Coefficient of determination (proportion of variance explained)",
+                "iou": "Intersection over Union - Overlap between predicted and true regions",
+                "dice_coefficient": "Dice Coefficient - Similarity measure for segmentation",
+                "inference_time_ms": "Inference Time - Time taken for model prediction (milliseconds)",
+                "memory_usage_mb": "Memory Usage - Peak memory consumption during validation (MB)",
+            }
+
+            for metric_name, value in metrics.items():
+                if value is not None:
+                    description = metric_descriptions.get(
+                        metric_name, "Performance metric"
+                    )
+                    f.write(
+                        f"| {metric_name.upper()} | {value:.4f} | {description} |\n"
+                    )
+
+            f.write("\n## Dataset Information\n\n")
+            f.write("| Property | Value |\n")
+            f.write("|----------|-------|\n")
+            for key, value in validation_result.dataset_info.items():
+                f.write(f"| {key.replace('_', ' ').title()} | {value} |\n")
+
+            # Add metadata for MkDocs
+            f.write("\n---\n")
+            f.write(
+                f"*Report generated on {validation_result.timestamp} by Kelpie-Carbon validation framework*\n"
+            )
+
+        console.print(
+            f"[green]✓[/green] Documentation report saved: {docs_report_path}"
+        )
+        logger.info(f"Documentation report generated: {docs_report_path}")
+
+    except Exception as e:
+        console.print(f"[red]Error generating documentation report:[/red] {e}")
+        logger.error(f"Failed to generate documentation report: {e}")
+
+
 @app.command()
 def validate(
     dataset: Path = DATASET_OPTION,
@@ -239,8 +383,7 @@ def validate(
         help="Model name being validated",
     ),
 ) -> None:
-    """
-    Validate satellite-based kelp detection against ground truth.
+    """Validate satellite-based kelp detection against ground truth.
 
     Processes validation dataset and generates comprehensive metrics report.
     """
@@ -292,17 +435,12 @@ def validate(
             },
         )
 
-        # Apply validation thresholds from config
-        thresholds = config.get("thresholds", {})
-        min_accuracy = thresholds.get("min_accuracy", 0.75)
-
-        # Simple validation check (can be enhanced)
-        if validation_result.r2 and validation_result.r2 >= min_accuracy:
-            validation_result.passed_validation = True
-        else:
-            validation_result.validation_errors.append(
-                f"R² score {validation_result.r2:.4f} below minimum threshold {min_accuracy}"
-            )
+        # Apply config-driven validation thresholds (T2-002)
+        passed_validation, validation_errors = validate_against_thresholds(
+            metrics, config
+        )
+        validation_result.passed_validation = passed_validation
+        validation_result.validation_errors.extend(validation_errors)
 
         progress.update(task3, description="✓ Created validation result")
 
@@ -310,6 +448,7 @@ def validate(
         task4 = progress.add_task("Generating reports...", total=None)
         generate_json_report(validation_result, output)
         generate_markdown_report(validation_result, metrics, output)
+        generate_docs_report(validation_result, metrics)
         progress.update(task4, description="✓ Generated reports")
 
     # Display results table

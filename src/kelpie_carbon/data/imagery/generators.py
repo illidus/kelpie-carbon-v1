@@ -25,6 +25,7 @@ def generate_rgb_composite(
 
     Returns:
         PIL Image in RGB format
+
     """
     # Get red band
     if red_band not in dataset:
@@ -77,6 +78,7 @@ def generate_false_color_composite(
 
     Returns:
         PIL Image in RGB format
+
     """
     # Validate bands exist
     required_bands = [nir_band, red_band, green_band]
@@ -108,6 +110,7 @@ def generate_spectral_visualization(
 
     Returns:
         PIL Image with applied colormap
+
     """
     # Normalize to 0-1 range
     normalized = normalize_to_0_1(index_data)
@@ -129,6 +132,7 @@ def generate_ndvi_visualization(dataset: xr.Dataset) -> Image.Image:
 
     Returns:
         NDVI visualization image
+
     """
     if "ndvi" not in dataset:
         raise ValueError("Dataset does not contain NDVI data")
@@ -146,6 +150,7 @@ def generate_fai_visualization(dataset: xr.Dataset) -> Image.Image:
 
     Returns:
         FAI visualization image
+
     """
     if "fai" not in dataset:
         raise ValueError("Dataset does not contain FAI data")
@@ -165,6 +170,7 @@ def generate_red_edge_ndvi_visualization(dataset: xr.Dataset) -> Image.Image:
 
     Returns:
         Red Edge NDVI visualization image
+
     """
     if "red_edge_ndvi" not in dataset:
         raise ValueError("Dataset does not contain Red Edge NDVI data")
@@ -187,6 +193,7 @@ def generate_ndre_visualization(dataset: xr.Dataset) -> Image.Image:
 
     Returns:
         NDRE visualization image with research-optimized colormap
+
     """
     if "ndre" not in dataset:
         raise ValueError("Dataset does not contain NDRE data")
@@ -208,6 +215,7 @@ def generate_comparative_ndvi_ndre_visualization(dataset: xr.Dataset) -> Image.I
 
     Returns:
         Composite image showing NDVI and NDRE side by side
+
     """
     if "ndvi" not in dataset or "ndre" not in dataset:
         raise ValueError("Dataset must contain both NDVI and NDRE data for comparison")
@@ -219,7 +227,7 @@ def generate_comparative_ndvi_ndre_visualization(dataset: xr.Dataset) -> Image.I
 
     # Plot NDVI
     ndvi_data = normalize_to_0_1(dataset["ndvi"])
-    im1 = ax1.imshow(ndvi_data, cmap="RdYlGn", vmin=0, vmax=1)
+    ax1.imshow(ndvi_data, cmap="RdYlGn", vmin=0, vmax=1)
     ax1.set_title("Traditional NDVI\n(NIR-Red)/(NIR+Red)")
     ax1.axis("off")
 
@@ -266,6 +274,7 @@ def generate_multi_band_composite(
 
     Returns:
         RGB composite image
+
     """
     required_channels = ["red", "green", "blue"]
 
@@ -309,6 +318,7 @@ def generate_stretched_composite(
 
     Returns:
         Histogram-stretched RGB image
+
     """
     if len(bands) != 3:
         raise ValueError("Must provide exactly 3 bands for RGB composite")

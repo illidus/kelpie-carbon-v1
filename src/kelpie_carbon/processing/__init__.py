@@ -3,13 +3,32 @@
 This module provides backwards compatibility by importing from core.processing.
 """
 
-from ..core.processing import *
+from ..core.processing import (
+    BiomassEstimate,
+    BladeFromdDetector,
+    KelpSpecies,
+    MorphologicalFeature,
+    MorphologyDetectionResult,
+    MorphologyDetector,
+    MorphologyType,
+    PneumatocystDetector,
+    SpeciesClassificationResult,
+    SpeciesClassifier,
+    create_morphology_detector,
+    create_species_classifier,
+)
 
 __all__ = [
+    "BiomassEstimate",
+    "BladeFromdDetector",
     "KelpSpecies",
-    "SpeciesClassifier",
-    "SpeciesClassificationError",
-    "DerivativeFeatures",
-    "WaterAnomalyFilter",
+    "MorphologicalFeature",
+    "MorphologyDetectionResult",
     "MorphologyDetector",
+    "MorphologyType",
+    "PneumatocystDetector",
+    "SpeciesClassificationResult",
+    "SpeciesClassifier",
+    "create_morphology_detector",
+    "create_species_classifier",
 ]

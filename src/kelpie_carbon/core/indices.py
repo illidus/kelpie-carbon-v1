@@ -17,6 +17,7 @@ def floating_algae_index(
 
     Returns:
         FAI values as same type as input
+
     """
     return nir - red_edge
 
@@ -29,6 +30,7 @@ def calculate_indices_from_dataset(dataset: xr.Dataset) -> xr.Dataset:
 
     Returns:
         Dataset with computed indices
+
     """
     indices = xr.Dataset()
 

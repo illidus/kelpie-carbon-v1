@@ -1,5 +1,4 @@
-"""
-Historical Baseline Analysis for Kelp Detection
+"""Historical Baseline Analysis for Kelp Detection.
 
 This module implements comprehensive historical baseline analysis capabilities,
 including historical data digitization, change detection algorithms, and temporal
@@ -80,6 +79,7 @@ class ChangeDetectionAnalyzer:
     """Implements change detection algorithms for historical vs. current kelp extent."""
 
     def __init__(self):
+        """Initialize change detection analyzer."""
         self.change_threshold = 0.15  # 15% change significance threshold
         self.trend_window = 10  # years for trend analysis
 
@@ -89,8 +89,7 @@ class ChangeDetectionAnalyzer:
         current_data: dict[int, float],
         method: str = "mann_kendall",
     ) -> dict[str, Any]:
-        """
-        Detect statistically significant changes between historical and current data.
+        """Detect statistically significant changes between historical and current data.
 
         Args:
             historical_data: Year -> extent mapping for historical period
@@ -99,6 +98,7 @@ class ChangeDetectionAnalyzer:
 
         Returns:
             Dictionary with change detection results
+
         """
         try:
             # Calculate basic change metrics
@@ -195,8 +195,7 @@ class ChangeDetectionAnalyzer:
         current_extent: float,
         analysis_year: int = 2024,
     ) -> dict[str, Any]:
-        """
-        Analyze patterns in kelp extent changes over time.
+        """Analyze patterns in kelp extent changes over time.
 
         Args:
             historical_dataset: Historical kelp dataset
@@ -205,6 +204,7 @@ class ChangeDetectionAnalyzer:
 
         Returns:
             Comprehensive change pattern analysis
+
         """
         try:
             temporal_data = historical_dataset.temporal_data
@@ -292,14 +292,14 @@ class TemporalTrendAnalyzer:
     """Provides comprehensive temporal trend analysis for kelp extent data."""
 
     def __init__(self):
+        """Initialize temporal trend analyzer."""
         self.seasonal_window = 5  # years for seasonal analysis
         self.forecast_years = 10  # years to forecast
 
     def analyze_temporal_trends(
         self, historical_dataset: HistoricalDataset, include_forecast: bool = True
     ) -> dict[str, Any]:
-        """
-        Perform comprehensive temporal trend analysis.
+        """Perform comprehensive temporal trend analysis.
 
         Args:
             historical_dataset: Historical kelp dataset
@@ -307,6 +307,7 @@ class TemporalTrendAnalyzer:
 
         Returns:
             Comprehensive temporal trend analysis results
+
         """
         try:
             temporal_data = historical_dataset.temporal_data
@@ -557,14 +558,14 @@ class TemporalTrendAnalyzer:
 
 
 class HistoricalBaselineAnalysis:
-    """
-    Main framework for historical baseline analysis of kelp extent.
+    """Main framework for historical baseline analysis of kelp extent.
 
     This class integrates historical data digitization, change detection,
     and temporal trend analysis following UVic methodology for kelp mapping.
     """
 
     def __init__(self):
+        """Initialize historical baseline analysis."""
         self.change_analyzer = ChangeDetectionAnalyzer()
         self.trend_analyzer = TemporalTrendAnalyzer()
         self.historical_sites: dict[str, HistoricalSite] = {}
@@ -603,8 +604,7 @@ class HistoricalBaselineAnalysis:
         chart_data: dict[int, dict[str, float | str]],
         quality_control_params: dict[str, Any] | None = None,
     ) -> HistoricalDataset:
-        """
-        Digitize historical chart data for a site.
+        """Digitize historical chart data for a site.
 
         Args:
             site_name: Name of the historical site
@@ -613,6 +613,7 @@ class HistoricalBaselineAnalysis:
 
         Returns:
             Validated historical dataset
+
         """
         if site_name not in self.historical_sites:
             raise ValueError(f"Site {site_name} not found")
@@ -751,8 +752,7 @@ class HistoricalBaselineAnalysis:
         current_year: int = 2024,
         analysis_options: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """
-        Perform comprehensive historical baseline analysis.
+        """Perform comprehensive historical baseline analysis.
 
         Args:
             site_name: Name of the site to analyze
@@ -762,6 +762,7 @@ class HistoricalBaselineAnalysis:
 
         Returns:
             Comprehensive analysis results
+
         """
         if site_name not in self.historical_datasets:
             raise ValueError(f"No historical dataset found for site: {site_name}")
@@ -819,8 +820,7 @@ class HistoricalBaselineAnalysis:
     def generate_comparison_report(
         self, site_names: list[str], output_format: str = "dict"
     ) -> dict[str, Any] | str:
-        """
-        Generate comparative analysis report across multiple sites.
+        """Generate comparative analysis report across multiple sites.
 
         Args:
             site_names: List of site names to compare
@@ -828,6 +828,7 @@ class HistoricalBaselineAnalysis:
 
         Returns:
             Comparative analysis report
+
         """
         if not all(name in self.historical_datasets for name in site_names):
             missing = [
@@ -953,13 +954,13 @@ class HistoricalBaselineAnalysis:
         output_path: str | Path,
         include_visualizations: bool = False,
     ) -> None:
-        """
-        Export analysis results to file.
+        """Export analysis results to file.
 
         Args:
             site_name: Site name to export
             output_path: Output file path
             include_visualizations: Whether to generate plots
+
         """
         if site_name not in self.historical_datasets:
             raise ValueError(f"No dataset found for site: {site_name}")

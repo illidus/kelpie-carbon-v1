@@ -1,4 +1,10 @@
-"""Standardized error handling for Kelpie Carbon v1 API."""
+"""Standardized error handling for Kelpie Carbon API.
+
+This module provides comprehensive error handling with standardized HTTP responses,
+detailed error messages, and proper exception chaining for debugging.
+"""
+
+from __future__ import annotations
 
 import traceback
 from enum import Enum
@@ -56,6 +62,18 @@ class StandardizedError(HTTPException):
         suggestions: list[str] | None = None,
         log_error: bool = True,
     ):
+        """Initialize standardized error.
+
+        Args:
+            status_code: HTTP status code
+            error_code: Standardized error code
+            message: Error message
+            details: Optional error details
+            field: Optional field name for validation errors
+            suggestions: Optional list of suggestions
+            log_error: Whether to log the error
+
+        """
         self.error_detail = ErrorDetail(
             code=error_code,
             message=message,

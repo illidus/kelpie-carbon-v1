@@ -107,8 +107,61 @@ validation:
     - "cpu_usage"
     - "model_size"
 
-  # Validation thresholds
+  # Validation thresholds - Config-driven validation criteria (T2-002)
   thresholds:
+    # Classification metrics
+    accuracy:
+      min: 0.75
+      target: 0.85
+      stretch: 0.9
+    precision:
+      min: 0.70
+      target: 0.80
+      stretch: 0.90
+    recall:
+      min: 0.70
+      target: 0.80
+      stretch: 0.90
+    f1_score:
+      min: 0.70
+      target: 0.80
+      stretch: 0.90
+
+    # Regression metrics
+    mae:
+      max: 0.15  # Lower is better
+      target: 0.10
+      excellent: 0.05
+    rmse:
+      max: 0.20  # Lower is better
+      target: 0.15
+      excellent: 0.10
+    r2:
+      min: 0.70
+      target: 0.85
+      excellent: 0.95
+
+    # Segmentation metrics
+    iou:
+      min: 0.60
+      target: 0.75
+      excellent: 0.85
+    dice_coefficient:
+      min: 0.65
+      target: 0.80
+      excellent: 0.90
+
+    # Performance metrics
+    inference_time_ms:
+      max: 5000  # 5 seconds max
+      target: 2000  # 2 seconds target
+      excellent: 1000  # 1 second excellent
+    memory_usage_mb:
+      max: 2048  # 2GB max
+      target: 1024  # 1GB target
+      excellent: 512  # 512MB excellent
+
+    # Legacy thresholds (for backward compatibility)
     min_accuracy: 0.75
     target_accuracy: 0.85
     stretch_accuracy: 0.9

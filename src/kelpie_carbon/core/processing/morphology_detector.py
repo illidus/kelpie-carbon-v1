@@ -76,6 +76,7 @@ class PneumatocystDetector:
         Args:
             min_size: Minimum pneumatocyst size in pixels
             max_size: Maximum pneumatocyst size in pixels
+
         """
         self.min_size = min_size
         self.max_size = max_size
@@ -96,6 +97,7 @@ class PneumatocystDetector:
 
         Returns:
             List of detected pneumatocyst features
+
         """
         try:
             # Ensure proper image format
@@ -429,6 +431,7 @@ class BladeFromdDetector:
 
         Returns:
             List of detected blade and frond features
+
         """
         try:
             # Ensure proper image format
@@ -632,6 +635,7 @@ class MorphologyDetector:
 
         Returns:
             Comprehensive morphological detection results
+
         """
         processing_notes = []
 
@@ -792,5 +796,5 @@ class MorphologyDetector:
 
 
 def create_morphology_detector() -> MorphologyDetector:
-    """Factory function to create a morphology detector."""
+    """Create a morphology detector."""
     return MorphologyDetector()

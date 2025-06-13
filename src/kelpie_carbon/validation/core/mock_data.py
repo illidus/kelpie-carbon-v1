@@ -1,5 +1,4 @@
-"""
-MockValidationGenerator - Task 2.3
+"""MockValidationGenerator - Task 2.3
 Generates realistic mock validation data for BC kelp forests.
 """
 
@@ -17,6 +16,7 @@ class MockValidationGenerator:
     """Generates realistic mock validation data for BC coastal waters."""
 
     def __init__(self, data_manager: ValidationDataManager):
+        """Initialize mock validation generator."""
         self.data_manager = data_manager
 
         # BC validation sites accessible from Victoria

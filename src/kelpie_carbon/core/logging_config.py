@@ -11,6 +11,7 @@ def setup_logging(level: int = logging.INFO) -> None:
 
     Args:
         level: Logging level (default: INFO)
+
     """
     logging.basicConfig(
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -95,6 +96,7 @@ def get_logger(name: str) -> logging.Logger:
 
     Returns:
         Configured logger instance
+
     """
     return logging.getLogger(name)
 
@@ -106,6 +108,7 @@ def log_performance(func_name: str, duration: float, **kwargs) -> None:
         func_name: Name of the function being measured
         duration: Duration in seconds
         **kwargs: Additional context data
+
     """
     logger = get_logger("performance")
     extra_data = {"duration": duration, "function": func_name, **kwargs}
@@ -129,6 +132,7 @@ def log_api_request(
         status_code: Response status code
         duration: Request duration in seconds
         **kwargs: Additional context data
+
     """
     logger = get_logger("api")
     extra_data = {
@@ -168,6 +172,7 @@ def log_satellite_data_fetch(
         success: Whether the fetch was successful
         duration: Operation duration in seconds
         **kwargs: Additional context data
+
     """
     logger = get_logger("satellite")
     extra_data = {

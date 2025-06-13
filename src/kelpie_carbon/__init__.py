@@ -10,6 +10,8 @@ Refactored into four main packages:
 - reporting: Visualization, analytics, and reporting
 """
 
+import contextlib
+
 __version__ = "0.1.0"
 __author__ = "Ryan Eyre"
 __email__ = "ryaneyre1337@gmail.com"
@@ -21,7 +23,7 @@ from .core.config import Config, get_settings, load
 from .core.logging_config import get_logger, setup_logging
 
 # Import core functionality
-try:
+with contextlib.suppress(ImportError):
     from .core import (
         KelpBiomassModel,
         apply_mask,
@@ -30,12 +32,9 @@ try:
         get_mask_statistics,
         predict_biomass,
     )
-except ImportError:
-    # Fallback if core modules aren't properly set up yet
-    pass
 
 # Import validation framework
-try:
+with contextlib.suppress(ImportError):
     from .validation.core import (
         RealWorldValidator,
         ValidationResult,
@@ -43,12 +42,9 @@ try:
         validate_primary_sites,
         validate_with_controls,
     )
-except ImportError:
-    # Fallback if validation modules aren't properly set up yet
-    pass
 
 # Import analytics framework
-try:
+with contextlib.suppress(ImportError):
     from .reporting.analytics import (
         AnalyticsFramework,
         FirstNationsReport,
@@ -56,19 +52,13 @@ try:
         ScientificReport,
         create_analytics_framework,
     )
-except ImportError:
-    # Fallback if reporting modules aren't properly set up yet
-    pass
 
 # Import API framework
-try:
+with contextlib.suppress(ImportError):
     from .core import api
 
     # Make API available at package level for backwards compatibility
     # This allows imports like: from kelpie_carbon.core.api.models import CoordinateModel
-except ImportError:
-    # Fallback if API modules aren't properly set up yet
-    pass
 
 __all__ = [
     "__version__",

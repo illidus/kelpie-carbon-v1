@@ -1,20 +1,88 @@
 site_name: Kelpie-Carbon
 site_url: https://illidus.github.io/kelpie-carbon-v1/docs/
 site_dir: site/docs
+site_description: Kelp forest carbon sequestration monitoring and validation platform
+
 theme:
   name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+  palette:
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
 nav:
   - Home: index.md
-  - Roadmap: ROADMAP.md
-  - Architecture: ARCHITECTURE.md
-  - API: API_REFERENCE.md
+  - Documentation:
+    - Roadmap: ROADMAP.md
+    - Architecture: ARCHITECTURE.md
+    - Agent Guide: AGENT_GUIDE.md
+  - API Reference: API_REFERENCE.md
+  - Validation Reports: reports/index.md
 
 plugins:
-  - search
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
   - mkdocstrings:
       handlers:
         python:
           paths: [src]
+          options:
+            docstring_style: google
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+            show_submodules: true
+            show_source: false
+            show_bases: true
+            show_inheritance_diagram: false
+            group_by_category: true
+            heading_level: 2
+            filters: ["!^_"]
+            members_order: source
+            separate_signature: true
+            show_signature_annotations: true
+            signature_crossrefs: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
 
 exclude_docs: |
   ARCHIVE/

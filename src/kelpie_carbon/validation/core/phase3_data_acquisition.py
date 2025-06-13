@@ -1,5 +1,4 @@
-"""
-Phase 3 Real Data Acquisition System for SKEMA Validation.
+"""Phase 3 Real Data Acquisition System for SKEMA Validation.
 
 Implements real satellite data acquisition and validation capabilities
 for Task C1.5 Phase 3 of the SKEMA validation framework.
@@ -20,6 +19,8 @@ Key Features:
 - Factory functions for easy integration
 """
 
+from __future__ import annotations
+
 import datetime
 import json
 import logging
@@ -37,8 +38,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ValidationSite:
-    """
-    Information about a kelp validation site.
+    """Information about a kelp validation site.
 
     Represents a real-world location where kelp detection algorithms
     can be validated against known kelp presence and characteristics.
@@ -57,8 +57,7 @@ class ValidationSite:
 
 @dataclass
 class SatelliteScene:
-    """
-    Information about a satellite scene.
+    """Information about a satellite scene.
 
     Represents a single Sentinel-2 acquisition over a validation site
     with associated quality metrics and metadata.
@@ -74,8 +73,7 @@ class SatelliteScene:
 
 @dataclass
 class ValidationDataset:
-    """
-    Complete validation dataset for a site.
+    """Complete validation dataset for a site.
 
     Combines validation site information, satellite scenes, and
     quality metrics into a comprehensive testing package.
@@ -88,8 +86,7 @@ class ValidationDataset:
 
 
 class Phase3DataAcquisition:
-    """
-    Phase 3 Real Data Acquisition System for SKEMA Validation.
+    """Phase 3 Real Data Acquisition System for SKEMA Validation.
 
     Provides comprehensive satellite data acquisition and validation
     capabilities for real-world testing of kelp detection algorithms.
@@ -102,11 +99,11 @@ class Phase3DataAcquisition:
     """
 
     def __init__(self, data_directory: str | None = None):
-        """
-        Initialize the Phase 3 data acquisition system.
+        """Initialize the Phase 3 data acquisition system.
 
         Args:
             data_directory: Optional data directory path for storing datasets
+
         """
         self.data_directory = (
             Path(data_directory) if data_directory else Path("data/phase3")
@@ -125,8 +122,7 @@ class Phase3DataAcquisition:
         )
 
     def _initialize_validation_sites(self) -> dict[str, ValidationSite]:
-        """
-        Initialize the comprehensive validation sites database.
+        """Initialize the comprehensive validation sites database.
 
         Returns comprehensive coverage of:
         - 6 validation sites across 4 regions
@@ -238,8 +234,7 @@ class Phase3DataAcquisition:
         species: str | None = None,
         confidence: str | None = None,
     ) -> list[ValidationSite]:
-        """
-        Get validation sites with optional filtering.
+        """Get validation sites with optional filtering.
 
         Args:
             region: Filter by region (e.g., "British Columbia", "California")
@@ -248,6 +243,7 @@ class Phase3DataAcquisition:
 
         Returns:
             List of matching validation sites
+
         """
         sites = list(self.validation_sites.values())
 
@@ -272,8 +268,7 @@ class Phase3DataAcquisition:
     def create_synthetic_sentinel2_scenes(
         self, site_id: str, num_scenes: int = 8, year: int = 2024
     ) -> list[SatelliteScene]:
-        """
-        Create synthetic Sentinel-2 scenes for testing and validation.
+        """Create synthetic Sentinel-2 scenes for testing and validation.
 
         This simulates realistic Sentinel-2 data availability and quality
         characteristics for the specified site and time period.
@@ -285,6 +280,7 @@ class Phase3DataAcquisition:
 
         Returns:
             List of synthetic satellite scenes with realistic characteristics
+
         """
         if site_id not in self.validation_sites:
             raise ValueError(f"Unknown site_id: {site_id}")
@@ -351,8 +347,7 @@ class Phase3DataAcquisition:
     def _simulate_cloud_coverage(
         self, site: ValidationSite, date: datetime.datetime
     ) -> float:
-        """
-        Simulate realistic cloud coverage for a site and date.
+        """Simulate realistic cloud coverage for a site and date.
 
         Based on regional climate patterns and seasonal variations.
         """
@@ -393,8 +388,7 @@ class Phase3DataAcquisition:
         return np.clip(cloud_coverage, 0.0, 95.0)
 
     def _determine_data_quality(self, cloud_coverage: float) -> str:
-        """
-        Determine data quality based on cloud coverage.
+        """Determine data quality based on cloud coverage.
 
         Uses realistic Sentinel-2 quality assessment criteria.
         """
@@ -408,8 +402,7 @@ class Phase3DataAcquisition:
             return "poor"
 
     def _get_season_phase(self, date: datetime.datetime, site: ValidationSite) -> str:
-        """
-        Determine which phase of kelp season the date falls in.
+        """Determine which phase of kelp season the date falls in.
 
         This helps with understanding expected kelp biomass and visibility.
         """
@@ -444,8 +437,7 @@ class Phase3DataAcquisition:
     def create_validation_dataset(
         self, site_id: str, num_scenes: int = 8, year: int = 2024
     ) -> ValidationDataset:
-        """
-        Create a complete validation dataset for a site.
+        """Create a complete validation dataset for a site.
 
         Args:
             site_id: Validation site identifier
@@ -454,6 +446,7 @@ class Phase3DataAcquisition:
 
         Returns:
             Complete validation dataset with quality metrics
+
         """
         if site_id not in self.validation_sites:
             raise ValueError(f"Unknown site_id: {site_id}")
@@ -479,8 +472,7 @@ class Phase3DataAcquisition:
     def _calculate_quality_metrics(
         self, scenes: list[SatelliteScene]
     ) -> dict[str, float]:
-        """
-        Calculate comprehensive quality metrics for a scene collection.
+        """Calculate comprehensive quality metrics for a scene collection.
 
         Provides detailed assessment of dataset suitability for validation.
         """
@@ -584,8 +576,7 @@ class Phase3DataAcquisition:
         num_scenes_per_site: int = 8,
         year: int = 2024,
     ) -> dict[str, ValidationDataset]:
-        """
-        Create a comprehensive benchmark suite across multiple sites.
+        """Create a comprehensive benchmark suite across multiple sites.
 
         Args:
             sites: List of site IDs to include (all sites if None)
@@ -594,6 +585,7 @@ class Phase3DataAcquisition:
 
         Returns:
             Dictionary mapping site_id to ValidationDataset
+
         """
         if sites is None:
             sites = list(self.validation_sites.keys())
@@ -632,8 +624,7 @@ class Phase3DataAcquisition:
     def save_validation_dataset(
         self, dataset: ValidationDataset, filename: str | None = None
     ) -> str:
-        """
-        Save a validation dataset to disk in JSON format.
+        """Save a validation dataset to disk in JSON format.
 
         Args:
             dataset: ValidationDataset to save
@@ -641,6 +632,7 @@ class Phase3DataAcquisition:
 
         Returns:
             Path to saved file
+
         """
         if filename is None:
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -689,14 +681,14 @@ class Phase3DataAcquisition:
         return str(filepath)
 
     def load_validation_dataset(self, filepath: str) -> ValidationDataset:
-        """
-        Load a validation dataset from disk.
+        """Load a validation dataset from disk.
 
         Args:
             filepath: Path to saved validation dataset JSON file
 
         Returns:
             Loaded ValidationDataset
+
         """
         with open(filepath) as f:
             dataset_dict = json.load(f)
@@ -729,11 +721,11 @@ class Phase3DataAcquisition:
         return dataset
 
     def get_site_summary(self) -> dict[str, Any]:
-        """
-        Get a comprehensive summary of all validation sites.
+        """Get a comprehensive summary of all validation sites.
 
         Returns:
             Detailed summary statistics and site information
+
         """
         summary = {
             "total_sites": len(self.validation_sites),
@@ -809,14 +801,14 @@ class Phase3DataAcquisition:
     def generate_quality_report(
         self, datasets: dict[str, ValidationDataset]
     ) -> dict[str, Any]:
-        """
-        Generate a comprehensive quality assessment report for multiple datasets.
+        """Generate a comprehensive quality assessment report for multiple datasets.
 
         Args:
             datasets: Dictionary of site_id -> ValidationDataset
 
         Returns:
             Comprehensive quality report with recommendations
+
         """
         report = {
             "report_metadata": {
@@ -930,14 +922,14 @@ class Phase3DataAcquisition:
 def create_phase3_data_acquisition(
     data_directory: str | None = None,
 ) -> Phase3DataAcquisition:
-    """
-    Factory function to create a Phase3DataAcquisition instance.
+    """Create a Phase3DataAcquisition instance.
 
     Args:
         data_directory: Optional data directory path
 
     Returns:
         Configured Phase3DataAcquisition instance
+
     """
     return Phase3DataAcquisition(data_directory)
 
@@ -945,8 +937,7 @@ def create_phase3_data_acquisition(
 def get_validation_sites(
     region: str | None = None, species: str | None = None, confidence: str | None = None
 ) -> list[ValidationSite]:
-    """
-    Get validation sites with optional filtering.
+    """Get validation sites with optional filtering.
 
     High-level convenience function for accessing validation sites.
 
@@ -957,6 +948,7 @@ def get_validation_sites(
 
     Returns:
         List of matching validation sites
+
     """
     acquisition = create_phase3_data_acquisition()
     return acquisition.get_validation_sites(region, species, confidence)
@@ -965,8 +957,7 @@ def get_validation_sites(
 def create_benchmark_dataset(
     site_id: str, num_scenes: int = 8, year: int = 2024
 ) -> ValidationDataset:
-    """
-    Create a benchmark dataset for a specific site.
+    """Create a benchmark dataset for a specific site.
 
     High-level convenience function for creating single-site datasets.
 
@@ -977,6 +968,7 @@ def create_benchmark_dataset(
 
     Returns:
         Complete validation dataset
+
     """
     acquisition = create_phase3_data_acquisition()
     return acquisition.create_validation_dataset(site_id, num_scenes, year)
@@ -985,8 +977,7 @@ def create_benchmark_dataset(
 def create_full_benchmark_suite(
     num_scenes_per_site: int = 8, year: int = 2024
 ) -> dict[str, ValidationDataset]:
-    """
-    Create a full benchmark suite across all validation sites.
+    """Create a full benchmark suite across all validation sites.
 
     High-level convenience function for comprehensive benchmarking.
 
@@ -996,6 +987,7 @@ def create_full_benchmark_suite(
 
     Returns:
         Complete benchmark suite with all sites
+
     """
     acquisition = create_phase3_data_acquisition()
     return acquisition.create_benchmark_suite(None, num_scenes_per_site, year)

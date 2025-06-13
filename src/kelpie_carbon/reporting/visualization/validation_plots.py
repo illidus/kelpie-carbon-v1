@@ -1,5 +1,4 @@
-"""
-Validation Plots - Task MV1.3
+"""Validation Plots - Task MV1.3
 Visualization methods for assessing model prediction accuracy against real data.
 User-requested visualization suite for RMSE, MAE, R² assessment.
 """
@@ -24,8 +23,7 @@ except ImportError:
 
 
 class ValidationVisualizationSuite:
-    """
-    Comprehensive validation visualization suite for model accuracy assessment.
+    """Comprehensive validation visualization suite for model accuracy assessment.
     Implements user-requested visualization methods for RMSE, MAE, R² evaluation.
     """
 
@@ -43,14 +41,14 @@ class ValidationVisualizationSuite:
         )
 
     def create_accuracy_assessment_dashboard(self, validation_results: dict) -> str:
-        """
-        Create comprehensive accuracy assessment visualization suite.
+        """Create comprehensive accuracy assessment visualization suite.
 
         Args:
             validation_results: Results from enhanced metrics validation
 
         Returns:
             Path to generated dashboard HTML file
+
         """
         logger.info("Creating comprehensive accuracy assessment dashboard")
 
@@ -96,14 +94,14 @@ class ValidationVisualizationSuite:
         return str(dashboard_path)
 
     def plot_rmse_mae_r2_comparison(self, validation_results: dict) -> str:
-        """
-        Visualize RMSE, MAE, R² metrics for model assessment.
+        """Visualize RMSE, MAE, R² metrics for model assessment.
 
         Args:
             validation_results: Validation results with metrics
 
         Returns:
             Path to generated plot
+
         """
         logger.debug("Creating RMSE, MAE, R² comparison plots")
 
@@ -178,14 +176,14 @@ class ValidationVisualizationSuite:
     def create_predicted_vs_actual_plots(
         self, validation_results: dict
     ) -> dict[str, str]:
-        """
-        Create predicted vs actual scatter plots with accuracy metrics.
+        """Create predicted vs actual scatter plots with accuracy metrics.
 
         Args:
             validation_results: Validation results with prediction data
 
         Returns:
             Dictionary of plot types to file paths
+
         """
         logger.debug("Creating predicted vs actual scatter plots")
 
@@ -318,14 +316,14 @@ class ValidationVisualizationSuite:
         return plot_paths
 
     def visualize_spatial_accuracy_distribution(self, validation_results: dict) -> str:
-        """
-        Geographic accuracy heatmap for 4 validation sample points.
+        """Geographic accuracy heatmap for 4 validation sample points.
 
         Args:
             validation_results: Validation results with coordinate information
 
         Returns:
             Path to generated map file
+
         """
         logger.debug("Creating spatial accuracy distribution visualization")
 
@@ -441,14 +439,14 @@ class ValidationVisualizationSuite:
         return str(plot_path)
 
     def create_species_accuracy_comparison(self, validation_results: dict) -> str:
-        """
-        Species-specific accuracy comparison visualization.
+        """Species-specific accuracy comparison visualization.
 
         Args:
             validation_results: Validation results with species information
 
         Returns:
             Path to generated plot
+
         """
         logger.debug("Creating species-specific accuracy comparison")
 
@@ -581,14 +579,14 @@ class ValidationVisualizationSuite:
         return str(plot_path)
 
     def plot_temporal_accuracy_trends(self, temporal_data: dict) -> str:
-        """
-        Seasonal accuracy variation visualization.
+        """Seasonal accuracy variation visualization.
 
         Args:
             temporal_data: Temporal validation data
 
         Returns:
             Path to generated plot
+
         """
         logger.debug("Creating temporal accuracy trends plot")
 
@@ -649,8 +647,7 @@ class ValidationVisualizationSuite:
         uncertainties: np.ndarray,
         observations: np.ndarray,
     ) -> dict[str, str]:
-        """
-        Uncertainty calibration assessment plots.
+        """Uncertainty calibration assessment plots.
 
         Args:
             predictions: Model predictions
@@ -659,6 +656,7 @@ class ValidationVisualizationSuite:
 
         Returns:
             Dictionary of plot types to file paths
+
         """
         logger.debug("Creating uncertainty calibration plots")
 
@@ -736,14 +734,14 @@ class ValidationVisualizationSuite:
     def generate_validation_report_visualizations(
         self, all_metrics: dict
     ) -> dict[str, str]:
-        """
-        Generate complete set of validation report visualizations.
+        """Generate complete set of validation report visualizations.
 
         Args:
             all_metrics: Complete validation metrics and results
 
         Returns:
             Dictionary mapping visualization types to file paths
+
         """
         logger.info("Generating complete validation report visualizations")
 

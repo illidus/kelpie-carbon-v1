@@ -1,5 +1,12 @@
-"""Configuration management for Kelpie Carbon v1."""
+"""Configuration management for Kelpie Carbon v1.
 
+This module provides comprehensive configuration management with environment-specific
+settings, validation, and dynamic configuration loading.
+"""
+
+from __future__ import annotations
+
+import logging
 import os
 from dataclasses import dataclass, field
 from functools import lru_cache
@@ -127,6 +134,7 @@ class ConfigLoader:
         Args:
             config_dir: Directory containing configuration files.
                        Defaults to project root/config
+
         """
         if config_dir is None:
             # Find project root by looking for pyproject.toml
@@ -150,6 +158,7 @@ class ConfigLoader:
 
         Returns:
             Dictionary containing configuration data
+
         """
         if filename in self._config_cache:
             return self._config_cache[filename]
@@ -169,8 +178,6 @@ class ConfigLoader:
             return config_data
 
         except Exception as e:
-            import logging
-
             logging.getLogger(__name__).warning(
                 f"Failed to load config file {config_path}: {e}"
             )
@@ -197,6 +204,7 @@ class ConfigLoader:
 
         Returns:
             Configured Config object
+
         """
         if environment is None:
             environment = os.getenv("KELPIE_ENV", "development")
@@ -384,6 +392,7 @@ def get_config(environment: str | None = None) -> Config:
 
     Returns:
         Configuration instance
+
     """
     loader = ConfigLoader()
     return loader.create_config(environment)
@@ -404,6 +413,7 @@ def load() -> DictConfig:
     Raises:
         FileNotFoundError: If config/kelpie.yml is not found
         Exception: If there's an error parsing the YAML file
+
     """
     config_path = Path("config/kelpie.yml")
 
@@ -417,7 +427,7 @@ def load() -> DictConfig:
         config = OmegaConf.load(config_path)
         return config
     except Exception as e:
-        raise Exception(f"Error loading configuration from {config_path}: {e}")
+        raise Exception(f"Error loading configuration from {config_path}: {e}") from e
 
 
 def load_yaml_config() -> DictConfig:

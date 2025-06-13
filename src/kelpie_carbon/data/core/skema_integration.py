@@ -1,5 +1,4 @@
-"""
-SKEMA Data Integration Module
+"""SKEMA Data Integration Module.
 
 This module provides integration with the SKEMA (Satellite-based Kelp Mapping) project
 from the University of Victoria's SPECTRAL Remote Sensing Laboratory.
@@ -36,6 +35,7 @@ class SKEMADataIntegrator:
     """Integrates with University of Victoria's SKEMA kelp mapping data."""
 
     def __init__(self):
+        """Initialize SKEMA data integrator."""
         self.base_url = (
             "https://spectral.geog.uvic.ca/skema"  # Hypothetical API endpoint
         )
@@ -46,8 +46,7 @@ class SKEMADataIntegrator:
         bbox: tuple[float, float, float, float] | None = None,
         confidence_threshold: float = 0.8,
     ) -> list[SKEMAValidationPoint]:
-        """
-        Fetch validation points from SKEMA dataset.
+        """Fetch validation points from SKEMA dataset.
 
         Args:
             bbox: Bounding box (min_lat, min_lng, max_lat, max_lng) for spatial filtering
@@ -55,6 +54,7 @@ class SKEMADataIntegrator:
 
         Returns:
             List of SKEMA validation points
+
         """
         try:
             # For now, return simulated SKEMA-style data
@@ -71,7 +71,6 @@ class SKEMADataIntegrator:
         confidence_threshold: float = 0.8,
     ) -> list[SKEMAValidationPoint]:
         """Generate simulated SKEMA-style validation data for testing."""
-
         # Simulated validation points from BC coast (Vancouver Island area)
         simulated_data = [
             # Kelp forest locations with high confidence
@@ -190,8 +189,7 @@ class SKEMADataIntegrator:
     def validate_model_predictions(
         self, predictions: list[dict], validation_points: list[SKEMAValidationPoint]
     ) -> dict:
-        """
-        Validate model predictions against SKEMA ground truth data.
+        """Validate model predictions against SKEMA ground truth data.
 
         Args:
             predictions: List of model predictions with 'lat', 'lng', 'kelp_present', 'biomass'
@@ -199,6 +197,7 @@ class SKEMADataIntegrator:
 
         Returns:
             Validation metrics dictionary
+
         """
         if not predictions or not validation_points:
             return {"error": "Insufficient data for validation"}
@@ -267,8 +266,7 @@ def get_skema_validation_data(
     bbox: tuple[float, float, float, float] | None = None,
     confidence_threshold: float = 0.8,
 ) -> list[SKEMAValidationPoint]:
-    """
-    Convenience function to get SKEMA validation data.
+    """Get SKEMA validation data.
 
     Args:
         bbox: Bounding box for spatial filtering
@@ -276,6 +274,7 @@ def get_skema_validation_data(
 
     Returns:
         List of SKEMA validation points
+
     """
     integrator = SKEMADataIntegrator()
     return integrator.fetch_validation_points(bbox, confidence_threshold)

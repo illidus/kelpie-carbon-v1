@@ -1,5 +1,4 @@
-"""
-SKEMA Validation Benchmarking & Mathematical Comparison Framework
+"""SKEMA Validation Benchmarking & Mathematical Comparison Framework.
 
 This module provides comprehensive validation of our kelp detection pipeline against
 SKEMA (Satellite-based Kelp Mapping) methodology from University of Victoria.
@@ -91,12 +90,12 @@ class SKEMAMathematicalAnalyzer:
     """Analyzes and documents SKEMA's mathematical methodology."""
 
     def __init__(self):
+        """Initialize SKEMA mathematical analyzer."""
         self.skema_formulas = self._load_skema_formulas()
         self.pipeline_formulas = self._load_pipeline_formulas()
 
     def _load_skema_formulas(self) -> dict[str, SKEMAFormula]:
         """Load documented SKEMA mathematical formulas."""
-
         return {
             "ndre_calculation": SKEMAFormula(
                 name="Normalized Difference Red Edge (NDRE)",
@@ -155,7 +154,6 @@ class SKEMAMathematicalAnalyzer:
 
     def _load_pipeline_formulas(self) -> dict[str, PipelineFormula]:
         """Load our pipeline's mathematical formulas for comparison."""
-
         return {
             "ndre_calculation": PipelineFormula(
                 name="Our NDRE Implementation",
@@ -219,7 +217,6 @@ def calculate_confidence_interval(estimate, method_std, data_std):
 
     def compare_formulas(self) -> dict[str, dict[str, Any]]:
         """Compare SKEMA and our pipeline formulas side-by-side."""
-
         comparisons = {}
 
         for formula_name in self.skema_formulas:
@@ -254,7 +251,6 @@ def calculate_confidence_interval(estimate, method_std, data_std):
         self, skema: SKEMAFormula, ours: PipelineFormula
     ) -> dict[str, Any]:
         """Assess mathematical equivalence between SKEMA and our formulas."""
-
         # Simple equivalence checking based on formula structure
         skema_clean = skema.formula_latex.replace(" ", "").lower()
         ours_clean = ours.formula_latex.replace(" ", "").lower()
@@ -308,7 +304,6 @@ def calculate_confidence_interval(estimate, method_std, data_std):
 
     def _get_equivalence_recommendation(self, score: float) -> str:
         """Get recommendation based on equivalence score."""
-
         if score >= 0.9:
             return "High equivalence - formulas are mathematically very similar"
         elif score >= 0.7:
@@ -323,13 +318,13 @@ class VisualProcessingDemonstrator:
     """Creates visual demonstrations of satellite imagery processing."""
 
     def __init__(self):
+        """Initialize visual processing demonstrator."""
         self.processing_steps = []
 
     def create_synthetic_satellite_imagery(
         self, site_coords: tuple[float, float], size: tuple[int, int] = (200, 200)
     ) -> dict[str, np.ndarray]:
         """Create realistic synthetic satellite imagery for demonstration."""
-
         height, width = size
 
         # Create base imagery with realistic spectral characteristics
@@ -414,7 +409,6 @@ class VisualProcessingDemonstrator:
 
     def _create_water_mask(self, height: int, width: int) -> np.ndarray:
         """Create realistic water body mask."""
-
         # Create water body with irregular coastline
         y, x = np.ogrid[:height, :width]
 
@@ -429,7 +423,6 @@ class VisualProcessingDemonstrator:
         self, height: int, width: int, site_coords: tuple[float, float]
     ) -> np.ndarray:
         """Create realistic kelp forest distribution."""
-
         y, x = np.ogrid[:height, :width]
 
         # Base kelp areas - prefer near-shore shallow water
@@ -458,7 +451,6 @@ class VisualProcessingDemonstrator:
 
     def _create_land_mask(self, height: int, width: int) -> np.ndarray:
         """Create land area mask."""
-
         y, x = np.ogrid[:height, :width]
 
         # Land is right side of image
@@ -472,7 +464,6 @@ class VisualProcessingDemonstrator:
         self, satellite_imagery: dict[str, np.ndarray]
     ) -> dict[str, Any]:
         """Demonstrate step-by-step processing of satellite imagery."""
-
         demo_results = {
             "original_imagery": satellite_imagery,
             "processing_steps": [],
@@ -577,7 +568,6 @@ class VisualProcessingDemonstrator:
 
     def _calculate_skema_ndre(self, imagery: dict[str, np.ndarray]) -> np.ndarray:
         """Calculate NDRE using SKEMA methodology."""
-
         nir = imagery["nir"]
         red_edge = imagery["red_edge"]
 
@@ -590,7 +580,6 @@ class VisualProcessingDemonstrator:
 
     def _calculate_our_ndre(self, imagery: dict[str, np.ndarray]) -> np.ndarray:
         """Calculate NDRE using our pipeline methodology (same formula, enhanced error handling)."""
-
         nir = imagery["nir"]
         red_edge = imagery["red_edge"]
 
@@ -613,7 +602,6 @@ class VisualProcessingDemonstrator:
         self, imagery: dict[str, np.ndarray]
     ) -> dict[str, np.ndarray]:
         """Apply water anomaly filter following SKEMA methodology."""
-
         green = imagery["green"]
         red = imagery["red"]
 
@@ -640,7 +628,6 @@ class VisualProcessingDemonstrator:
         self, imagery: dict[str, np.ndarray]
     ) -> dict[str, np.ndarray]:
         """Calculate spectral derivatives following SKEMA methodology."""
-
         red = imagery["red"]
         red_edge = imagery["red_edge"]
 
@@ -671,7 +658,6 @@ class VisualProcessingDemonstrator:
         self, ndre: np.ndarray, waf_result: dict, derivative_result: dict
     ) -> np.ndarray:
         """SKEMA final kelp detection logic."""
-
         # SKEMA detection criteria (from research papers)
         ndre_threshold = 0.05  # From Timmer et al. (2022)
         derivative_threshold = 0.001  # From Uhl et al. (2016)
@@ -689,7 +675,6 @@ class VisualProcessingDemonstrator:
         self, ndre: np.ndarray, waf_result: dict, derivative_result: dict
     ) -> dict[str, np.ndarray]:
         """Our pipeline final detection with multiple methods and uncertainty."""
-
         # Method 1: Enhanced NDRE detection
         ndre_detection = ndre > 0.04  # Slightly more sensitive
 
@@ -741,7 +726,6 @@ class VisualProcessingDemonstrator:
         self, skema_result: np.ndarray, our_result: dict, ground_truth: np.ndarray
     ) -> dict[str, float]:
         """Calculate performance metrics comparing SKEMA and our methods."""
-
         our_detection = (
             our_result["final_detection"]
             if isinstance(our_result, dict)
@@ -801,7 +785,6 @@ class VisualProcessingDemonstrator:
 
     def create_visualization_figure(self, demo_results: dict[str, Any]) -> plt.Figure:
         """Create comprehensive visualization figure showing processing steps."""
-
         fig, axes = plt.subplots(3, 4, figsize=(20, 15))
         fig.suptitle(
             "SKEMA vs Our Pipeline: Satellite Imagery Processing Comparison",

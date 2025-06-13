@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Budget U-Net Kelp Detector
+"""Budget U-Net Kelp Detector.
 
 Zero-cost to low-cost ($0-20) kelp detection using pre-trained U-Net models
 with minimal transfer learning. Designed as a secondary approach to complement
@@ -38,8 +37,7 @@ from ..spectral.skema_processor import SKEMAProcessor
 
 
 class BudgetUNetKelpDetector:
-    """
-    Budget-friendly U-Net kelp detector using pre-trained models.
+    """Budget-friendly U-Net kelp detector using pre-trained models.
 
     Features:
     - Zero to minimal cost ($0-20 for Google Colab Pro)
@@ -55,13 +53,13 @@ class BudgetUNetKelpDetector:
         device: str = "auto",
         use_spectral_guidance: bool = True,
     ):
-        """
-        Initialize the budget U-Net detector.
+        """Initialize the budget U-Net detector.
 
         Args:
             model_path: Path to trained model weights. If None, uses pre-trained only.
             device: Device to use ('cpu', 'cuda', or 'auto')
             use_spectral_guidance: Whether to use SKEMA spectral guidance
+
         """
         self.device = self._setup_device(device)
         self.model = None
@@ -87,7 +85,7 @@ class BudgetUNetKelpDetector:
             print("📋 U-Net model not available - using fallback segmentation")
 
     def _setup_device(self, device: str) -> torch.device:
-        """Setup computation device."""
+        """Set up computation device."""
         if device == "auto":
             if torch.cuda.is_available():
                 device = "cuda"
@@ -132,14 +130,14 @@ class BudgetUNetKelpDetector:
     def detect_kelp_from_file(
         self, satellite_image_path: str
     ) -> tuple[np.ndarray, dict]:
-        """
-        Detect kelp from satellite image file.
+        """Detect kelp from satellite image file.
 
         Args:
             satellite_image_path: Path to satellite image file
 
         Returns:
             Tuple of (kelp_mask, metadata)
+
         """
         # Load satellite image
         with rasterio.open(satellite_image_path) as src:
@@ -173,8 +171,7 @@ class BudgetUNetKelpDetector:
         transform=None,
         crs=None,
     ) -> tuple[np.ndarray, dict]:
-        """
-        Detect kelp using budget U-Net approach.
+        """Detect kelp using budget U-Net approach.
 
         Args:
             rgb_image: RGB image array (H, W, 3)
@@ -185,6 +182,7 @@ class BudgetUNetKelpDetector:
 
         Returns:
             Tuple of (kelp_mask, metadata)
+
         """
         print("🌊 Starting Budget U-Net kelp detection...")
 
@@ -303,8 +301,7 @@ class BudgetUNetKelpDetector:
         output_dir: str,
         validation_split: float = 0.2,
     ) -> dict[str, Any]:
-        """
-        Create training data for minimal transfer learning.
+        """Create training data for minimal transfer learning.
 
         Args:
             satellite_images: List of satellite image paths
@@ -314,6 +311,7 @@ class BudgetUNetKelpDetector:
 
         Returns:
             Dictionary with training data information
+
         """
         if not SMP_AVAILABLE:
             print("❌ segmentation-models-pytorch required for training data creation")
@@ -465,8 +463,7 @@ print("📥 Download this file and use with BudgetUNetKelpDetector")
     def batch_process_directory(
         self, input_dir: str, output_dir: str, pattern: str = "*.tif"
     ) -> dict[str, Any]:
-        """
-        Batch process satellite images for kelp detection.
+        """Batch process satellite images for kelp detection.
 
         Args:
             input_dir: Directory containing satellite images
@@ -475,6 +472,7 @@ print("📥 Download this file and use with BudgetUNetKelpDetector")
 
         Returns:
             Dictionary with processing results
+
         """
         input_path = Path(input_dir)
         output_path = Path(output_dir)
@@ -544,9 +542,7 @@ print("📥 Download this file and use with BudgetUNetKelpDetector")
 
 
 def setup_budget_unet_environment():
-    """
-    Setup instructions for budget U-Net implementation.
-    """
+    """Set up budget U-Net implementation."""
     print("🛠️  Budget U-Net Setup Instructions")
     print("=====================================")
     print()

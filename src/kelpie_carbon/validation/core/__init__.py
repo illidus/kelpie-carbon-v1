@@ -1,5 +1,4 @@
-"""
-Validation and testing framework for SKEMA kelp detection.
+"""Validation and testing framework for SKEMA kelp detection.
 
 This module provides comprehensive validation capabilities including:
 - Real-world validation against field surveys and expert annotations

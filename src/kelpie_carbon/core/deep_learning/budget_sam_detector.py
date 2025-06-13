@@ -1,5 +1,4 @@
-"""
-Budget-Friendly SAM-based Kelp Detector
+"""Budget-Friendly SAM-based Kelp Detector.
 
 Zero-cost implementation combining Segment Anything Model (SAM) with SKEMA spectral analysis.
 No training required - uses pre-trained SAM model with spectral guidance from existing pipeline.
@@ -33,8 +32,7 @@ from ..spectral.skema_processor import SKEMAProcessor
 
 
 class BudgetSAMKelpDetector:
-    """
-    Budget-friendly kelp detector using pre-trained SAM with spectral guidance.
+    """Budget-friendly kelp detector using pre-trained SAM with spectral guidance.
 
     Cost: $0 (zero training, inference only)
     Accuracy: Expected 80-90% based on research
@@ -42,11 +40,11 @@ class BudgetSAMKelpDetector:
     """
 
     def __init__(self, sam_checkpoint_path: str | None = None):
-        """
-        Initialize the SAM-based kelp detector.
+        """Initialize the SAM-based kelp detector.
 
         Args:
             sam_checkpoint_path: Path to SAM model. If None, will look for default locations.
+
         """
         if not SAM_AVAILABLE:
             raise ImportError(
@@ -95,14 +93,14 @@ class BudgetSAMKelpDetector:
     def detect_kelp_from_file(
         self, satellite_image_path: str
     ) -> tuple[np.ndarray, dict]:
-        """
-        Detect kelp in satellite imagery using spectral-guided SAM.
+        """Detect kelp in satellite imagery using spectral-guided SAM.
 
         Args:
             satellite_image_path: Path to satellite image (GeoTIFF)
 
         Returns:
             Tuple of (kelp_mask, metadata)
+
         """
         # Load satellite imagery
         with rasterio.open(satellite_image_path) as src:
@@ -125,8 +123,7 @@ class BudgetSAMKelpDetector:
         transform=None,
         crs=None,
     ) -> tuple[np.ndarray, dict]:
-        """
-        Detect kelp using spectral-guided SAM approach.
+        """Detect kelp using spectral-guided SAM approach.
 
         Args:
             rgb_image: RGB image for SAM (H, W, 3)
@@ -137,6 +134,7 @@ class BudgetSAMKelpDetector:
 
         Returns:
             Tuple of (kelp_mask, metadata)
+
         """
         metadata = {
             "method": "spectral_guided_sam",
@@ -196,7 +194,6 @@ class BudgetSAMKelpDetector:
         red_edge_band: np.ndarray | None = None,
     ) -> list[tuple[int, int]]:
         """Generate guidance points using SKEMA spectral analysis."""
-
         if nir_band is None or red_edge_band is None:
             print("⚠️ NIR/Red-edge bands not available, using RGB-based guidance")
             return self._generate_rgb_guidance_points(rgb_image)
@@ -272,7 +269,6 @@ class BudgetSAMKelpDetector:
         self, rgb_image: np.ndarray, guidance_points: list[tuple[int, int]]
     ) -> np.ndarray:
         """Apply SAM segmentation with guidance points."""
-
         # Ensure RGB image is in correct format for SAM
         if rgb_image.dtype != np.uint8:
             rgb_image = (rgb_image * 255).astype(np.uint8)
@@ -302,8 +298,7 @@ class BudgetSAMKelpDetector:
     def batch_process_directory(
         self, input_dir: str, output_dir: str, pattern: str = "*.tif"
     ) -> dict:
-        """
-        Process all satellite images in a directory.
+        """Process all satellite images in a directory.
 
         Args:
             input_dir: Directory containing satellite images
@@ -312,6 +307,7 @@ class BudgetSAMKelpDetector:
 
         Returns:
             Dictionary with processing results
+
         """
         input_path = Path(input_dir)
         output_path = Path(output_dir)
@@ -375,14 +371,14 @@ class BudgetSAMKelpDetector:
 
 
 def download_sam_model(output_dir: str = ".") -> str:
-    """
-    Download SAM model if not already present.
+    """Download SAM model if not already present.
 
     Args:
         output_dir: Directory to save the model
 
     Returns:
         Path to downloaded model
+
     """
     import urllib.request
     from pathlib import Path

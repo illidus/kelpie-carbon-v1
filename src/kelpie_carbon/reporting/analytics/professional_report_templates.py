@@ -1,5 +1,4 @@
-"""
-Professional Report Templates for Regulatory Compliance
+"""Professional Report Templates for Regulatory Compliance.
 
 This module provides comprehensive report templates for regulatory submissions,
 stakeholder communications, and scientific documentation with professional
@@ -12,6 +11,8 @@ Features:
 - Professional styling and layout
 - Mathematical transparency integration
 """
+
+from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
@@ -70,6 +71,7 @@ class ProfessionalReportTemplate:
     """Base class for professional report templates."""
 
     def __init__(self, config: ReportConfiguration):
+        """Initialize professional report template."""
         self.config = config
         if not config.analysis_date:
             self.config.analysis_date = datetime.now().strftime("%Y-%m-%d")
@@ -574,6 +576,7 @@ class RegulatoryComplianceReport(ProfessionalReportTemplate):
     """Specialized template for regulatory compliance reporting."""
 
     def __init__(self, config: ReportConfiguration):
+        """Initialize regulatory compliance template."""
         super().__init__(config)
         self.config.vera_compliance = True
         self.config.include_mathematical_details = True
@@ -627,6 +630,7 @@ class ProfessionalReportGenerator:
     """Main generator for professional reports."""
 
     def __init__(self):
+        """Initialize professional report generator."""
         self.templates = {
             "scientific": ProfessionalReportTemplate,
             "regulatory": RegulatoryComplianceReport,
@@ -647,6 +651,7 @@ class ProfessionalReportGenerator:
 
         Returns:
             HTML content or file path
+
         """
         template_class = self.templates.get(
             config.report_type, ProfessionalReportTemplate
@@ -676,6 +681,7 @@ class ProfessionalReportGenerator:
 
         Returns:
             Path to generated PDF file
+
         """
         if not HAS_WEASYPRINT:
             raise ImportError("WeasyPrint required for PDF generation")
@@ -707,6 +713,7 @@ class ProfessionalReportGenerator:
 
         Returns:
             Dictionary mapping stakeholder types to file paths
+
         """
         stakeholder_configs = {
             "scientific": {
@@ -775,5 +782,5 @@ class ProfessionalReportGenerator:
 
 
 def create_professional_report_generator() -> ProfessionalReportGenerator:
-    """Factory function to create professional report generator."""
+    """Create professional report generator."""
     return ProfessionalReportGenerator()

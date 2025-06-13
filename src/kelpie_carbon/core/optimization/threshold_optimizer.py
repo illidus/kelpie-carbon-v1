@@ -34,6 +34,7 @@ class ThresholdOptimizer:
 
         Returns:
             Validation results dictionary
+
         """
         try:
             with open(results_path) as f:
@@ -60,6 +61,7 @@ class ThresholdOptimizer:
 
         Returns:
             Analysis metrics
+
         """
         analysis = {
             "mean_detection_rate": 0.0,
@@ -109,6 +111,7 @@ class ThresholdOptimizer:
 
         Returns:
             Optimized threshold configuration
+
         """
         analysis = self.analyze_detection_rates(results)
         current_config = results["skema_configuration"]
@@ -177,6 +180,7 @@ class ThresholdOptimizer:
 
         Returns:
             Adaptive configuration dictionary
+
         """
         # Base configuration optimized for different site types
         base_configs = {
@@ -244,6 +248,7 @@ class ThresholdOptimizer:
 
         Returns:
             Real-time optimized configuration
+
         """
         # Fast processing configuration
         fast_config = {
@@ -273,6 +278,7 @@ class ThresholdOptimizer:
         Args:
             output_path: Path to save optimization results
             optimization_type: Type of optimization performed
+
         """
         self.optimization_results["optimization_type"] = optimization_type
         self.optimization_results["timestamp"] = datetime.now().isoformat()
@@ -299,6 +305,7 @@ class ThresholdOptimizer:
 
         Returns:
             Comprehensive optimization results
+
         """
         logger.info("Starting comprehensive threshold optimization...")
 
@@ -347,6 +354,7 @@ class ThresholdOptimizer:
 
         Returns:
             List of optimization recommendations
+
         """
         recommendations = []
 
@@ -399,7 +407,7 @@ class ThresholdOptimizer:
 def optimize_detection_pipeline(
     validation_results_path: str, output_dir: str = "results/optimization/"
 ) -> dict[str, Any]:
-    """Main function to optimize detection pipeline based on validation results.
+    """Optimize detection pipeline based on validation results.
 
     Args:
         validation_results_path: Path to validation results JSON
@@ -407,6 +415,7 @@ def optimize_detection_pipeline(
 
     Returns:
         Optimization results dictionary
+
     """
     optimizer = ThresholdOptimizer()
     return optimizer.run_comprehensive_optimization(validation_results_path, output_dir)
@@ -423,6 +432,7 @@ def get_optimized_config_for_site(
 
     Returns:
         Optimized configuration dictionary
+
     """
     optimizer = ThresholdOptimizer()
     return optimizer.create_adaptive_config(site_type, environmental_conditions)

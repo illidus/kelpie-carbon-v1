@@ -1,5 +1,4 @@
-"""
-Derivative-Based Feature Detection for Kelp Detection
+"""Derivative-Based Feature Detection for Kelp Detection.
 
 Based on SKEMA research from Uhl et al. (2016) - "Submerged Kelp Detection with Hyperspectral Data"
 Implements first-order derivative spectral analysis for enhanced kelp detection.
@@ -27,6 +26,7 @@ class DerivativeFeatures:
 
         Args:
             config: Configuration parameters for detection
+
         """
         self.config = config or {
             "red_edge_slope_threshold": 0.01,
@@ -44,6 +44,7 @@ class DerivativeFeatures:
 
         Returns:
             Boolean mask where True indicates potential kelp
+
         """
         return apply_derivative_kelp_detection(dataset, self.config)
 
@@ -58,6 +59,7 @@ class DerivativeFeatures:
 
         Returns:
             Array of first derivatives
+
         """
         return np.diff(reflectance) / np.diff(wavelengths)
 
@@ -73,6 +75,7 @@ def calculate_spectral_derivatives(dataset: xr.Dataset) -> xr.Dataset:
 
     Returns:
         Dataset with derivative features added
+
     """
     derivative_dataset = dataset.copy()
 
@@ -115,6 +118,7 @@ def _calculate_band_derivatives(
 
     Returns:
         Dictionary of derivative arrays
+
     """
     derivatives = {}
 
@@ -157,6 +161,7 @@ def calculate_kelp_derivative_features(
 
     Returns:
         Dictionary of kelp-specific derivative features
+
     """
     features = {}
 
@@ -222,6 +227,7 @@ def apply_derivative_kelp_detection(
 
     Returns:
         Boolean mask where True indicates potential kelp
+
     """
     if detection_config is None:
         detection_config = {
@@ -272,6 +278,7 @@ def _apply_morphological_cleanup(mask: np.ndarray, min_size: int) -> np.ndarray:
 
     Returns:
         Cleaned binary mask
+
     """
     # Remove noise with opening operation
     kernel = np.ones((3, 3))
@@ -282,7 +289,7 @@ def _apply_morphological_cleanup(mask: np.ndarray, min_size: int) -> np.ndarray:
 
     label_result = cast(tuple[np.ndarray, int], ndimage.label(cleaned_mask))
     labeled_array: np.ndarray = label_result[0]
-    num_features = label_result[1]
+    label_result[1]
     component_sizes: np.ndarray = np.bincount(labeled_array.ravel())
 
     # Keep only large components
@@ -305,6 +312,7 @@ def calculate_derivative_quality_metrics(
 
     Returns:
         Dictionary of quality metrics
+
     """
     metrics = {}
 

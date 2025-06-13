@@ -1,8 +1,10 @@
+"""Comprehensive metrics framework for validation.
+
+This module provides standardized metrics for evaluating model performance
+across different validation scenarios and data types.
 """
-ValidationMetrics - Task 2.3
-Calculates validation metrics for SKEMA NDRE vs NDVI comparison.
-Enhanced with T2-001: ValidationResult & standardized metric helpers.
-"""
+
+from __future__ import annotations
 
 from datetime import datetime
 from typing import Any
@@ -21,8 +23,7 @@ from sklearn.metrics import (
 
 
 class ValidationResult(BaseModel):
-    """
-    Standardized validation result container for all validation metrics.
+    """Standardized validation result container for all validation metrics.
     T2-001: ValidationResult implementation with comprehensive metric tracking.
     """
 
@@ -96,15 +97,13 @@ class ValidationResult(BaseModel):
 
 
 class MetricHelpers:
-    """
-    T2-001: Standardized metric helper functions for MAE, RMSE, R², IoU, Dice.
+    """T2-001: Standardized metric helper functions for MAE, RMSE, R², IoU, Dice.
     Provides consistent implementations across the validation framework.
     """
 
     @staticmethod
     def calculate_mae(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        """
-        Calculate Mean Absolute Error (MAE).
+        """Calculate Mean Absolute Error (MAE).
 
         Args:
             y_true: Ground truth values
@@ -112,6 +111,7 @@ class MetricHelpers:
 
         Returns:
             MAE value
+
         """
         if len(y_true) == 0 or len(y_pred) == 0:
             return 0.0
@@ -119,8 +119,7 @@ class MetricHelpers:
 
     @staticmethod
     def calculate_rmse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        """
-        Calculate Root Mean Square Error (RMSE).
+        """Calculate Root Mean Square Error (RMSE).
 
         Args:
             y_true: Ground truth values
@@ -128,6 +127,7 @@ class MetricHelpers:
 
         Returns:
             RMSE value
+
         """
         if len(y_true) == 0 or len(y_pred) == 0:
             return 0.0
@@ -135,8 +135,7 @@ class MetricHelpers:
 
     @staticmethod
     def calculate_r2(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        """
-        Calculate R-squared coefficient.
+        """Calculate R-squared coefficient.
 
         Args:
             y_true: Ground truth values
@@ -144,6 +143,7 @@ class MetricHelpers:
 
         Returns:
             R² value
+
         """
         if len(y_true) == 0 or len(y_pred) == 0:
             return 0.0
@@ -153,8 +153,7 @@ class MetricHelpers:
     def calculate_iou(
         y_true: np.ndarray, y_pred: np.ndarray, threshold: float = 0.5
     ) -> float:
-        """
-        Calculate Intersection over Union (IoU) for binary masks.
+        """Calculate Intersection over Union (IoU) for binary masks.
 
         Args:
             y_true: Ground truth binary mask
@@ -163,6 +162,7 @@ class MetricHelpers:
 
         Returns:
             IoU value
+
         """
         if len(y_true) == 0 or len(y_pred) == 0:
             return 0.0
@@ -188,8 +188,7 @@ class MetricHelpers:
     def calculate_dice_coefficient(
         y_true: np.ndarray, y_pred: np.ndarray, threshold: float = 0.5
     ) -> float:
-        """
-        Calculate Dice coefficient for binary masks.
+        """Calculate Dice coefficient for binary masks.
 
         Args:
             y_true: Ground truth binary mask
@@ -198,6 +197,7 @@ class MetricHelpers:
 
         Returns:
             Dice coefficient value
+
         """
         if len(y_true) == 0 or len(y_pred) == 0:
             return 0.0
@@ -230,8 +230,7 @@ class ValidationMetrics:
     def create_validation_result(
         self, campaign_id: str, test_site: str, model_name: str, **kwargs: Any
     ) -> ValidationResult:
-        """
-        Create ValidationResult instance with standardized metrics.
+        """Create ValidationResult instance with standardized metrics.
         Enhanced for T2-001: Core framework for validation result creation.
 
         Args:
@@ -242,6 +241,7 @@ class ValidationMetrics:
 
         Returns:
             ValidationResult instance
+
         """
         return ValidationResult(
             campaign_id=campaign_id,
@@ -257,8 +257,7 @@ class ValidationMetrics:
         y_prob: np.ndarray | None = None,
         is_segmentation: bool = False,
     ) -> dict[str, float]:
-        """
-        Calculate comprehensive metrics using standardized helpers.
+        """Calculate comprehensive metrics using standardized helpers.
 
         Args:
             y_true: Ground truth values
@@ -268,6 +267,7 @@ class ValidationMetrics:
 
         Returns:
             Dictionary of calculated metrics
+
         """
         metrics = {}
 
@@ -321,7 +321,6 @@ class ValidationMetrics:
         ndvi_predictions: list[bool],
     ) -> dict[str, Any]:
         """Calculate comprehensive detection accuracy metrics."""
-
         gt = np.array(ground_truth)
         ndre_pred = np.array(ndre_predictions)
         ndvi_pred = np.array(ndvi_predictions)
@@ -367,7 +366,6 @@ class ValidationMetrics:
 
     def calculate_skema_score(self, validation_results: dict[str, Any]) -> float:
         """Calculate SKEMA validation score based on research targets."""
-
         ndre_metrics = validation_results["ndre_metrics"]
         improvements = validation_results["improvements"]
         area_metrics = validation_results["area_metrics"]
@@ -388,8 +386,7 @@ class ValidationMetrics:
     def generate_report(
         self, campaign_id: str, validation_results: dict[str, Any]
     ) -> ValidationResult:
-        """
-        Generate standardized validation report using ValidationResult.
+        """Generate standardized validation report using ValidationResult.
         Enhanced for T2-001 compliance.
         """
         skema_score = self.calculate_skema_score(validation_results)

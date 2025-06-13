@@ -1,5 +1,4 @@
-"""
-Field Survey Data Integration - Task C2.4
+"""Field Survey Data Integration - Task C2.4.
 
 This module implements comprehensive field survey data integration for:
 - Species-specific ground truth validation
@@ -10,12 +9,14 @@ This module implements comprehensive field survey data integration for:
 Integrates with Task C2.1-C2.3 species classification and biomass estimation.
 """
 
+from __future__ import annotations
+
 import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -98,6 +99,7 @@ class FieldDataIngestor:
     """Handles ingestion of field survey data from multiple formats."""
 
     def __init__(self):
+        """Initialize field data ingestor."""
         self.supported_formats = ["csv", "excel", "json", "shapefile"]
         self.logger = logging.getLogger(__name__)
 
@@ -234,6 +236,7 @@ class SpeciesValidationAnalyzer:
     """Analyzes species classification accuracy against field survey data."""
 
     def __init__(self):
+        """Initialize species validation analyzer."""
         self.logger = logging.getLogger(__name__)
 
     def compare_predictions_to_field_data(
@@ -243,7 +246,6 @@ class SpeciesValidationAnalyzer:
         spatial_tolerance_m: float = 100.0,
     ) -> SpeciesValidationMetrics:
         """Compare model predictions to field survey data."""
-
         # Match predictions to field records spatially and temporally
         matched_pairs = self._match_predictions_to_records(
             predictions, field_records, spatial_tolerance_m
@@ -297,7 +299,6 @@ class SpeciesValidationAnalyzer:
         self, matched_pairs: list[tuple[dict[str, Any], FieldSurveyRecord]]
     ) -> dict[str, Any]:
         """Calculate species classification accuracy metrics."""
-
         # Extract predictions and ground truth
         predicted_species = [
             pair[0].get("primary_species", "unknown") for pair in matched_pairs
@@ -356,18 +357,18 @@ class SpeciesValidationAnalyzer:
             )
 
         # Create confusion matrix
-        confusion_matrix = {}
-        for actual_species_name in all_species:
-            confusion_matrix[actual_species_name] = {}
-            for predicted_species_name in all_species:
+        confusion_matrix: dict[str, dict[str, int]] = {}
+        for species in all_species:
+            confusion_matrix[species] = {}
+            for predicted_species in all_species:
                 count = sum(
                     1
                     for pred, actual in zip(
                         predicted_species, actual_species, strict=False
                     )
-                    if pred == predicted_species_name and actual == actual_species_name
+                    if pred == predicted_species and actual == species
                 )
-                confusion_matrix[actual_species_name][predicted_species_name] = count
+                confusion_matrix[species][predicted_species] = count
 
         # Confidence distribution
         confidence_dist = {
@@ -398,7 +399,6 @@ class SpeciesValidationAnalyzer:
         self, matched_pairs: list[tuple[dict[str, Any], FieldSurveyRecord]]
     ) -> dict[str, Any]:
         """Calculate biomass estimation accuracy metrics."""
-
         # Filter pairs with biomass data
         biomass_pairs = [
             (pair[0], pair[1])
@@ -504,6 +504,7 @@ class FieldSurveyReporter:
     """Generates comprehensive reports combining field survey and model prediction results."""
 
     def __init__(self):
+        """Initialize field survey reporter."""
         self.logger = logging.getLogger(__name__)
 
     def generate_comprehensive_report(
@@ -515,7 +516,6 @@ class FieldSurveyReporter:
         output_path: Path | None = None,
     ) -> dict[str, Any]:
         """Generate comprehensive validation report."""
-
         report = {
             "campaign_id": campaign_id,
             "generated_at": datetime.now().isoformat(),
@@ -768,6 +768,7 @@ class FieldSurveyIntegrationManager:
     def __init__(
         self, data_manager: ValidationDataManager, species_classifier: SpeciesClassifier
     ):
+        """Initialize field survey integration manager."""
         self.data_manager = data_manager
         self.species_classifier = species_classifier
         self.ingestor = FieldDataIngestor()
@@ -783,7 +784,6 @@ class FieldSurveyIntegrationManager:
         output_dir: Path | None = None,
     ) -> dict[str, Any]:
         """Process complete field survey validation campaign."""
-
         self.logger.info(f"Processing field survey campaign: {campaign_id}")
 
         try:
@@ -882,20 +882,20 @@ class FieldSurveyIntegrationManager:
 def create_field_survey_integration_manager(
     data_manager: ValidationDataManager, species_classifier: SpeciesClassifier
 ) -> FieldSurveyIntegrationManager:
-    """Factory function to create a field survey integration manager."""
+    """Create a field survey integration manager."""
     return FieldSurveyIntegrationManager(data_manager, species_classifier)
 
 
 def create_field_data_ingestor() -> FieldDataIngestor:
-    """Factory function to create a field data ingestor."""
+    """Create a field data ingestor."""
     return FieldDataIngestor()
 
 
 def create_validation_analyzer() -> SpeciesValidationAnalyzer:
-    """Factory function to create a species validation analyzer."""
+    """Create a species validation analyzer."""
     return SpeciesValidationAnalyzer()
 
 
 def create_survey_reporter() -> FieldSurveyReporter:
-    """Factory function to create a field survey reporter."""
+    """Create a field survey reporter."""
     return FieldSurveyReporter()

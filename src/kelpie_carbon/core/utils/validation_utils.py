@@ -32,11 +32,12 @@ def validate_coordinates(
 
     Raises:
         ValidationError: If coordinates are invalid
+
     """
-    if not isinstance(lat, (int, float)):
+    if not isinstance(lat, int | float):
         raise ValidationError(f"Latitude must be numeric, got {type(lat)}")
 
-    if not isinstance(lng, (int, float)):
+    if not isinstance(lng, int | float):
         raise ValidationError(f"Longitude must be numeric, got {type(lng)}")
 
     lat_min, lat_max = lat_bounds
@@ -66,25 +67,26 @@ def validate_date_range(
 
     Raises:
         ValidationError: If dates are invalid or out of range
+
     """
     # Parse dates if they're strings
     if isinstance(start_date, str):
         try:
             start_dt = datetime.strptime(start_date, "%Y-%m-%d")
-        except ValueError:
+        except ValueError as e:
             raise ValidationError(
                 f"Invalid start date format: {start_date}. Expected YYYY-MM-DD"
-            )
+            ) from e
     else:
         start_dt = start_date
 
     if isinstance(end_date, str):
         try:
             end_dt = datetime.strptime(end_date, "%Y-%m-%d")
-        except ValueError:
+        except ValueError as e:
             raise ValidationError(
                 f"Invalid end date format: {end_date}. Expected YYYY-MM-DD"
-            )
+            ) from e
     else:
         end_dt = end_date
 
@@ -130,6 +132,7 @@ def validate_dataset_bands(
 
     Raises:
         ValidationError: If required bands are missing
+
     """
     available_bands = list(dataset.data_vars.keys())
     band_status = {}
@@ -172,6 +175,7 @@ def validate_config_structure(
 
     Raises:
         ValidationError: If configuration doesn't match schema
+
     """
     for key, expected_type in schema.items():
         current_path = f"{path}.{key}" if path else key
@@ -212,7 +216,7 @@ def validate_config_structure(
                 if not expected_type(value):
                     raise ValidationError(f"{current_path} failed validation check")
             except Exception as e:
-                raise ValidationError(f"{current_path} validation failed: {e}")
+                raise ValidationError(f"{current_path} validation failed: {e}") from e
 
     return True
 
@@ -228,6 +232,7 @@ def validate_email(email: str) -> bool:
 
     Raises:
         ValidationError: If email format is invalid
+
     """
     email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
@@ -252,6 +257,7 @@ def validate_url(url: str, allowed_schemes: list[str] | None = None) -> bool:
 
     Raises:
         ValidationError: If URL format is invalid
+
     """
     if allowed_schemes is None:
         allowed_schemes = ["http", "https"]
@@ -292,6 +298,7 @@ def validate_file_path(
 
     Raises:
         ValidationError: If file path is invalid
+
     """
     from pathlib import Path
 
@@ -319,7 +326,7 @@ def validate_file_path(
     try:
         path.resolve()
     except (OSError, ValueError) as e:
-        raise ValidationError(f"Invalid file path: {e}")
+        raise ValidationError(f"Invalid file path: {e}") from e
 
     return True
 
@@ -343,8 +350,9 @@ def validate_numeric_range(
 
     Raises:
         ValidationError: If value is out of range
+
     """
-    if not isinstance(value, (int, float)):
+    if not isinstance(value, int | float):
         raise ValidationError(f"{name} must be numeric, got {type(value)}")
 
     if min_value is not None and value < min_value:

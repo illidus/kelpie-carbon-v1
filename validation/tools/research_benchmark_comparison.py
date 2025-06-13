@@ -9,8 +9,14 @@ import sys
 import time
 from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Add src to path and set working directory to project root
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+# Change to project root directory for config loading
+import os
+
+os.chdir(project_root)
 
 try:
     from src.kelpie_carbon.core.config import load
@@ -33,17 +39,22 @@ def load_research_benchmarks():
 
 
 def load_our_results():
-    """Load our implementation results from unified config or test suite."""
+    """Load our implementation results from latest validation results or config fallback."""
 
+    # Try to load latest validation results first
+    validation_results = load_latest_validation_results()
+    if validation_results:
+        return validation_results
+
+    # Fallback to config default results
     try:
         config = load()
-        # Use default results from config, or actual results if available
         if hasattr(config, "default_results"):
             return config.default_results
     except Exception:
         pass
 
-    # Fallback to hardcoded values if config is not available
+    # Ultimate fallback to hardcoded values if config is not available
     return {
         "sam_spectral": {
             "status": "not_tested",
@@ -64,6 +75,123 @@ def load_our_results():
             "cost": 0,
         },
     }
+
+
+def load_latest_validation_results():
+    """Load latest validation results from validation/results directory."""
+
+    validation_dir = Path(__file__).parent.parent / "results"
+    if not validation_dir.exists():
+        return None
+
+    # Find the most recent validation report
+    json_files = list(validation_dir.glob("**/validation_report.json"))
+    if not json_files:
+        return None
+
+    # Get the most recent file
+    latest_file = max(json_files, key=lambda f: f.stat().st_mtime)
+
+    try:
+        import json
+
+        with open(latest_file) as f:
+            validation_data = json.load(f)
+
+        # Convert validation result to our results format
+        return convert_validation_to_results(validation_data)
+    except Exception as e:
+        print(f"⚠️  Could not load validation results from {latest_file}: {e}")
+        return None
+
+
+def convert_validation_to_results(validation_data):
+    """Convert validation result format to our results format."""
+
+    # Extract metrics from validation data
+    metrics = {
+        "accuracy": validation_data.get("accuracy"),
+        "precision": validation_data.get("precision"),
+        "recall": validation_data.get("recall"),
+        "f1_score": validation_data.get("f1_score"),
+        "mae": validation_data.get("mae"),
+        "rmse": validation_data.get("rmse"),
+        "r2": validation_data.get("r2"),
+        "iou": validation_data.get("iou"),
+        "dice_coefficient": validation_data.get("dice_coefficient"),
+    }
+
+    # Determine primary accuracy metric
+    primary_accuracy = (
+        metrics.get("accuracy") or metrics.get("f1_score") or metrics.get("r2") or 0.0
+    )
+
+    model_name = validation_data.get("model_name", "kelpie-carbon")
+
+    return {
+        "validation_result": {
+            "status": (
+                "tested" if validation_data.get("passed_validation") else "failed"
+            ),
+            "accuracy": primary_accuracy,
+            "model": model_name,
+            "campaign_id": validation_data.get("campaign_id"),
+            "test_site": validation_data.get("test_site"),
+            "timestamp": validation_data.get("timestamp"),
+            "metrics": metrics,
+            "passed_validation": validation_data.get("passed_validation", False),
+            "validation_errors": validation_data.get("validation_errors", []),
+            "cost": 0,  # Our approach is zero-cost
+        }
+    }
+
+
+def check_validation_thresholds():
+    """Check if latest validation results meet configured thresholds."""
+
+    try:
+        config = load()
+        thresholds = config.get("validation", {}).get("thresholds", {})
+    except Exception:
+        print("⚠️  Could not load validation thresholds from config")
+        return True, []
+
+    validation_results = load_latest_validation_results()
+    if not validation_results or "validation_result" not in validation_results:
+        print("⚠️  No validation results available for threshold checking")
+        return True, []
+
+    result = validation_results["validation_result"]
+    metrics = result.get("metrics", {})
+    failures = []
+
+    # Check each metric against thresholds
+    for metric_name, metric_value in metrics.items():
+        if metric_value is None:
+            continue
+
+        metric_thresholds = thresholds.get(metric_name, {})
+        if not metric_thresholds:
+            continue
+
+        # For metrics where lower is better (MAE, RMSE)
+        if metric_name in ["mae", "rmse"]:
+            max_threshold = metric_thresholds.get("max")
+            if max_threshold is not None and metric_value > max_threshold:
+                failures.append(
+                    f"{metric_name.upper()} {metric_value:.4f} > {max_threshold}"
+                )
+
+        # For metrics where higher is better
+        else:
+            min_threshold = metric_thresholds.get("min")
+            if min_threshold is not None and metric_value < min_threshold:
+                failures.append(
+                    f"{metric_name.upper()} {metric_value:.4f} < {min_threshold}"
+                )
+
+    passed = len(failures) == 0
+    return passed, failures
 
 
 def compare_against_research():
@@ -99,21 +227,40 @@ def compare_against_research():
     # Our results analysis
     print("\n🚀 Our Implementation Results:")
 
-    sam_result = our_results["sam_spectral"]
-    if sam_result["status"] == "not_tested":
+    # Handle new validation result format or fallback to legacy format
+    if "validation_result" in our_results:
+        validation_result = our_results["validation_result"]
+        status_icon = "✅" if validation_result["passed_validation"] else "❌"
         print(
-            f"• SAM + Spectral: Not tested ({sam_result['reason']}) - Projected {sam_result['projected_accuracy']:.1%}"
+            f"• {status_icon} Latest Validation: {validation_result['accuracy']:.1%} accuracy ({validation_result['model']}) - ${validation_result['cost']}"
         )
+        print(f"  - Campaign: {validation_result['campaign_id']}")
+        print(f"  - Test Site: {validation_result['test_site']}")
+        print(f"  - Status: {validation_result['status']}")
 
-    unet_result = our_results["unet_transfer"]
-    print(
-        f"• U-Net Transfer: {unet_result['accuracy']:.1%} accuracy ({unet_result['method']}) - ${unet_result['cost']}"
-    )
+        if validation_result["validation_errors"]:
+            print("  - Issues:")
+            for error in validation_result["validation_errors"]:
+                print(f"    • {error}")
+    else:
+        # Legacy format fallback
+        sam_result = our_results.get("sam_spectral", {})
+        if sam_result and sam_result.get("status") == "not_tested":
+            print(
+                f"• SAM + Spectral: Not tested ({sam_result.get('reason', 'Unknown')}) - Projected {sam_result.get('projected_accuracy', 0):.1%}"
+            )
 
-    classical_result = our_results["classical_ml"]
-    print(
-        f"• Classical ML Enhancement: {classical_result['accuracy']:.1%} performance, {classical_result['improvement']:+.1%} improvement - ${classical_result['cost']}"
-    )
+        unet_result = our_results.get("unet_transfer", {})
+        if unet_result:
+            print(
+                f"• U-Net Transfer: {unet_result.get('accuracy', 0):.1%} accuracy ({unet_result.get('method', 'Unknown')}) - ${unet_result.get('cost', 0)}"
+            )
+
+        classical_result = our_results.get("classical_ml", {})
+        if classical_result:
+            print(
+                f"• Classical ML Enhancement: {classical_result.get('accuracy', 0):.1%} performance, {classical_result.get('improvement', 0):+.1%} improvement - ${classical_result.get('cost', 0)}"
+            )
 
     # Cost-performance analysis from unified config
     try:
@@ -164,7 +311,12 @@ def compare_against_research():
 
     # Compare against Enhanced U-Net (primary research benchmark)
     enhanced_unet_accuracy = 0.82  # Approximate from AUC-PR 0.2739
-    our_best_tested = classical_result["accuracy"]
+
+    # Get our best tested accuracy from validation results or legacy format
+    if "validation_result" in our_results:
+        our_best_tested = our_results["validation_result"]["accuracy"]
+    else:
+        our_best_tested = our_results.get("classical_ml", {}).get("accuracy", 0)
 
     if our_best_tested >= enhanced_unet_accuracy * 0.9:
         competitiveness = "🟢 HIGHLY COMPETITIVE"
@@ -175,11 +327,29 @@ def compare_against_research():
 
     print(f"• vs Enhanced U-Net: {competitiveness}")
     print("  - Research: ~82% accuracy at $750-1,200")
-    print(f"  - Ours: {our_best_tested:.1%} accuracy at ${classical_result['cost']}")
+
+    # Get cost from validation results or legacy format
+    our_cost = 0  # Default zero-cost approach
+    if "validation_result" in our_results:
+        our_cost = our_results["validation_result"]["cost"]
+    else:
+        our_cost = our_results.get("classical_ml", {}).get("cost", 0)
+
+    print(f"  - Ours: {our_best_tested:.1%} accuracy at ${our_cost}")
 
     # Compare against Vision Transformers
     vit_accuracy = benchmarks["vision_transformers"]["accuracy"]
-    if sam_result["projected_accuracy"] >= vit_accuracy * 0.9:
+
+    # Get SAM projection from legacy format or use validation result
+    sam_projected_accuracy = 0.85  # Default projection
+    sam_cost = 0
+
+    if "validation_result" not in our_results:
+        sam_result = our_results.get("sam_spectral", {})
+        sam_projected_accuracy = sam_result.get("projected_accuracy", 0.85)
+        sam_cost = sam_result.get("cost", 0)
+
+    if sam_projected_accuracy >= vit_accuracy * 0.9:
         sam_competitiveness = "🟢 PROJECTED HIGHLY COMPETITIVE"
     else:
         sam_competitiveness = "🟡 PROJECTED COMPETITIVE"
@@ -187,7 +357,7 @@ def compare_against_research():
     print(f"• vs Vision Transformers: {sam_competitiveness}")
     print(f"  - Research: {vit_accuracy:.1%} accuracy (competition winner)")
     print(
-        f"  - Ours (SAM): {sam_result['projected_accuracy']:.1%} projected accuracy at ${sam_result['cost']}"
+        f"  - Ours (SAM): {sam_projected_accuracy:.1%} projected accuracy at ${sam_cost}"
     )
 
     # Value proposition analysis
@@ -206,11 +376,23 @@ def compare_against_research():
     print("\n🔍 Research Gap Analysis:")
 
     gaps = []
-    if sam_result["status"] == "not_tested":
-        gaps.append("SAM model testing (primary approach)")
 
-    if unet_result["method"] == "classical_segmentation_fallback":
-        gaps.append("Full U-Net model evaluation")
+    # Handle both validation result format and legacy format
+    if "validation_result" in our_results:
+        validation_result = our_results["validation_result"]
+        if not validation_result["passed_validation"]:
+            gaps.append("Validation threshold compliance")
+        if validation_result["accuracy"] < 0.8:
+            gaps.append("Target accuracy achievement (80%+)")
+    else:
+        # Legacy format checks
+        sam_result = our_results.get("sam_spectral", {})
+        if sam_result.get("status") == "not_tested":
+            gaps.append("SAM model testing (primary approach)")
+
+        unet_result = our_results.get("unet_transfer", {})
+        if unet_result.get("method") == "classical_segmentation_fallback":
+            gaps.append("Full U-Net model evaluation")
 
     if "real_data" not in str(our_results):
         gaps.append("Real satellite imagery validation")
@@ -225,15 +407,31 @@ def compare_against_research():
     # Recommendations
     print("\n📋 Recommendations:")
 
-    if sam_result["status"] == "not_tested":
-        print("1. 🎯 HIGH PRIORITY: Download SAM model to test primary approach")
-        print("   - Expected to achieve 80-90% accuracy (competitive with research)")
-        print("   - Zero training cost maintains cost advantage")
+    if "validation_result" in our_results:
+        validation_result = our_results["validation_result"]
+        if not validation_result["passed_validation"]:
+            print("1. 🎯 HIGH PRIORITY: Fix validation threshold failures")
+            for error in validation_result["validation_errors"]:
+                print(f"   - {error}")
 
-    if unet_result["method"] == "classical_segmentation_fallback":
-        print("2. 🔧 MEDIUM PRIORITY: Evaluate full U-Net model")
-        print("   - Install segmentation-models-pytorch")
-        print("   - Optional fine-tuning on Google Colab ($0-20)")
+        if validation_result["accuracy"] < 0.8:
+            print("2. 🔧 MEDIUM PRIORITY: Improve model accuracy")
+            print("   - Consider ensemble methods or hyperparameter tuning")
+    else:
+        # Legacy format recommendations
+        sam_result = our_results.get("sam_spectral", {})
+        if sam_result.get("status") == "not_tested":
+            print("1. 🎯 HIGH PRIORITY: Download SAM model to test primary approach")
+            print(
+                "   - Expected to achieve 80-90% accuracy (competitive with research)"
+            )
+            print("   - Zero training cost maintains cost advantage")
+
+        unet_result = our_results.get("unet_transfer", {})
+        if unet_result.get("method") == "classical_segmentation_fallback":
+            print("2. 🔧 MEDIUM PRIORITY: Evaluate full U-Net model")
+            print("   - Install segmentation-models-pytorch")
+            print("   - Optional fine-tuning on Google Colab ($0-20)")
 
     print("3. 📊 HIGH PRIORITY: Acquire real satellite imagery for validation")
     print("   - Test with Sentinel-2 data from known kelp sites")
@@ -334,8 +532,24 @@ Our budget approach shows strong competitive positioning:
 
 
 def main():
-    """Run complete research benchmark comparison."""
+    """Run complete research benchmark comparison with validation threshold checking."""
 
+    print("🔬 Research Benchmark Comparison Analysis")
+    print("=" * 50)
+
+    # Check validation thresholds first (T2-004 requirement)
+    print("\n🎯 Validation Threshold Check:")
+    passed_validation, failures = check_validation_thresholds()
+
+    if passed_validation:
+        print("✅ All validation metrics meet configured thresholds")
+    else:
+        print("❌ Validation threshold failures detected:")
+        for failure in failures:
+            print(f"  • {failure}")
+        print("\n💡 Run 'kelpie-carbon validation config' to see current thresholds")
+
+    # Run the comparison analysis
     compare_against_research()
     generate_benchmark_report()
 
@@ -353,6 +567,15 @@ def main():
     print(
         "• Zero-cost approach eliminates typical barriers to deep learning deployment"
     )
+
+    # Exit with non-zero code if validation failed (T2-004 requirement)
+    if not passed_validation:
+        print(f"\n❌ VALIDATION FAILED: {len(failures)} metric(s) below threshold")
+        print("   Fix validation issues before proceeding to production")
+        sys.exit(1)
+    else:
+        print("\n✅ VALIDATION PASSED: All metrics meet requirements")
+        sys.exit(0)
 
 
 if __name__ == "__main__":

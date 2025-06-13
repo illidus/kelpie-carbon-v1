@@ -14,6 +14,7 @@ def calculate_area_from_pixels(pixel_count: int, pixel_size_meters: float) -> fl
 
     Returns:
         Area in square meters
+
     """
     return pixel_count * (pixel_size_meters**2)
 
@@ -35,6 +36,7 @@ def convert_coordinates(
     Note:
         This is a simplified implementation. For production use,
         consider using proper GIS libraries like pyproj.
+
     """
     if from_crs == "EPSG:4326" and to_crs == "EPSG:3857":
         # WGS84 to Web Mercator conversion
@@ -66,6 +68,7 @@ def calculate_distance(
 
     Returns:
         Distance in meters
+
     """
     if method == "haversine":
         return _haversine_distance(lat1, lng1, lat2, lng2)
@@ -78,7 +81,7 @@ def calculate_distance(
 def _haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     """Calculate Haversine distance between two points."""
     # Earth's radius in meters
-    R = 6371000
+    earth_radius = 6371000
 
     # Convert to radians
     lat1_rad = math.radians(lat1)
@@ -97,7 +100,7 @@ def _haversine_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> f
     )
     c = 2 * math.asin(math.sqrt(a))
 
-    return R * c
+    return earth_radius * c
 
 
 def _euclidean_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
@@ -118,6 +121,7 @@ def gaussian_kernel(size: int, sigma: float) -> np.ndarray:
 
     Returns:
         2D Gaussian kernel array
+
     """
     if size % 2 == 0:
         size += 1  # Ensure odd size

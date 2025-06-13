@@ -1,9 +1,9 @@
 """API endpoints for satellite imagery visualization."""
 
-import io
 import sys
 import time
 import uuid
+from io import BytesIO
 from typing import Any
 
 import xarray as xr
@@ -120,54 +120,25 @@ def _get_analysis_result(analysis_id: str) -> dict[str, Any]:
 
 def _image_to_response(
     image: Image.Image,
-    format: str = "PNG",
+    image_format: str = "PNG",
     quality: int = 95,
     optimize: bool = True,
 ) -> Response:
-    """Convert PIL Image to FastAPI Response with optimization."""
-    img_io = io.BytesIO()
+    """Convert PIL Image to FastAPI Response."""
+    buffer = BytesIO()
 
-    # Apply optimization based on format
-    if format.upper() == "JPEG":
-        # JPEG optimization for photo-like content
-        # Convert RGBA to RGB if necessary (JPEG doesn't support transparency)
-        if image.mode == "RGBA":
-            # Create white background and paste image on it
-            rgb_image = Image.new("RGB", image.size, (255, 255, 255))
-            rgb_image.paste(image, mask=image.split()[-1])  # Use alpha channel as mask
-            image = rgb_image
-        elif image.mode not in ("RGB", "L"):
-            # Convert other modes to RGB
-            image = image.convert("RGB")
+    # Save image to buffer
+    save_kwargs = {"optimize": optimize}
+    if image_format.upper() == "JPEG":
+        save_kwargs["quality"] = quality
 
-        image.save(
-            img_io,
-            format=format,
-            quality=quality,
-            optimize=optimize,
-            progressive=True,
-        )
-        content_type = "image/jpeg"
-    else:
-        # PNG optimization for graphics with transparency
-        image.save(
-            img_io,
-            format=format,
-            optimize=optimize,
-            compress_level=6 if optimize else 1,
-        )
-        content_type = "image/png"
+    image.save(buffer, format=image_format, **save_kwargs)
+    buffer.seek(0)
 
-    img_io.seek(0)
+    # Determine media type
+    media_type = f"image/{image_format.lower()}"
 
-    return Response(
-        content=img_io.getvalue(),
-        media_type=content_type,
-        headers={
-            "Cache-Control": "public, max-age=3600",
-            "ETag": f'"{hash(img_io.getvalue())}"',
-        },
-    )
+    return Response(content=buffer.getvalue(), media_type=media_type)
 
 
 @router.post("/analyze-and-cache")
@@ -265,7 +236,7 @@ async def analyze_and_cache_for_imagery(request: ImageryAnalysisRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}") from e
 
 
 @router.get("/{analysis_id}/rgb")
@@ -289,18 +260,18 @@ async def get_rgb_composite(analysis_id: str):
         raise create_validation_error(
             f"Invalid data for RGB generation: {str(e)}",
             details=f"Analysis {analysis_id} data incompatible with RGB generation",
-        )
+        ) from e
     except KeyError as e:
         # Missing required bands
         raise create_validation_error(
             f"Missing required band for RGB: {str(e)}",
             details=f"Analysis {analysis_id} missing spectral bands for RGB composite",
-        )
+        ) from e
     except Exception as e:
         # Unexpected errors
         raise create_imagery_error(
             "RGB composite generation", analysis_id, original_error=e
-        )
+        ) from e
 
 
 @router.get("/{analysis_id}/false-color")
@@ -319,7 +290,7 @@ async def get_false_color_composite(analysis_id: str):
     except Exception as e:
         raise create_imagery_error(
             "False-color composite generation", analysis_id, original_error=e
-        )
+        ) from e
 
 
 @router.get("/{analysis_id}/spectral/{index_name}")
@@ -355,7 +326,7 @@ async def get_spectral_visualization(analysis_id: str, index_name: str):
     except Exception as e:
         raise create_imagery_error(
             f"Spectral visualization for {index_name}", analysis_id, original_error=e
-        )
+        ) from e
 
 
 @router.get("/{analysis_id}/mask/{mask_name}")
@@ -408,7 +379,7 @@ async def get_mask_overlay(analysis_id: str, mask_name: str, alpha: float = 0.6)
     except Exception as e:
         raise create_imagery_error(
             f"Mask overlay generation for {mask_name}", analysis_id, original_error=e
-        )
+        ) from e
 
 
 @router.get("/{analysis_id}/biomass")
@@ -420,12 +391,15 @@ async def get_biomass_heatmap(
 ):
     """Get biomass density heatmap."""
     # Validate parameters
-    if min_biomass is not None and max_biomass is not None:
-        if min_biomass >= max_biomass:
-            raise create_validation_error(
-                "min_biomass must be less than max_biomass",
-                details=f"Provided: min={min_biomass}, max={max_biomass}",
-            )
+    if (
+        min_biomass is not None
+        and max_biomass is not None
+        and min_biomass >= max_biomass
+    ):
+        raise create_validation_error(
+            "min_biomass must be less than max_biomass",
+            details=f"Provided: min={min_biomass}, max={max_biomass}",
+        )
 
     try:
         result = _get_analysis_result(analysis_id)
@@ -448,7 +422,7 @@ async def get_biomass_heatmap(
     except Exception as e:
         raise create_imagery_error(
             "Biomass heatmap generation", analysis_id, original_error=e
-        )
+        ) from e
 
 
 @router.get("/{analysis_id}/metadata")
@@ -512,7 +486,7 @@ async def get_imagery_metadata(analysis_id: str):
                         "description": f"{name.upper()} spectral index visualization",
                         "range": "Varies by index",
                     }
-                    for name in indices.keys()
+                    for name in indices
                 },
                 "masks": {
                     "kelp": {"color": "#00ff00", "description": "Kelp detection areas"},
@@ -531,7 +505,7 @@ async def get_imagery_metadata(analysis_id: str):
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Metadata retrieval failed: {str(e)}"
-        )
+        ) from e
 
 
 @router.delete("/{analysis_id}")

@@ -1,5 +1,4 @@
-"""
-Stakeholder-Specific Reporting for Kelpie Carbon v1
+"""Stakeholder-Specific Reporting for Kelpie Carbon v1.
 
 This module provides specialized reporting formats tailored to different
 stakeholder groups including First Nations communities, scientists,
@@ -49,6 +48,7 @@ class ReportSection:
     recommendations: list[str] = None
 
     def __post_init__(self):
+        """Initialize default values after dataclass creation."""
         if self.visualizations is None:
             self.visualizations = []
         if self.recommendations is None:
@@ -59,6 +59,7 @@ class BaseStakeholderReport(ABC):
     """Abstract base class for stakeholder-specific reports."""
 
     def __init__(self, stakeholder_type: str):
+        """Initialize base stakeholder report."""
         self.stakeholder_type = stakeholder_type
         self.sections = []
         self.metadata = {}
@@ -79,7 +80,6 @@ class BaseStakeholderReport(ABC):
         format_type: ReportFormat = ReportFormat.HTML,
     ) -> dict[str, Any]:
         """Create complete report for stakeholder group."""
-
         content = self.generate_content(analysis_result)
         key_messages = self.get_key_messages(analysis_result)
 
@@ -101,12 +101,12 @@ class BaseStakeholderReport(ABC):
 
 
 class FirstNationsReport(BaseStakeholderReport):
-    """
-    Report format for First Nations communities integrating traditional
+    """Report format for First Nations communities integrating traditional
     ecological knowledge with scientific analysis.
     """
 
     def __init__(self):
+        """Initialize First Nations report."""
         super().__init__("first_nations")
         self.metadata = {
             "cultural_considerations": True,
@@ -117,7 +117,6 @@ class FirstNationsReport(BaseStakeholderReport):
 
     def generate_content(self, analysis_result: AnalysisResult) -> dict[str, Any]:
         """Generate culturally appropriate content for First Nations communities."""
-
         content = {
             "executive_summary": self._create_executive_summary(analysis_result),
             "cultural_context": self._create_cultural_context(analysis_result),
@@ -186,7 +185,6 @@ class FirstNationsReport(BaseStakeholderReport):
 
     def _create_executive_summary(self, analysis_result: AnalysisResult) -> str:
         """Create executive summary emphasizing stewardship and cultural values."""
-
         summary_parts = [
             "Kelp Forest Health Assessment Summary",
             "",
@@ -209,7 +207,6 @@ class FirstNationsReport(BaseStakeholderReport):
 
     def _create_cultural_context(self, analysis_result: AnalysisResult) -> str:
         """Create section on cultural and traditional importance of kelp."""
-
         context = [
             "Cultural and Traditional Significance",
             "",
@@ -228,7 +225,6 @@ class FirstNationsReport(BaseStakeholderReport):
 
     def _create_current_conditions(self, analysis_result: AnalysisResult) -> str:
         """Create current conditions section with accessible language."""
-
         conditions = ["Current Kelp Forest Conditions", ""]
 
         # Extent information
@@ -264,7 +260,6 @@ class FirstNationsReport(BaseStakeholderReport):
         self, analysis_result: AnalysisResult
     ) -> str:
         """Create section for integrating traditional knowledge."""
-
         tek = [
             "Integration with Traditional Knowledge",
             "",
@@ -285,7 +280,6 @@ class FirstNationsReport(BaseStakeholderReport):
         self, analysis_result: AnalysisResult
     ) -> str:
         """Create stewardship recommendations appropriate for First Nations communities."""
-
         recommendations = ["Stewardship Recommendations", ""]
 
         # Risk-based recommendations
@@ -336,7 +330,6 @@ class FirstNationsReport(BaseStakeholderReport):
 
     def _create_monitoring_partnership(self, analysis_result: AnalysisResult) -> str:
         """Create section on partnership opportunities for monitoring."""
-
         partnership = [
             "Partnership Opportunities",
             "",
@@ -355,7 +348,6 @@ class FirstNationsReport(BaseStakeholderReport):
 
     def _create_seasonal_calendar(self, analysis_result: AnalysisResult) -> str:
         """Create seasonal monitoring calendar."""
-
         calendar = [
             "Seasonal Monitoring Calendar",
             "",
@@ -382,12 +374,12 @@ class FirstNationsReport(BaseStakeholderReport):
 
 
 class ScientificReport(BaseStakeholderReport):
-    """
-    Report format for scientific audiences emphasizing methodology,
+    """Report format for scientific audiences emphasizing methodology,
     statistics, and technical analysis.
     """
 
     def __init__(self):
+        """Initialize scientific report."""
         super().__init__("scientific")
         self.metadata = {
             "technical_detail": "high",
@@ -398,7 +390,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def generate_content(self, analysis_result: AnalysisResult) -> dict[str, Any]:
         """Generate technical content for scientific audiences."""
-
         content = {
             "abstract": self._create_abstract(analysis_result),
             "methodology": self._create_methodology(analysis_result),
@@ -450,7 +441,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_abstract(self, analysis_result: AnalysisResult) -> str:
         """Create scientific abstract."""
-
         abstract_parts = [
             "Abstract",
             "",
@@ -481,7 +471,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_methodology(self, analysis_result: AnalysisResult) -> str:
         """Create detailed methodology section."""
-
         methodology = [
             "Methodology",
             "",
@@ -523,7 +512,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_results_section(self, analysis_result: AnalysisResult) -> str:
         """Create detailed results section with statistics."""
-
         results = ["Results", ""]
 
         # Quantitative results
@@ -532,7 +520,7 @@ class ScientificReport(BaseStakeholderReport):
                 results.extend([f"{analysis_type.title()} Analysis Results:", ""])
 
                 for key, value in result_data.items():
-                    if isinstance(value, (int, float)):
+                    if isinstance(value, int | float):
                         results.append(f"• {key}: {value:.2f}")
                     else:
                         results.append(f"• {key}: {value}")
@@ -557,7 +545,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_statistical_analysis(self, analysis_result: AnalysisResult) -> str:
         """Create statistical analysis section."""
-
         stats = [
             "Statistical Analysis",
             "",
@@ -597,7 +584,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_uncertainty_analysis(self, analysis_result: AnalysisResult) -> str:
         """Create uncertainty analysis section."""
-
         uncertainty = ["Uncertainty Analysis", ""]
 
         if analysis_result.uncertainty_estimates:
@@ -626,7 +612,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_validation_section(self, analysis_result: AnalysisResult) -> str:
         """Create validation methodology section."""
-
         validation = [
             "Validation Approach",
             "",
@@ -658,7 +643,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_discussion(self, analysis_result: AnalysisResult) -> str:
         """Create scientific discussion section."""
-
         discussion = [
             "Discussion",
             "",
@@ -704,7 +688,6 @@ class ScientificReport(BaseStakeholderReport):
 
     def _create_technical_appendix(self, analysis_result: AnalysisResult) -> str:
         """Create technical appendix with detailed parameters."""
-
         appendix = [
             "Technical Appendix",
             "",
@@ -729,12 +712,12 @@ class ScientificReport(BaseStakeholderReport):
 
 
 class ManagementReport(BaseStakeholderReport):
-    """
-    Report format for resource managers and decision-makers emphasizing
+    """Report format for resource managers and decision-makers emphasizing
     actionable information and conservation recommendations.
     """
 
     def __init__(self):
+        """Initialize management report."""
         super().__init__("management")
         self.metadata = {
             "decision_support": True,
@@ -745,7 +728,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def generate_content(self, analysis_result: AnalysisResult) -> dict[str, Any]:
         """Generate management-focused content."""
-
         content = {
             "executive_dashboard": self._create_executive_dashboard(analysis_result),
             "status_assessment": self._create_status_assessment(analysis_result),
@@ -802,7 +784,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def _create_executive_dashboard(self, analysis_result: AnalysisResult) -> str:
         """Create executive dashboard summary."""
-
         dashboard = ["EXECUTIVE DASHBOARD", "=" * 50, ""]
 
         # Key metrics
@@ -847,7 +828,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def _create_status_assessment(self, analysis_result: AnalysisResult) -> str:
         """Create current status assessment."""
-
         status = ["Current Status Assessment", "", "Kelp Forest Health Indicators:", ""]
 
         # Extent status
@@ -888,7 +868,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def _create_risk_analysis(self, analysis_result: AnalysisResult) -> str:
         """Create risk analysis for management."""
-
         risk = ["Risk Analysis", "", "Conservation Risk Factors:", ""]
 
         # Risk level assessment
@@ -933,7 +912,6 @@ class ManagementReport(BaseStakeholderReport):
         self, analysis_result: AnalysisResult
     ) -> str:
         """Create specific management recommendations."""
-
         recommendations = ["Management Recommendations", "", "Priority Actions:", ""]
 
         # Add analysis recommendations
@@ -984,7 +962,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def _create_monitoring_strategy(self, analysis_result: AnalysisResult) -> str:
         """Create monitoring strategy recommendations."""
-
         strategy = ["Monitoring Strategy", "", "Recommended Monitoring Approach:", ""]
 
         # Frequency recommendations
@@ -1025,7 +1002,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def _create_resource_requirements(self, analysis_result: AnalysisResult) -> str:
         """Create resource requirements assessment."""
-
         resources = ["Resource Requirements", "", "Estimated Resource Needs:", ""]
 
         # Base monitoring costs
@@ -1073,7 +1049,6 @@ class ManagementReport(BaseStakeholderReport):
 
     def _create_implementation_timeline(self, analysis_result: AnalysisResult) -> str:
         """Create implementation timeline."""
-
         timeline = [
             "Implementation Timeline",
             "",
@@ -1108,7 +1083,6 @@ def create_stakeholder_report(
     format_type: ReportFormat = ReportFormat.HTML,
 ) -> dict[str, Any]:
     """Create stakeholder-specific report from analysis result."""
-
     report_classes = {
         "first_nations": FirstNationsReport,
         "scientific": ScientificReport,
@@ -1137,6 +1111,7 @@ def create_stakeholder_reporter(
 
     Returns:
         Configured stakeholder reporter instance
+
     """
     report_classes = {
         "first_nations": FirstNationsReport,
@@ -1163,6 +1138,7 @@ def create_stakeholder_reporter(
 
     Returns:
         Configured stakeholder reporter instance
+
     """
     report_classes = {
         "first_nations": FirstNationsReport,

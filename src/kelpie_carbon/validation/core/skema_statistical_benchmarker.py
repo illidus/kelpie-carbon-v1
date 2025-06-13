@@ -1,5 +1,4 @@
-"""
-SKEMA Statistical Benchmarking Component
+"""SKEMA Statistical Benchmarking Component.
 
 This module provides comprehensive statistical analysis comparing our kelp detection
 pipeline against SKEMA methodology using real validation sites and rigorous
@@ -64,12 +63,12 @@ class StatisticalBenchmarker:
     """Performs rigorous statistical comparison between SKEMA and our pipeline."""
 
     def __init__(self, alpha: float = 0.05, n_bootstrap: int = 1000):
-        """
-        Initialize statistical benchmarker.
+        """Initialize statistical benchmarker.
 
         Args:
             alpha: Significance level for statistical tests
             n_bootstrap: Number of bootstrap samples for confidence intervals
+
         """
         self.alpha = alpha
         self.n_bootstrap = n_bootstrap
@@ -78,16 +77,15 @@ class StatisticalBenchmarker:
     def compare_methods_comprehensive(
         self, validation_sites: list[dict[str, Any]]
     ) -> list[BenchmarkComparison]:
-        """
-        Perform comprehensive statistical comparison across multiple validation sites.
+        """Perform comprehensive statistical comparison across multiple validation sites.
 
         Args:
             validation_sites: List of validation sites with SKEMA and our results
 
         Returns:
             List of detailed benchmark comparisons for each site
-        """
 
+        """
         comparisons = []
 
         for site_data in validation_sites:
@@ -108,7 +106,6 @@ class StatisticalBenchmarker:
 
     def _analyze_single_site(self, site_data: dict[str, Any]) -> BenchmarkComparison:
         """Perform detailed statistical analysis for a single validation site."""
-
         site_name = site_data["name"]
         skema_predictions = site_data["skema_results"]["predictions"]
         our_predictions = site_data["our_results"]["predictions"]
@@ -160,7 +157,6 @@ class StatisticalBenchmarker:
         self, predictions: np.ndarray, ground_truth: np.ndarray
     ) -> dict[str, float]:
         """Calculate comprehensive performance metrics."""
-
         # Convert to binary if needed
         pred_binary = (predictions > 0.5).astype(int)
         truth_binary = (ground_truth > 0.5).astype(int)
@@ -195,8 +191,8 @@ class StatisticalBenchmarker:
 
     def _calculate_specificity(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """Calculate specificity (true negative rate)."""
-        tn = np.sum((y_true == 0) & (y_pred == 0))
-        fp = np.sum((y_true == 0) & (y_pred == 1))
+        tn: int = np.sum((y_true == 0) & (y_pred == 0))
+        fp: int = np.sum((y_true == 0) & (y_pred == 1))
         return tn / (tn + fp) if (tn + fp) > 0 else 0.0
 
     def _calculate_npv(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
@@ -217,7 +213,6 @@ class StatisticalBenchmarker:
         self, skema_pred: np.ndarray, our_pred: np.ndarray, ground_truth: np.ndarray
     ) -> list[StatisticalTestResult]:
         """Perform comprehensive statistical significance tests."""
-
         tests = []
 
         # 1. Paired t-test for accuracy comparison
@@ -314,7 +309,6 @@ class StatisticalBenchmarker:
         self, skema_pred: np.ndarray, our_pred: np.ndarray, ground_truth: np.ndarray
     ) -> StatisticalTestResult:
         """Perform McNemar's test for comparing binary classifiers."""
-
         # Create contingency table for correct/incorrect predictions
         skema_correct = skema_pred == ground_truth
         our_correct = our_pred == ground_truth
@@ -369,7 +363,6 @@ class StatisticalBenchmarker:
         self, skema_pred: np.ndarray, our_pred: np.ndarray, ground_truth: np.ndarray
     ) -> dict[str, float]:
         """Perform comprehensive correlation analysis."""
-
         # Pearson correlation
         pearson_r, pearson_p = stats.pearsonr(skema_pred, our_pred)
 
@@ -399,7 +392,6 @@ class StatisticalBenchmarker:
         self, skema_pred: np.ndarray, our_pred: np.ndarray, ground_truth: np.ndarray
     ) -> dict[str, Any]:
         """Perform regression analysis to understand method relationships."""
-
         from sklearn.linear_model import LinearRegression
         from sklearn.metrics import r2_score
 
@@ -434,7 +426,6 @@ class StatisticalBenchmarker:
         self, skema_pred: np.ndarray, our_pred: np.ndarray, ground_truth: np.ndarray
     ) -> dict[str, dict[str, float]]:
         """Perform bootstrap analysis for robust confidence intervals."""
-
         n_samples = len(skema_pred)
 
         def bootstrap_metric(pred, truth, metric_func):
@@ -591,7 +582,6 @@ class StatisticalBenchmarker:
         statistical_tests: list[StatisticalTestResult],
     ) -> str:
         """Generate overall assessment of method comparison."""
-
         # Compare key metrics
         accuracy_diff = our_metrics["accuracy"] - skema_metrics["accuracy"]
         f1_diff = our_metrics["f1_score"] - skema_metrics["f1_score"]
@@ -640,7 +630,6 @@ class StatisticalBenchmarker:
         self, comparisons: list[BenchmarkComparison]
     ) -> dict[str, Any]:
         """Perform meta-analysis across all validation sites."""
-
         if len(comparisons) == 0:
             return {}
 
@@ -694,7 +683,6 @@ class StatisticalBenchmarker:
 
     def _print_site_summary(self, comparison: BenchmarkComparison) -> None:
         """Print summary for a single site comparison."""
-
         print(
             f"   📊 SKEMA: Accuracy={comparison.skema_results['accuracy']:.3f}, F1={comparison.skema_results['f1_score']:.3f}"
         )
@@ -712,7 +700,6 @@ class StatisticalBenchmarker:
 
     def _print_meta_analysis(self, meta: dict[str, Any]) -> None:
         """Print meta-analysis results."""
-
         if not meta:
             print("   No data for meta-analysis")
             return
@@ -736,7 +723,6 @@ class StatisticalBenchmarker:
 
     def create_statistical_report(self, comparisons: list[BenchmarkComparison]) -> str:
         """Generate comprehensive statistical report."""
-
         report = """
 # SKEMA vs Our Pipeline: Statistical Benchmarking Report
 

@@ -1,4 +1,10 @@
-"""Performance monitoring utilities for Kelpie Carbon v1."""
+"""Performance monitoring and optimization utilities.
+
+This module provides comprehensive performance monitoring, profiling,
+and optimization utilities for the Kelpie Carbon system.
+"""
+
+from __future__ import annotations
 
 import functools
 import logging
@@ -40,6 +46,7 @@ class PerformanceMonitor:
 
         Args:
             max_history: Maximum number of performance records to keep
+
         """
         self.max_history = max_history
         self.metrics_history: list[PerformanceMetrics] = []
@@ -51,6 +58,7 @@ class PerformanceMonitor:
 
         Args:
             metrics: PerformanceMetrics object to record
+
         """
         with self.lock:
             self.metrics_history.append(metrics)
@@ -67,6 +75,7 @@ class PerformanceMonitor:
 
         Returns:
             Dictionary containing performance statistics
+
         """
         try:
             with self.lock:
@@ -122,6 +131,7 @@ class PerformanceMonitor:
 
         Returns:
             Dictionary containing overall performance statistics
+
         """
         try:
             with self.lock:
@@ -134,7 +144,7 @@ class PerformanceMonitor:
                 )
                 total_calls = len(self.metrics_history)
                 successful_calls = sum(1 for m in self.metrics_history if m.success)
-                function_names = set(m.function_name for m in self.metrics_history)
+                function_names = {m.function_name for m in self.metrics_history}
 
                 return {
                     "total_functions_monitored": len(function_names),
@@ -185,10 +195,11 @@ def timing_context(name: str = "operation"):
 
     Yields:
         Dictionary that will contain timing results
+
     """
     start_time = time.time()
     start_memory = memory_usage()
-    result = {"name": name}
+    result: dict[str, Any] = {"name": name}
 
     try:
         yield result
@@ -226,6 +237,7 @@ def memory_usage() -> float:
 
     Returns:
         Current memory usage in megabytes
+
     """
     try:
         process = psutil.Process()
@@ -239,7 +251,7 @@ def profile_function(
     log_calls: bool = True,
     log_threshold: float = 1.0,
 ) -> Callable[[F], F]:
-    """Decorator to profile function performance.
+    """Profile function performance.
 
     Args:
         monitor: PerformanceMonitor instance (uses global if None)
@@ -248,6 +260,7 @@ def profile_function(
 
     Returns:
         Decorated function with performance monitoring
+
     """
     if monitor is None:
         monitor = _global_monitor
@@ -326,6 +339,7 @@ def benchmark_function(
 
     Returns:
         Dictionary containing benchmark results
+
     """
     if kwargs is None:
         kwargs = {}
@@ -343,7 +357,7 @@ def benchmark_function(
     success_count = 0
 
     for i in range(iterations):
-        start_memory = memory_usage()
+        memory_usage()
         start_time = time.time()
 
         try:
@@ -389,6 +403,7 @@ class ResourceMonitor:
         Args:
             interval: Monitoring interval in seconds
             enable_threading: Whether to enable background threading (disabled by default)
+
         """
         self.interval = interval
         self.enable_threading = enable_threading
@@ -473,6 +488,7 @@ class ResourceMonitor:
 
         Returns:
             Dictionary containing resource statistics
+
         """
         # Take a fresh snapshot if we have no data
         if not self.data:

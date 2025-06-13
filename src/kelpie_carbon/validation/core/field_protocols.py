@@ -1,5 +1,4 @@
-"""
-FieldCampaignProtocols - Task 2.1
+"""FieldCampaignProtocols - Task 2.1
 Protocols for field validation campaigns in BC waters.
 """
 
@@ -22,7 +21,6 @@ class FieldCampaignProtocols:
 
     def get_bc_protocols(self) -> dict[str, FieldProtocol]:
         """Get BC-specific field protocols."""
-
         return {
             "gps_mapping": FieldProtocol(
                 protocol_name="GPS Kelp Boundary Mapping",
@@ -79,7 +77,6 @@ class FieldCampaignProtocols:
 
     def get_site_recommendations(self, site_name: str) -> dict[str, str]:
         """Get BC site-specific recommendations."""
-
         recommendations = {
             "saanich_inlet": {
                 "access": "Brentwood Bay Marina",
@@ -99,7 +96,6 @@ class FieldCampaignProtocols:
 
     def calculate_timing(self, overpass_time: datetime) -> dict[str, datetime]:
         """Calculate optimal measurement timing."""
-
         return {
             "start": overpass_time - timedelta(hours=2),
             "spectral": overpass_time - timedelta(minutes=30),

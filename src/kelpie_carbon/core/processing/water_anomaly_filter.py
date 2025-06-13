@@ -1,5 +1,4 @@
-"""
-Water Anomaly Filter (WAF) Implementation
+"""Water Anomaly Filter (WAF) Implementation.
 
 Based on SKEMA research from Uhl et al. (2016) - "Submerged Kelp Detection with Hyperspectral Data"
 Removes sunglint and surface artifacts from satellite imagery to improve submerged kelp detection.
@@ -25,6 +24,7 @@ class WaterAnomalyFilter:
 
         Args:
             config: Configuration parameters for WAF algorithm
+
         """
         self.config = config or {
             "sunglint_threshold": 0.15,
@@ -41,6 +41,7 @@ class WaterAnomalyFilter:
 
         Returns:
             Filtered xarray Dataset with reduced surface artifacts
+
         """
         return apply_water_anomaly_filter(dataset, self.config)
 
@@ -52,6 +53,7 @@ class WaterAnomalyFilter:
 
         Returns:
             Boolean mask where True indicates sunglint
+
         """
         return _detect_sunglint(dataset, self.config["sunglint_threshold"])
 
@@ -70,6 +72,7 @@ def apply_water_anomaly_filter(
 
     Returns:
         Filtered xarray Dataset with reduced surface artifacts
+
     """
     if waf_config is None:
         waf_config = {
@@ -121,6 +124,7 @@ def _detect_sunglint(dataset: xr.Dataset, threshold: float) -> np.ndarray:
 
     Returns:
         Boolean mask where True indicates sunglint
+
     """
     # Sunglint shows high reflectance in visible bands
     red = dataset["red"].values
@@ -153,6 +157,7 @@ def _detect_surface_anomalies(dataset: xr.Dataset, kernel_size: int) -> np.ndarr
 
     Returns:
         Boolean mask where True indicates surface anomalies
+
     """
     # Use NIR band for surface anomaly detection (sensitive to surface conditions)
     nir: np.ndarray = dataset["nir"].values.astype(np.float32)
@@ -193,6 +198,7 @@ def _apply_artifact_filter(
 
     Returns:
         Filtered band data
+
     """
     filtered_data = band_data.copy()
 
@@ -238,6 +244,7 @@ def _apply_spectral_smoothing(dataset: xr.Dataset) -> xr.Dataset:
 
     Returns:
         Smoothed dataset
+
     """
     smoothed_dataset = dataset.copy()
 
@@ -261,6 +268,7 @@ def calculate_waf_quality_metrics(dataset: xr.Dataset) -> dict[str, float]:
 
     Returns:
         Dictionary of quality metrics
+
     """
     if "waf_mask" not in dataset:
         return {"error": 1.0}  # Use numeric error code instead of string

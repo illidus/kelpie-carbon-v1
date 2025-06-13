@@ -73,6 +73,7 @@ class SpeciesClassifier:
 
         Args:
             enable_morphology: Whether to enable advanced morphological analysis
+
         """
         self.logger = logging.getLogger(__name__)
         self.enable_morphology = enable_morphology
@@ -100,6 +101,7 @@ class SpeciesClassifier:
 
         Returns:
             SpeciesClassificationResult with classification details
+
         """
         if metadata is None:
             metadata = {}
@@ -540,8 +542,7 @@ class SpeciesClassifier:
     def _estimate_nereocystis_biomass(
         self, morphological_features: dict[str, float], area_m2: float
     ) -> float:
-        """
-        Enhanced biomass estimation for Nereocystis luetkeana (Bull kelp).
+        """Enhanced biomass estimation for Nereocystis luetkeana (Bull kelp).
 
         Based on research showing typical biomass range: 600-1200 kg/ha (6-12 kg/m²).
         Morphological factors significantly affect biomass density.
@@ -604,8 +605,7 @@ class SpeciesClassifier:
     def _estimate_macrocystis_biomass(
         self, morphological_features: dict[str, float], area_m2: float
     ) -> float:
-        """
-        Enhanced biomass estimation for Macrocystis pyrifera (Giant kelp).
+        """Enhanced biomass estimation for Macrocystis pyrifera (Giant kelp).
 
         Based on research showing typical biomass range: 800-1500 kg/ha (8-15 kg/m²).
         Blade and frond characteristics are key biomass indicators.
@@ -686,8 +686,7 @@ class SpeciesClassifier:
     def _estimate_mixed_species_biomass(
         self, morphological_features: dict[str, float], area_m2: float
     ) -> float:
-        """
-        Enhanced biomass estimation for mixed species kelp forests.
+        """Enhanced biomass estimation for mixed species kelp forests.
 
         Uses intermediate values and combined morphological indicators.
         """
@@ -766,8 +765,7 @@ class SpeciesClassifier:
         kelp_mask: np.ndarray,
         classification_confidence: float,
     ) -> BiomassEstimate | None:
-        """
-        Estimate biomass with confidence intervals and uncertainty quantification.
+        """Estimate biomass with confidence intervals and uncertainty quantification.
 
         Args:
             species: Classified kelp species
@@ -777,6 +775,7 @@ class SpeciesClassifier:
 
         Returns:
             BiomassEstimate with point estimate and confidence intervals
+
         """
         if species == KelpSpecies.UNKNOWN or kelp_mask.sum() == 0:
             return None
@@ -896,6 +895,7 @@ def run_species_classification(
 
     Returns:
         SpeciesClassificationResult with species identification and biomass estimates
+
     """
     classifier = SpeciesClassifier(enable_morphology=enable_morphology)
     return classifier.classify_species(rgb_image, spectral_indices, kelp_mask, metadata)

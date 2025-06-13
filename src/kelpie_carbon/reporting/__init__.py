@@ -8,6 +8,8 @@ This package contains:
 """
 
 # Import reporting functionality
+import contextlib
+
 try:
     from .analytics import (
         AnalyticsFramework,
@@ -20,15 +22,11 @@ except ImportError:
     # Modules may not be fully organized yet
     pass
 
-try:
+with contextlib.suppress(ImportError):
     from .visualization import *
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .web import *
-except ImportError:
-    pass
 
 __all__ = [
     "AnalyticsFramework",

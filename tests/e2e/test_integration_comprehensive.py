@@ -76,6 +76,7 @@ class TestCompleteWorkflow:
                 assert response.headers["content-type"] == "image/png"
 
     @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
+    @pytest.mark.slow
     def test_phase3_analysis_overlays(self, mock_fetch):
         """Test Phase 3: Analysis Overlays functionality."""
         # Mock satellite data fetch to return realistic data
@@ -118,6 +119,7 @@ class TestCompleteWorkflow:
             assert response.headers["content-type"] == "image/png"
 
     @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
+    @pytest.mark.slow
     def test_phase4_interactive_controls(self, mock_fetch):
         """Test Phase 4: Interactive Controls functionality."""
         # Mock satellite data fetch to return realistic data
@@ -168,6 +170,7 @@ class TestCompleteWorkflow:
             assert response.headers["content-type"] == "image/png"
 
     @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
+    @pytest.mark.slow
     def test_phase5_performance_polish(self, mock_fetch):
         """Test Phase 5: Performance & Polish functionality."""
         # Mock satellite data fetch to return realistic data
@@ -335,6 +338,7 @@ class TestDataProcessingIntegration:
     """Test data processing pipeline integration."""
 
     @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
+    @pytest.mark.slow
     def test_satellite_data_pipeline(self, mock_fetch):
         """Test complete satellite data processing pipeline."""
         # Mock satellite data fetch to return realistic data
@@ -369,6 +373,7 @@ class TestDataProcessingIntegration:
         assert "biomass" in result or "carbon" in result
 
     @patch("src.kelpie_carbon.core.fetch.fetch_sentinel_tiles")
+    @pytest.mark.slow
     def test_image_generation_pipeline(self, mock_fetch):
         """Test image generation pipeline integration."""
         # Mock satellite data fetch to return realistic data

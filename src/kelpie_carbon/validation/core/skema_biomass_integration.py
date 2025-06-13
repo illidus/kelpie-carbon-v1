@@ -1,8 +1,9 @@
-"""
-SKEMA/UVic Biomass Dataset Integration - Task DI1
+"""SKEMA/UVic Biomass Dataset Integration - Task DI1
 Integration of real biomass measurements from UVic SKEMA research for production validation.
 Enhances existing SKEMA framework with biomass ground truth data.
 """
+
+from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 try:
     import numpy as np
-    
+
     PANDAS_NUMPY_AVAILABLE = True
 except ImportError:
     PANDAS_NUMPY_AVAILABLE = False
@@ -88,8 +89,7 @@ class SKEMAIntegrationConfig:
 
 
 class SKEMABiomassDatasetIntegrator:
-    """
-    Integration system for SKEMA/UVic biomass measurements with kelp detection.
+    """Integration system for SKEMA/UVic biomass measurements with kelp detection.
     Enhances existing SKEMA framework with real biomass ground truth data.
     """
 
@@ -123,8 +123,7 @@ class SKEMABiomassDatasetIntegrator:
         )
 
     def integrate_four_validation_sites_biomass_data(self) -> dict[str, Any]:
-        """
-        Integrate biomass data for the 4 identified validation sample points.
+        """Integrate biomass data for the 4 identified validation sample points.
 
         Coordinates:
         - British Columbia (50.1163°N, -125.2735°W) - Nereocystis luetkeana
@@ -134,6 +133,7 @@ class SKEMABiomassDatasetIntegrator:
 
         Returns:
             Integrated biomass validation dataset
+
         """
         logger.info("Integrating biomass data for 4 validation sample points")
 
@@ -230,11 +230,11 @@ class SKEMABiomassDatasetIntegrator:
             raise
 
     def enhance_existing_skema_integration(self) -> dict[str, Any]:
-        """
-        Enhance existing SKEMA framework (94.5% mathematical equivalence) with biomass validation.
+        """Enhance existing SKEMA framework (94.5% mathematical equivalence) with biomass validation.
 
         Returns:
             Enhanced SKEMA integration with biomass validation
+
         """
         logger.info("Enhancing existing SKEMA integration with biomass validation")
 
@@ -285,11 +285,11 @@ class SKEMABiomassDatasetIntegrator:
             raise
 
     def load_uvic_saanich_inlet_data(self) -> dict[str, Any]:
-        """
-        Load UVic SKEMA Saanich Inlet biomass measurements.
+        """Load UVic SKEMA Saanich Inlet biomass measurements.
 
         Returns:
             Saanich Inlet biomass dataset
+
         """
         logger.info("Loading UVic SKEMA Saanich Inlet biomass data")
 
@@ -330,11 +330,11 @@ class SKEMABiomassDatasetIntegrator:
             raise
 
     def integrate_species_specific_biomass_validation(self) -> dict[str, Any]:
-        """
-        Integrate species-specific biomass validation for Nereocystis vs Macrocystis.
+        """Integrate species-specific biomass validation for Nereocystis vs Macrocystis.
 
         Returns:
             Species-specific biomass validation framework
+
         """
         logger.info("Integrating species-specific biomass validation")
 
@@ -380,11 +380,11 @@ class SKEMABiomassDatasetIntegrator:
             raise
 
     def create_carbon_quantification_validation(self) -> dict[str, Any]:
-        """
-        Create comprehensive carbon quantification validation framework.
+        """Create comprehensive carbon quantification validation framework.
 
         Returns:
             Carbon quantification validation system
+
         """
         logger.info("Creating carbon quantification validation framework")
 
@@ -905,22 +905,22 @@ def create_skema_biomass_integrator(
 
 
 def integrate_validation_sites_biomass() -> dict[str, Any]:
-    """
-    Integrate biomass data for all four validation sites.
+    """Integrate biomass data for all four validation sites.
 
     Returns:
         Complete biomass validation dataset
+
     """
     integrator = create_skema_biomass_integrator()
     return integrator.integrate_four_validation_sites_biomass_data()
 
 
 def enhance_skema_with_biomass() -> dict[str, Any]:
-    """
-    Enhance existing SKEMA framework with biomass validation.
+    """Enhance existing SKEMA framework with biomass validation.
 
     Returns:
         Enhanced SKEMA framework with biomass integration
+
     """
     integrator = create_skema_biomass_integrator()
     return integrator.enhance_existing_skema_integration()

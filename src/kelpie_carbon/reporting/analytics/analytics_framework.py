@@ -1,5 +1,4 @@
-"""
-Core Analytics Framework for Kelpie Carbon v1
+"""Core Analytics Framework for Kelpie Carbon v1.
 
 This module provides the central analytics engine that integrates all analysis types
 (validation, temporal, species, historical, deep learning) into unified analytics
@@ -13,6 +12,8 @@ Classes:
     TrendAnalyzer: Temporal trend analysis integration
     PerformanceMetrics: System performance tracking
 """
+
+from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
@@ -131,6 +132,7 @@ class MetricCalculator:
     """Calculate performance and accuracy metrics across analysis types."""
 
     def __init__(self):
+        """Initialize metric calculator."""
         self.metric_weights = {
             "accuracy": 0.3,
             "precision": 0.2,
@@ -174,7 +176,6 @@ class MetricCalculator:
         true_negatives: int,
     ) -> dict[str, float]:
         """Calculate standard detection performance metrics."""
-
         # Avoid division by zero
         total = true_positives + false_positives + false_negatives + true_negatives
         if total == 0:
@@ -223,7 +224,6 @@ class MetricCalculator:
         reference_data: list[tuple[datetime, float]] | None = None,
     ) -> dict[str, float]:
         """Calculate temporal analysis performance metrics."""
-
         if len(time_series_data) < 3:
             return {"error": "Insufficient temporal data"}
 
@@ -273,7 +273,7 @@ class MetricCalculator:
         try:
             autocorr_12 = np.corrcoef(values[:-12], values[12:])[0, 1]
             return abs(autocorr_12) if not np.isnan(autocorr_12) else 0
-        except:
+        except (ValueError, IndexError, np.linalg.LinAlgError):
             return 0
 
 
@@ -281,13 +281,13 @@ class TrendAnalyzer:
     """Integrate temporal trend analysis across all analysis types."""
 
     def __init__(self):
+        """Initialize trend analyzer."""
         self.trend_methods = ["linear", "polynomial", "seasonal"]
 
     def analyze_kelp_trends(
         self, temporal_data: dict[datetime, float], analysis_type: str = "comprehensive"
     ) -> dict[str, Any]:
         """Analyze kelp extent trends using multiple methods."""
-
         if len(temporal_data) < 3:
             return {"error": "Insufficient data for trend analysis"}
 
@@ -462,6 +462,7 @@ class PerformanceMetrics:
     """Track system performance across all analysis components."""
 
     def __init__(self):
+        """Initialize performance tracker."""
         self.performance_history = []
         self.benchmark_targets = {
             "processing_time": 30.0,  # seconds
@@ -479,7 +480,6 @@ class PerformanceMetrics:
         timestamp: datetime | None = None,
     ) -> None:
         """Record performance metrics for an analysis."""
-
         if timestamp is None:
             timestamp = datetime.now()
 
@@ -513,7 +513,6 @@ class PerformanceMetrics:
 
     def get_performance_summary(self, days: int = 30) -> dict[str, Any]:
         """Get performance summary for the last N days."""
-
         cutoff_date = datetime.now() - timedelta(days=days)
         recent_records = [
             r for r in self.performance_history if r["timestamp"] >= cutoff_date
@@ -550,8 +549,7 @@ class PerformanceMetrics:
 
 
 class AnalyticsFramework:
-    """
-    Main analytics framework integrating all analysis types.
+    """Main analytics framework integrating all analysis types.
 
     This class provides the central engine for comprehensive kelp analysis,
     integrating validation, temporal, species, historical, and deep learning
@@ -559,6 +557,7 @@ class AnalyticsFramework:
     """
 
     def __init__(self):
+        """Initialize analytics framework."""
         self.metric_calculator = MetricCalculator()
         self.trend_analyzer = TrendAnalyzer()
         self.performance_metrics = PerformanceMetrics()
@@ -581,7 +580,6 @@ class AnalyticsFramework:
 
     def execute_analysis(self, request: AnalysisRequest) -> AnalysisResult:
         """Execute comprehensive analysis based on request."""
-
         start_time = datetime.now()
         results = {}
         confidence_scores = {}
@@ -663,7 +661,6 @@ class AnalyticsFramework:
         self, analysis_type: AnalysisType, request: AnalysisRequest
     ) -> dict[str, Any]:
         """Execute a single analysis type."""
-
         # This is a simplified implementation - in practice would call actual analysis modules
         lat, lon = request.site_coordinates
         start_time, end_time = request.time_range
@@ -795,7 +792,6 @@ class AnalyticsFramework:
         self, results: dict[str, Any], confidence_scores: dict[str, float]
     ) -> dict[str, float]:
         """Calculate metrics that integrate across analysis types."""
-
         # Overall system performance
         overall_confidence = (
             np.mean(list(confidence_scores.values())) if confidence_scores else 0
@@ -829,7 +825,6 @@ class AnalyticsFramework:
         self, results: dict[str, Any], request: AnalysisRequest
     ) -> dict[str, Any]:
         """Integrate results across multiple analysis types."""
-
         integration = {
             "cross_validation": {},
             "consensus_metrics": {},
@@ -884,7 +879,6 @@ class AnalyticsFramework:
 
     def get_system_health(self) -> dict[str, Any]:
         """Get overall system health and performance summary."""
-
         performance_summary = self.performance_metrics.get_performance_summary()
 
         if "error" in performance_summary:
@@ -949,7 +943,6 @@ def create_analysis_request(
     **kwargs,
 ) -> AnalysisRequest:
     """Create an AnalysisRequest from simple parameters."""
-
     # Convert string analysis types to enum
     enum_types = []
     for type_str in analysis_types:
@@ -979,8 +972,7 @@ def quick_analysis(
     analysis_type: str = None,
     **kwargs,
 ) -> dict[str, Any]:
-    """
-    Quick analysis convenience function for basic usage.
+    """Quick analysis convenience function for basic usage.
 
     Args:
         dataset_path: Path to the dataset (optional if lat/lng provided)
@@ -992,6 +984,7 @@ def quick_analysis(
 
     Returns:
         Dictionary containing analysis results
+
     """
     # Handle backward compatibility with test signature
     if latitude is not None and longitude is not None:
@@ -1043,5 +1036,6 @@ def create_analytics_framework() -> AnalyticsFramework:
 
     Returns:
         Configured AnalyticsFramework instance ready for use
+
     """
     return AnalyticsFramework()

@@ -9,6 +9,7 @@ References:
 - UVic SPECTRAL Lab SKeMa project specifications
 
 Task C1.1: Research SKEMA CNN architecture specifics
+
 """
 
 import torch
@@ -45,6 +46,7 @@ class SKEMACNNModel(nn.Module):
             input_channels: Input channels (RGB, NIR, red-edge, etc.)
             pretrained: Use pre-trained COCO weights
             backbone_name: Backbone architecture name
+
         """
         super().__init__()
 
@@ -172,6 +174,7 @@ class SKEMACNNModel(nn.Module):
 
         Returns:
             Dictionary containing classification and segmentation outputs
+
         """
         # Extract features through backbone
         backbone_features = self.backbone(x)
@@ -216,6 +219,7 @@ class MaskRCNNKelpDetector(nn.Module):
             num_classes: Number of classes (background + kelp)
             pretrained: Load pre-trained COCO weights
             pretrained_backbone: Use pre-trained backbone
+
         """
         super().__init__()
 
@@ -254,6 +258,7 @@ class MaskRCNNKelpDetector(nn.Module):
 
         Returns:
             Model predictions or losses (training mode)
+
         """
         return self.model(images, targets)
 
@@ -268,6 +273,7 @@ class MaskRCNNKelpDetector(nn.Module):
 
         Returns:
             List of predictions for each image
+
         """
         self.model.eval()
         with torch.no_grad():
@@ -308,6 +314,7 @@ def train_skema_model(
 
     Returns:
         Training history dictionary
+
     """
     model = model.to(device)
     model.train()
@@ -335,7 +342,7 @@ def train_skema_model(
         train_correct = 0
         train_total = 0
 
-        for batch_idx, (images, targets) in enumerate(train_loader):
+        for _batch_idx, (images, targets) in enumerate(train_loader):
             images = images.to(device)
             classification_targets = targets["classification"].to(device)
             segmentation_targets = targets["segmentation"].to(device)
@@ -429,6 +436,7 @@ def load_pretrained_skema_model(
 
     Returns:
         Loaded model
+
     """
     if model_type == "skema_cnn":
         model = SKEMACNNModel()

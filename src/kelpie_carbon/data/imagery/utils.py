@@ -17,6 +17,7 @@ def normalize_band(
 
     Returns:
         Normalized array in 0-255 range
+
     """
     # Remove NaN values
     valid_data = band.values[~np.isnan(band.values)]
@@ -52,6 +53,7 @@ def normalize_to_0_1(data: xr.DataArray) -> np.ndarray:
 
     Returns:
         Normalized array in 0-1 range
+
     """
     values = data.values
     valid_mask = ~np.isnan(values)
@@ -81,6 +83,7 @@ def apply_colormap(normalized_data: np.ndarray, colormap: str = "RdYlGn") -> np.
 
     Returns:
         RGBA array with applied colormap
+
     """
     # Get colormap
     cmap = plt.get_cmap(colormap)
@@ -100,6 +103,7 @@ def array_to_image(array: np.ndarray) -> Image.Image:
 
     Returns:
         PIL Image object
+
     """
     if array.ndim == 2:
         # Grayscale
@@ -123,6 +127,7 @@ def get_image_bounds(dataset: xr.Dataset) -> tuple[float, float, float, float]:
 
     Returns:
         Tuple of (min_lon, min_lat, max_lon, max_lat) in WGS84
+
     """
     # First check if bbox is stored in dataset attributes
     if hasattr(dataset, "attrs") and "bbox" in dataset.attrs:
@@ -207,6 +212,7 @@ def create_rgba_overlay(
 
     Returns:
         RGBA array
+
     """
     height, width = mask.shape
     rgba = np.zeros((height, width, 4), dtype=np.uint8)
@@ -229,6 +235,7 @@ def enhance_contrast(array: np.ndarray, gamma: float = 1.0) -> np.ndarray:
 
     Returns:
         Enhanced array
+
     """
     normalized = array / 255.0
     enhanced = np.power(normalized, gamma)
@@ -246,6 +253,7 @@ def calculate_histogram_stretch(
 
     Returns:
         Tuple of (min_val, max_val) for stretching
+
     """
     valid_data = data[~np.isnan(data)]
 

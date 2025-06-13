@@ -1,7 +1,7 @@
 """Pydantic models for API request/response validation."""
 
 from enum import Enum
-from typing import Any, Union
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from pydantic.types import StrictFloat, StrictInt, StrictStr
@@ -347,5 +347,5 @@ class ErrorResponse(BaseModel):
 
 
 # Response model unions for OpenAPI documentation
-AnalysisResponseUnion = Union[AnalysisResponse, ErrorResponse]
-ImageryAnalysisResponseUnion = Union[ImageryAnalysisResponse, ErrorResponse]
+AnalysisResponseUnion = AnalysisResponse | ErrorResponse
+ImageryAnalysisResponseUnion = ImageryAnalysisResponse | ErrorResponse

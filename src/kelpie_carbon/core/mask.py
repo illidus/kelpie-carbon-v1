@@ -22,6 +22,7 @@ def apply_mask(dataset: xr.Dataset, mask_config: dict | None = None) -> xr.Datas
 
     Returns:
         Dataset with masks applied and invalid data marked as NaN
+
     """
     if mask_config is None:
         mask_config = {
@@ -74,6 +75,7 @@ def create_cloud_mask(dataset: xr.Dataset, threshold: float = 0.5) -> np.ndarray
 
     Returns:
         Boolean array where True indicates clouds
+
     """
     if "cloud_mask" not in dataset:
         # If no cloud mask available, create basic cloud detection
@@ -106,6 +108,7 @@ def create_water_mask(dataset: xr.Dataset, ndwi_threshold: float = 0.3) -> np.nd
 
     Returns:
         Boolean array where True indicates water
+
     """
     red_edge: np.ndarray = dataset["red_edge"].values.astype(np.float32)
     nir: np.ndarray = dataset["nir"].values.astype(np.float32)
@@ -134,6 +137,7 @@ def create_kelp_detection_mask(dataset: xr.Dataset, config: dict) -> np.ndarray:
 
     Returns:
         Boolean array where True indicates potential kelp
+
     """
     # Calculate Floating Algae Index (FAI)
     fai = calculate_fai(dataset)
@@ -170,6 +174,7 @@ def calculate_fai(dataset: xr.Dataset) -> np.ndarray:
 
     Returns:
         FAI values as numpy array
+
     """
     red: np.ndarray = dataset["red"].values.astype(np.float32)
     nir: np.ndarray = dataset["nir"].values.astype(np.float32)
@@ -201,6 +206,7 @@ def calculate_red_edge_ndvi(dataset: xr.Dataset) -> np.ndarray:
 
     Returns:
         Red Edge NDVI values as numpy array
+
     """
     red_edge: np.ndarray = dataset["red_edge"].values.astype(np.float32)
     nir: np.ndarray = dataset["nir"].values.astype(np.float32)
@@ -228,6 +234,7 @@ def calculate_ndre(dataset: xr.Dataset) -> np.ndarray:
 
     Returns:
         NDRE values as numpy array (-1 to 1 range)
+
     """
     # Use optimal 740nm red-edge band if available, fallback to 705nm
     red_edge: np.ndarray
@@ -265,6 +272,7 @@ def create_enhanced_kelp_detection_mask(
 
     Returns:
         Boolean array where True indicates potential kelp
+
     """
     # Calculate enhanced NDRE (primary method)
     ndre = calculate_ndre(dataset)
@@ -322,6 +330,7 @@ def create_skema_kelp_detection_mask(dataset: xr.Dataset, config: dict) -> np.nd
 
     Returns:
         Boolean array where True indicates potential kelp (SKEMA method)
+
     """
     # Step 1: Apply Water Anomaly Filter to remove surface artifacts
     if config.get("apply_waf", True):
@@ -382,6 +391,7 @@ def _apply_ndre_detection(dataset: xr.Dataset, config: dict) -> np.ndarray:
 
     Returns:
         Boolean mask where True indicates kelp (NDRE method)
+
     """
     # Calculate NDRE (already implemented in the module)
     ndre = calculate_ndre(dataset)
@@ -413,6 +423,7 @@ def remove_small_objects(binary_mask: np.ndarray, min_size: int) -> np.ndarray:
 
     Returns:
         Cleaned binary mask
+
     """
     from typing import cast
 
@@ -446,6 +457,7 @@ def _detect_cloud_shadows(dataset: xr.Dataset, cloud_mask: np.ndarray) -> np.nda
 
     Returns:
         Boolean array where True indicates potential cloud shadows
+
     """
     red: np.ndarray = dataset["red"].values.astype(np.float32)
     nir: np.ndarray = dataset["nir"].values.astype(np.float32)
@@ -489,6 +501,7 @@ def _create_basic_cloud_mask(dataset: xr.Dataset) -> np.ndarray:
 
     Returns:
         Boolean array where True indicates potential clouds
+
     """
     red = dataset["red"].values
     nir = dataset["nir"].values
@@ -517,6 +530,7 @@ def get_mask_statistics(dataset: xr.Dataset) -> dict[str, float]:
 
     Returns:
         Dictionary with mask coverage percentages
+
     """
     stats = {}
 

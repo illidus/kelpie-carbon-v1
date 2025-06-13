@@ -2,7 +2,7 @@
 
 **Status**: ✅ **FULLY FUNCTIONAL** (100% tests passing, ready for enhancements)
 **Version**: 0.1.0
-**Last Updated**: January 10, 2025
+**Last Updated**: June 12, 2025
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![CI](https://github.com/illidus/kelpie-carbon-v1/workflows/CI/badge.svg)](https://github.com/illidus/kelpie-carbon-v1/actions)
@@ -157,7 +157,7 @@ poetry run pytest tests/unit/test_api.py -v
 
 ```
 kelpie-carbon-v1/
-├── src/kelpie_carbon_v1/           # Core source code
+├── src/kelpie_carbon/           # Core source code
 │   ├── analytics/                  # Advanced analytics framework
 │   ├── validation/                 # Validation and benchmarking
 │   ├── core/                       # Core processing algorithms
@@ -181,21 +181,18 @@ kelpie-carbon-v1/
 
 **Latest docs:** https://illidus.github.io/kelpie-carbon-v1/docs/
 
-### **User Documentation**
-- **[User Guide](docs/USER_GUIDE.md)** - Complete user manual
-- **[API Reference](docs/API_REFERENCE.md)** - System interface documentation
-- **[Architecture Guide](docs/ARCHITECTURE.md)** - System design documentation
-- **[Testing Guide](docs/TESTING_GUIDE.md)** - Testing procedures and guidelines
+### **Core Documentation**
+- **[Roadmap](https://illidus.github.io/kelpie-carbon-v1/docs/ROADMAP/)** – Development roadmap and task tracking
+- **[Architecture Guide](https://illidus.github.io/kelpie-carbon-v1/docs/ARCHITECTURE/)** – System design and technical architecture
+- **[Agent Guide](https://illidus.github.io/kelpie-carbon-v1/docs/AGENT_GUIDE/)** – Guide for AI agents working on the codebase
+- **[API Reference](https://illidus.github.io/kelpie-carbon-v1/docs/API_REFERENCE/)** – Python API documentation (auto-generated)
+- **[Validation Reports](https://illidus.github.io/kelpie-carbon-v1/docs/reports/)** – Automated validation reports and metrics
 
-### **Developer Documentation**
-- **[Developer Onboarding](docs/DEVELOPER_ONBOARDING.md)** - Setup guide for new developers
-- **[Development Guide](docs/DEVELOPMENT_GUIDE.md)** - Development workflows
-- **[Agent Guide](docs/agent-guide.md)** - Guide for AI agents working on the codebase
-- **[Current Task List](docs/CURRENT_TASK_LIST.md)** - Active development priorities
+### **Developer Resources**
+- **[Contributing Guide](CONTRIBUTING.md)** - Contribution guidelines and development setup
+- **[Local Documentation](docs/)** - Source documentation files for development
 
-### **Deployment & Operations**
-- **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Production deployment instructions
-- **[Contributing Guide](CONTRIBUTING.md)** - Contribution guidelines
+**📝 Documentation Access**: All documentation is available online at the main docs URL above. Local markdown files in the `docs/` directory are the source files used to generate the web documentation.
 
 ## 🎯 Current Status
 

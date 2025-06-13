@@ -1,5 +1,4 @@
-"""
-SKEMA Processor - Integration Interface for Spectral Analysis
+"""SKEMA Processor - Integration Interface for Spectral Analysis.
 
 This module provides a unified interface to existing SKEMA spectral analysis
 capabilities for integration with deep learning models like SAM.
@@ -19,19 +18,18 @@ from ..processing.water_anomaly_filter import WaterAnomalyFilter
 
 
 class SKEMAProcessor:
-    """
-    SKEMA Spectral Processor for kelp detection.
+    """SKEMA Spectral Processor for kelp detection.
 
     Provides a unified interface to existing SKEMA spectral analysis capabilities,
     optimized for integration with deep learning models like SAM.
     """
 
     def __init__(self, config_path: str | None = None):
-        """
-        Initialize SKEMA processor.
+        """Initialize SKEMA processor.
 
         Args:
             config_path: Path to configuration file. If None, uses default config.
+
         """
         # Use optimized thresholds from Task A2.7 optimization work
         self.config = {
@@ -52,14 +50,14 @@ class SKEMAProcessor:
         self.waf = WaterAnomalyFilter(self.config.get("waf_config"))
 
     def process_satellite_data(self, dataset: xr.Dataset) -> dict[str, Any]:
-        """
-        Process satellite data through SKEMA pipeline.
+        """Process satellite data through SKEMA pipeline.
 
         Args:
             dataset: xarray Dataset with satellite bands
 
         Returns:
             Dictionary containing processed results and spectral indices
+
         """
         # Apply Water Anomaly Filter
         if self.config["kelp_detection"].get("apply_waf", True):
@@ -88,8 +86,7 @@ class SKEMAProcessor:
         nir_array: np.ndarray | None = None,
         red_edge_array: np.ndarray | None = None,
     ) -> dict[str, np.ndarray]:
-        """
-        Calculate spectral indices from numpy arrays.
+        """Calculate spectral indices from numpy arrays.
 
         Args:
             rgb_array: RGB array (H, W, 3) with bands [R, G, B]
@@ -98,13 +95,11 @@ class SKEMAProcessor:
 
         Returns:
             Dictionary of calculated spectral indices
+
         """
         indices = {}
 
-        if rgb_array.ndim == 3:
-            red = rgb_array[:, :, 0]
-        else:
-            red = rgb_array  # Assume single band input
+        red = rgb_array[:, :, 0] if rgb_array.ndim == 3 else rgb_array
 
         # Calculate NDVI if NIR is available
         if nir_array is not None:
@@ -136,8 +131,7 @@ class SKEMAProcessor:
         nir_array: np.ndarray | None = None,
         red_edge_array: np.ndarray | None = None,
     ) -> np.ndarray:
-        """
-        Generate kelp probability mask using optimized SKEMA thresholds.
+        """Generate kelp probability mask using optimized SKEMA thresholds.
 
         Args:
             rgb_array: RGB array (H, W, 3)
@@ -146,6 +140,7 @@ class SKEMAProcessor:
 
         Returns:
             Boolean mask where True indicates potential kelp
+
         """
         # Calculate spectral indices
         indices = self.calculate_spectral_indices(rgb_array, nir_array, red_edge_array)
@@ -168,11 +163,11 @@ class SKEMAProcessor:
         return kelp_mask
 
     def get_optimized_thresholds(self) -> dict[str, float]:
-        """
-        Get the optimized SKEMA thresholds from Task A2.7 optimization work.
+        """Get the optimized SKEMA thresholds from Task A2.7 optimization work.
 
         Returns:
             Dictionary of optimized threshold values
+
         """
         return {
             "ndre_threshold": self.config["kelp_detection"]["ndre_threshold"],
@@ -186,8 +181,7 @@ class SKEMAProcessor:
         nir_array: np.ndarray | None = None,
         red_edge_array: np.ndarray | None = None,
     ) -> dict[str, bool]:
-        """
-        Validate input spectral bands for processing.
+        """Validate input spectral bands for processing.
 
         Args:
             rgb_array: RGB array
@@ -196,6 +190,7 @@ class SKEMAProcessor:
 
         Returns:
             Dictionary indicating which bands are available and valid
+
         """
         validation = {
             "rgb_valid": False,

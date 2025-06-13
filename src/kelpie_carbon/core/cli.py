@@ -1,13 +1,24 @@
-"""CLI module for Kelpie-Carbon v1."""
+"""Command Line Interface for Kelpie Carbon v1.
 
-import socket
+This module provides comprehensive CLI functionality for kelp carbon monitoring
+including data processing, analysis, and validation workflows.
+"""
 
-import typer
-import uvicorn
+from __future__ import annotations
 
+import asyncio
+import json
+import logging
+import sys
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 from .config import get_settings
 from .constants import KelpAnalysis, Network
 from .logging_config import get_logger, setup_logging
+import click
+import socket
+import typer
+import uvicorn
 
 app = typer.Typer(
     name="kelpie-carbon-v1",
@@ -31,6 +42,7 @@ def _find_available_port(
 
     Raises:
         RuntimeError: If no available port is found in the range
+
     """
     for port in range(start_port, start_port + max_attempts):
         try:
@@ -47,17 +59,10 @@ def _find_available_port(
 
 @app.command()
 def serve(
-    host: str | None = typer.Option(None, "--host", "-h", help="Host to bind to"),
-    port: int | None = typer.Option(None, "--port", "-p", help="Port to bind to"),
-    reload: bool | None = typer.Option(None, "--reload", help="Enable auto-reload"),
-    env: str | None = typer.Option(
-        None, "--env", "-e", help="Environment (development/production)"
-    ),
-    auto_port: bool = typer.Option(
-        False,
-        "--auto-port",
-        help="Automatically find available port if specified port is busy",
-    ),
+    host: str = "127.0.0.1",
+    port: int = 8000,
+    reload: bool = False,
+    workers: int | None = None,
 ):
     """Start the Kelpie Carbon v1 web server."""
     # Setup logging first
@@ -69,109 +74,24 @@ def serve(
     # Determine port to use
     target_port = port or settings.server.port
 
-    if auto_port:
-        try:
-            target_port = _find_available_port(target_port)
-            if target_port != (port or settings.server.port):
-                logger.info(
-                    f"Port {port or settings.server.port} was busy, using port {target_port} instead"
-                )
-        except RuntimeError as e:
-            logger.error(f"Failed to find available port: {e}")
-            raise typer.Exit(1) from e
-
-    # Override with CLI arguments if provided
-    server_config = {
-        "app": "kelpie_carbon.core.api.main:app",
-        "host": host or settings.server.host,
-        "port": target_port,
-        "reload": reload if reload is not None else settings.server.reload,
-        "log_level": settings.server.log_level.lower(),
-        "access_log": settings.server.access_log,
-    }
-
-    # Configure selective file watching for reload
-    if server_config["reload"]:
-        server_config.update(
-            {
-                "reload_dirs": ["src/kelpie_carbon"],
-                "reload_includes": ["*.py"],
-                "reload_excludes": [
-                    "*.pyc",
-                    "__pycache__/*",
-                    "*.log",
-                    "*.tmp",
-                    "tests/*",
-                    "docs/*",
-                    "*.md",
-                    "*.yml",
-                    "*.yaml",
-                    ".git/*",
-                    ".pytest_cache/*",
-                    "*.egg-info/*",
-                ],
-                "reload_delay": 2.0,  # Delay between file checks (seconds)
-            }
-        )
-
-    if not settings.server.reload:
-        server_config["workers"] = settings.server.workers
+    if workers is None:
+        workers = settings.server.workers
 
     logger.info(
-        f"Starting Kelpie Carbon v1 server on {server_config['host']}:{server_config['port']}"
+        f"Starting Kelpie Carbon v1 server on {host}:{target_port}"
     )
     logger.info(f"Environment: {settings.environment}")
     logger.info(f"Debug mode: {settings.debug}")
 
     try:
-        # Extract values and pass them directly to avoid dict typing issues
-        from typing import Any, cast
-
-        host_str = str(server_config["host"])
-        port_int = (
-            int(server_config["port"])
-            if isinstance(server_config["port"], int | str)
-            else 8000
-        )
-        reload_bool = bool(server_config["reload"])
-        log_level_str = str(server_config["log_level"])
-        access_log_bool = bool(server_config["access_log"])
-
-        # Prepare conditional arguments
-        additional_args: dict[str, Any] = {}
-
-        # Add reload-specific args if reload is enabled
-        if reload_bool and "reload_dirs" in server_config:
-            additional_args.update(
-                {
-                    "reload_dirs": server_config["reload_dirs"],
-                    "reload_includes": server_config["reload_includes"],
-                    "reload_excludes": server_config["reload_excludes"],
-                    "reload_delay": (
-                        float(cast(float, server_config["reload_delay"]))
-                        if "reload_delay" in server_config
-                        and server_config["reload_delay"] is not None
-                        else 2.0
-                    ),
-                }
-            )
-
-        # Add workers if not in reload mode
-        if (
-            "workers" in server_config
-            and not reload_bool
-            and server_config["workers"] is not None
-        ):
-            additional_args["workers"] = int(cast(int, server_config["workers"]))
-
         uvicorn.run(
             "kelpie_carbon.core.api.main:app",
-            host=host_str,
-            port=port_int,
-            reload=reload_bool,
-            log_level=log_level_str,
-            access_log=access_log_bool,
-            **additional_args,
+            host=host,
+            port=target_port,
+            reload=reload,
+            log_level=settings.server.log_level.lower(),
+            access_log=settings.server.access_log,
+            workers=workers,
         )
     except OSError as e:
         if "Address already in use" in str(e) or "10048" in str(e):
@@ -336,8 +256,7 @@ VALIDATION_ARGS = typer.Argument(..., help="Arguments for validation CLI")
 def validation(
     args: list[str] = VALIDATION_ARGS,
 ):
-    """
-    Run validation commands to test system accuracy against ground truth.
+    """Run validation commands to test system accuracy against ground truth.
 
     This command forwards arguments to the validation CLI.
     """

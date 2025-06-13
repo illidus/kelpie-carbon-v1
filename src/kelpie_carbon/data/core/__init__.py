@@ -1,5 +1,4 @@
-"""
-Data integration modules for Kelpie Carbon v1.
+"""Data integration modules for Kelpie Carbon v1.
 
 This package provides integration with external datasets for validation and training.
 """

@@ -1,5 +1,4 @@
-"""
-Advanced Analytics & Reporting Framework for Kelpie Carbon v1
+"""Advanced Analytics & Reporting Framework for Kelpie Carbon v1.
 
 This module provides comprehensive analytics and reporting capabilities that integrate
 all validation, temporal, species, historical, and deep learning analysis into

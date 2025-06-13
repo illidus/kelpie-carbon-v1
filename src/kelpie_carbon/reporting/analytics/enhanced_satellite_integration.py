@@ -1,5 +1,4 @@
-"""
-Enhanced Satellite Integration Module for Professional Reporting
+"""Enhanced Satellite Integration Module for Professional Reporting.
 
 This module provides advanced multi-temporal, multi-spectral satellite analysis
 for comprehensive kelp carbon monitoring and validation reporting.
@@ -64,6 +63,7 @@ class EnhancedSatelliteAnalyzer:
             enable_interactive_maps: Enable folium interactive mapping
             enable_bathymetric_context: Include bathymetric analysis
             confidence_threshold: Minimum confidence for kelp detection
+
         """
         self.enable_interactive_maps = enable_interactive_maps
         self.enable_bathymetric_context = enable_bathymetric_context
@@ -102,6 +102,7 @@ class EnhancedSatelliteAnalyzer:
 
         Returns:
             Temporal change analysis results
+
         """
         if len(datasets) < 2:
             raise ValueError("Need at least 2 datasets for temporal analysis")
@@ -147,6 +148,7 @@ class EnhancedSatelliteAnalyzer:
 
         Returns:
             Spectral signature analysis results
+
         """
         logger.info("Generating spectral signature analysis")
 
@@ -197,6 +199,7 @@ class EnhancedSatelliteAnalyzer:
 
         Returns:
             HTML content or file path
+
         """
         if not self.enable_interactive_maps:
             logger.warning("Interactive maps disabled")
@@ -252,6 +255,7 @@ class EnhancedSatelliteAnalyzer:
 
         Returns:
             Uncertainty analysis results
+
         """
         logger.info("Generating biomass uncertainty analysis")
 
@@ -348,7 +352,7 @@ class EnhancedSatelliteAnalyzer:
 
         # Calculate change magnitude for each index
         change_maps = {}
-        for index_name in temporal_indices[0].keys():
+        for index_name in temporal_indices[0]:
             if index_name == "timestamp":
                 continue
 
@@ -386,13 +390,13 @@ class EnhancedSatelliteAnalyzer:
         """Calculate temporal trend statistics."""
         trends = {}
 
-        for index_name in temporal_indices[0].keys():
+        for index_name in temporal_indices[0]:
             if index_name == "timestamp":
                 continue
 
             # Extract time series for each pixel
             time_series = [period[index_name] for period in temporal_indices]
-            timestamps = [period["timestamp"] for period in temporal_indices]
+            [period["timestamp"] for period in temporal_indices]
 
             # Calculate pixel-wise trends (simplified linear regression)
             trends[index_name] = {
@@ -415,7 +419,7 @@ class EnhancedSatelliteAnalyzer:
         """Calculate confidence intervals for temporal analysis."""
         confidence_intervals = {}
 
-        for index_name in temporal_indices[0].keys():
+        for index_name in temporal_indices[0]:
             if index_name == "timestamp":
                 continue
 
@@ -621,13 +625,13 @@ class EnhancedSatelliteAnalyzer:
         """Add satellite imagery layers to folium map."""
         try:
             # Add RGB composite layer
-            rgb_image = generate_rgb_composite(dataset)
+            generate_rgb_composite(dataset)
             # Convert PIL Image to base64 for folium overlay
             # This is a simplified implementation
             logger.info("Added RGB composite layer to map")
 
             # Add false color composite
-            false_color_image = generate_false_color_composite(dataset)
+            generate_false_color_composite(dataset)
             logger.info("Added false color composite layer to map")
 
         except Exception as e:
@@ -781,7 +785,7 @@ class EnhancedSatelliteAnalyzer:
         self, biomass_estimates: dict[str, np.ndarray]
     ) -> dict[str, Any]:
         """Calculate validation metrics for biomass estimates."""
-        methods = list(biomass_estimates.keys())
+        list(biomass_estimates.keys())
         estimates = list(biomass_estimates.values())
 
         # Calculate ensemble statistics
@@ -863,5 +867,5 @@ class EnhancedSatelliteAnalyzer:
 
 
 def create_enhanced_satellite_analyzer(**kwargs) -> EnhancedSatelliteAnalyzer:
-    """Factory function to create enhanced satellite analyzer."""
+    """Create enhanced satellite analyzer."""
     return EnhancedSatelliteAnalyzer(**kwargs)

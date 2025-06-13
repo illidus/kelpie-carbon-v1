@@ -16,6 +16,7 @@ def normalize_array(arr: np.ndarray, method: str = "minmax") -> np.ndarray:
 
     Raises:
         ValueError: If method is not supported
+
     """
     if method == "minmax":
         arr_min, arr_max = np.nanmin(arr), np.nanmax(arr)
@@ -52,6 +53,7 @@ def clip_array_percentiles(
 
     Returns:
         Clipped array
+
     """
     lower_val = np.nanpercentile(arr, lower_percentile)
     upper_val = np.nanpercentile(arr, upper_percentile)
@@ -66,6 +68,7 @@ def calculate_statistics(arr: np.ndarray) -> dict:
 
     Returns:
         Dictionary containing various statistics
+
     """
     return {
         "mean": float(np.nanmean(arr)),
@@ -94,6 +97,7 @@ def safe_divide(
 
     Returns:
         Result of division with safe handling
+
     """
     # Create output array
     result = np.full_like(numerator, fill_value, dtype=np.float64)
@@ -122,6 +126,7 @@ def interpolate_missing_values(
 
     Raises:
         ValueError: If method is not supported
+
     """
     if not np.any(np.isnan(arr)):
         return arr.copy()
